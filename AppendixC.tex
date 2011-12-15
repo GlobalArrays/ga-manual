@@ -1,0 +1,735 @@
+\label{Appendix_C}Global Arrays supports many computing platforms.
+This appendix discusses those platforms, including older systems.
+
+The web page \url{www.emsl.pnl.gov/docs/global/support.html} contains
+updated information about using GA on different platforms. Please
+refer to this page frequently for most recent updates and platform
+information. 
+
+
+\section{Platform and Library Dependencies }
+
+The following platforms are supported by Global Arrays. 
+
+
+\section{Supported Platforms}
+\begin{itemize}
+\item IBM SP, CRAY T3E/J90/SV1, SGI Origin, Fujitsu VX/VPP, Hitachi 
+\item Cluster of workstations: Solaris, IRIX, AIX, HPUX, Digital/Tru64 Unix,
+Linux, NT 
+\item Standalone uni- or multi-processor workstations or servers 
+\item Standalone uni- or multi-processor Windows NT workstations or servers
+\end{itemize}
+Older versions of GA supported some additional (now obsolete) platforms
+such as: IPSC, KSR, PARAGON, DELTA, CONVEX. They are not supported
+in the newer (>3.1) versions because we do not have access to these
+systems. We recommend using GA 2.4 on these platforms.
+
+For most of the platforms, there are two versions available: 32-bit
+and 64-bit. This table specifies valid TARGET names for various supported
+platforms. 
+
+\begin{longtable}{|>{\centering}p{3cm}|c|>{\centering}p{3cm}|>{\centering}p{3cm}|}
+\hline 
+Platform & 32-bit TARGET name & 64-bit TARGET name & Remarks\tabularnewline
+\hline
+\endhead
+\hline 
+Sun Ultra & SOLARIS & SOLARIS64 & 64-bit version added in GA 3.1\tabularnewline
+\hline 
+IBM BlueGene/P &  & BGP & supported in GA 4.1 and later (Contact your BlueGene sys admin for
+GA instalation). More info in support page...\tabularnewline
+\hline 
+IBM BlueGene/L &  & BGL & added in GA 4.0.2 (Contact your BlueGene sys admin for GA instalation).
+More info in support page...\tabularnewline
+\hline 
+Cray XT3/XT4 &  & LINUX64 (or) CATAMOUNT & TARGET based on the OS in compute Nodes (Catamount/Linux). More info
+and sample settings in support page...\tabularnewline
+\hline 
+IBM RS/6000 & IBM & IBM64 & 64-bit version added in GA 3.1\tabularnewline
+\hline 
+IBM SP & LAPI & LAPI64 & no support yet for user-space communication in the 64-bit mode by
+IBM\tabularnewline
+\hline 
+Compaq/DEC alpha & not available & DECOSF & \tabularnewline
+\hline 
+HP pa-risc & HPUX & HPUX64 & 64-bit version added in GA 3.1\tabularnewline
+\hline 
+Linux (32-bit): x86, ultra, powerpc & LINUX & not available & \tabularnewline
+\hline 
+Linux (64-bit): ia64 (Itanium), x86\_64 (Opteron), ppc64, etc & not available & LINUX64 & \tabularnewline
+\hline 
+Linux alpha & not available & LINUX64 & 64-bit version added in GA 3.1; Compaq compilers rather than GNU required\tabularnewline
+\hline 
+Cray T3E & not available & CRAY-T3E & \tabularnewline
+\hline 
+Cray J90 & not available & CRAY-YMP & \tabularnewline
+\hline 
+Cray SV1 & not available & CRAY-SV1 & \tabularnewline
+\hline 
+Cray X1 & not available & CRAY-SV2 & In X1, by default, TARGET is defined by the operating system as cray-sv2\tabularnewline
+\hline 
+SGI IRIX mips & SGI\_N32, SGI & SGIFP & \tabularnewline
+\hline 
+Hitachi SR8000 & HITACHI & not available & \tabularnewline
+\hline 
+Fujitsu VPP systems & FUJITSU-VPP & FUJITSU-VPP64 & 64-bit version added in GA 3.\tabularnewline
+\hline 
+NEC SX series &  & NEC & \tabularnewline
+\hline 
+Apple & MACX & MACX64 & Running MAC X or higher\tabularnewline
+\hline
+\end{longtable}
+
+To aid development of fully portable applications, in 64-bit mode
+Fortran integer datatype is 64-bits. It is motivated by 1) the need
+of applications to use very large data structures and 2) Fortran INTEGER{*}8
+not being fully portable. The 64-bit representation of integer datatype
+is accomplished by using the appropriate Fortran compiler flag.
+
+Because of limited interest in heterogenous computing among known
+GA users, the Global Arrays library \emph{still does not support heterogeonous
+platforms}. This capability can be added if required by new applications. 
+
+
+\section{Selection of the communication network for ARMCI }
+
+Some cluster installations can be equipped with a high performance
+network which offer instead, or in addition to TCP/IP some special
+communication protocol, for example GM on Myrinet network. To achieve
+high performance in Global Arrays, \href{http://www.emsl.pnl.gov/docs/parsoft/armci}{ARMCI}
+must be built to use these protocols in its implementation of one-sided
+communication. Starting with GA 3.1, this is accomplished by setting
+an environment variable ARMCI\_NETWORK to specify the protocol to
+be used. In addition, the it might be necessary to provide location
+for the header files and library path corresponding to location of
+s/w supporting the appropriate protocol API, see g/armci/config/makecoms.h
+for details. 
+
+\begin{tabular}{|c|c|>{\centering}p{3cm}|>{\centering}p{3cm}|}
+\hline 
+Network & Protocol Name & ARMCI\_NETWORK Setting & Supported Platforms\tabularnewline
+\hline
+\hline 
+Ethernet & TCP/IP & SOCKETS (optional/default) & workstation clusters (32 and 64-bit)\tabularnewline
+\hline 
+Quadrics/QsNet & Elan3/Shmem & QUADRICS or ELAN3 & Linux (alpha,x86,IA64,..), Compaq \tabularnewline
+\hline 
+Quadrics/QsNet II & Elan4 & ELAN4 & Linux (32 and 64-bit) \tabularnewline
+\hline 
+Infiniband & OpenIB & OPENIB & Linux (32 and 64-bit). NOTE: This network is supported in GA versions>=4.1.
+For more info see the \href{http://www.emsl.pnl.gov/docs/global/support.html}{Support}
+page...\tabularnewline
+\hline 
+Infiniband & VAPI & MELLANOX & Linux (32 and 64-bit)\tabularnewline
+\hline 
+Myrinet & GM & GM & Linux (x86,ultra,IA64)\tabularnewline
+\hline 
+Giganet cLAN & VIA & VIA & Linux (32 and 64-bit)\tabularnewline
+\hline 
+ & MPI & MPI-SPAWN & Supported in GA 4.1 or higher. This network setting can be used on
+any platform that has MPI-2 dynamic process management support. Using
+this setting is recommended only if your network is not listed above.\tabularnewline
+\hline
+\end{tabular}
+
+\emph{Other Platforms:} (More settings info for these platforms in
+the\href{http://www.emsl.pnl.gov/docs/global/support.html}{Support}
+page) 
+
+\begin{tabular}{|c|c|c|}
+\hline 
+Platforms & Protocol Name & ARMCI\_NETWORK Setting\tabularnewline
+\hline
+\hline 
+IBM BG/L & BGML & BGMLMPI \tabularnewline
+\hline 
+Cray XT3/XT4  & Shmem Portals  & CRAY-SHMEM PORTALS 2.1.3\tabularnewline
+\hline
+\end{tabular}
+
+
+\section{Selection of the message-passing library }
+
+As explained in Section \ref{sec:Initialization-and-Termination},
+GA works with either MPI or TCGMSG message-passing libraries. That
+means that GA applications can use either of these interfaces. Selection
+of the message-passing library takes place when GA is built. Since
+the TCGMSG library is small and compiles fast, it is included with
+the GA distribution package and built on Unix workstations by default
+so that the package can be built as fast and as convenientlly to the
+user as possible. There are three possible configurations for running
+GA with the message-passing libraries:
+\begin{enumerate}
+\item \textcolor{black}{\underbar{GA with MPI}} (\emph{recommended}): directly
+with MPI. In this mode, GA program should contain MPI initialization
+calls. 
+\item \textcolor{black}{\underbar{GA with TCGMSG-MPI}} (MPI and TCGMSG emulation
+library): TCGMSG-MPI implements functionality of TCGMSG using MPI.
+In this mode, the message passing library is initialized using a TCGMSG
+PBEGIN(F) call which internally references MPI\_Initialize. To enable
+this mode, define the environmental variable USE\_MPI. 
+\item \textcolor{black}{\underbar{GA with TCGMSG}}: directly with TCGMSG.
+In this mode, GA program should contain TCGMSG initialization calls.
+\end{enumerate}
+For the MPI versions, the optional environmental variables MPI\_LIB
+and MPI\_INCLUDE are used to point to the location of the MPI library
+and include directories if they are not in the standard system location(s).
+GA programs are started with the mechanism that any other MPI programs
+use on the given platform.
+
+The recent versions of MPICH (an MPI implementation from ANL/Mississippi
+State) keep the MPI header files in more than one directory and provide
+compiler wrappers that implicitly point to the appropriate header
+files. One can :
+\begin{itemize}
+\item use MPI\_INCLUDE by expanding the string with another directory component
+prefixed with \textquotedbl{}-I\textquotedbl{} (you are passing include
+directory names as a part of compiler flags), or (starting with GA
+3.1) separated by comma \textquotedbl{},\textquotedbl{} and withot
+the prefix, OR 
+\item use MPI aware compiler wrappers e.g., mpicc and mpif77 to build GA
+right out of the box on UNIX workstations: \end{itemize}
+\begin{lyxcode}
+make~FC=mpif77~CC=mpicc~
+\end{lyxcode}
+One disadvantage of the second approach it that GA makefile in some
+circumstances might be not able to determine which compiler (e.g.,
+GNU or PGI) is called underneath by the MPICH compiler wrappers. Since
+different compilers provide different Fortran/C interface, the package
+might fail to build. This problem is most likely to occur on non-Linux
+Unix systems with non-native compilers (e.g., gcc).
+
+On Windows NT, the current version of GA was tested with WMPI, an
+NT implementation derived from MPICH in Portugal. 
+
+
+\section{Dependencies on other software }
+
+In addition to the message-passing library, GA requires:
+\begin{itemize}
+\item \href{http://www.emsl.pnl.gov/docs/parsoft/ma/MAapi.html}{MA}MA (Memory
+Allocator), a library for managment of local memory; 
+\item \href{http://www.emsl.pnl.gov/docs/parsoft/armci}{ARMCI}, a one-sided
+communication library that GA uses as its run-time system; 
+\item BLAS library is required for the eigensolver and ga\_dgemm; 
+\item LAPACK library is required for the eigensolver (a subset is included
+with GA, which is built into \emph{liblinalg.a});
+\end{itemize}
+GA may also depend on other software depending on the functions being
+used.
+\begin{itemize}
+\item GA eigensolver, ga\_diag, is a wrapper for the eigensolver from the
+PEIGS library; (Please contact \href{mailto:fanngi@ornl.gov}{George Fann}about
+PEIGS) 
+\item SCALAPACK, PBBLAS, and BLACS libraries are required for \emph{ga\_lu\_solve,
+ga\_cholesky, ga\_llt\_solve, ga\_spd\_invert, ga\_solve}. If these
+libraries are not installed, the named operations will not be available. 
+\item If one would like to generate trace information for GA calls, an additional
+library \emph{libtrace.a} is required, and the -DGA\_TRACE define
+flag should be specified for C and Fortran compilers.
+\end{itemize}
+
+\section{Writing GA Programs }
+
+C programs that use Global Arrays should include files \emph{`global.h',
+'ga.h', `macdecls.h'}. Fortran programs should include the files \emph{`mafdecls.fh',
+`global.fh'}. Fortran source must be preprocessed as a part of compilation.
+
+The GA program should look like:
+\begin{itemize}
+\item When GA runs with MPI\end{itemize}
+\begin{lyxcode}
+\textcolor{blue}{Fortran~}~~~~~~~~~~~~~~\textcolor{green}{C}
+
+\textcolor{blue}{call~mpi\_init(..)~}~~~\textcolor{green}{MPI\_Init(..)~}~~~!~start~MPI~
+
+\textcolor{blue}{call~ga\_initialize()}~\textcolor{green}{GA\_Initialize()~}!~start~global~arrays~
+
+\textcolor{blue}{status~=~ma\_init(..)}~\textcolor{green}{MA\_Init(..)~}~~~~!~start~memory~allocator
+
+\textcolor{blue}{....~do~work~~}~~~~~~~\textcolor{green}{....~do~work}
+
+\textcolor{blue}{call~ga\_terminate()}~~\textcolor{green}{GA\_Terminate()~}~!~tidy~up~global~arrays~call
+
+\textcolor{blue}{mpi\_finalize()}~~~~~~~\textcolor{green}{MPI\_Finalize()}~~!~tidy~up~MPI~~
+
+\textcolor{blue}{stop}~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~!~exit~program\end{lyxcode}
+\begin{itemize}
+\item When GA runs with TCGMSG or TCGMSG-MPI\end{itemize}
+\begin{lyxcode}
+\textcolor{blue}{Fortran~C}
+
+\textcolor{blue}{call~pbeginf()~}~~~~~~~~\textcolor{green}{PBEGIN\_(..)~}~~~~!~start~TCGMSG~
+
+\textcolor{blue}{call~ga\_initialize()}~~~\textcolor{green}{GA\_Initialize()}~!~start~global~arrays~
+
+\textcolor{blue}{status~=~ma\_init(..)}~~~\textcolor{green}{MA\_Init(..)}~~~~~!~start~memory~allocator
+
+\textcolor{blue}{....~do~work~}~~~~~~~~~~~\textcolor{green}{....~do~work}
+
+\textcolor{blue}{call~ga\_terminate()}~~~~\textcolor{green}{GA\_Terminate()~}~!~tidy~up~global~arrays~
+
+\textcolor{blue}{call~pend()}~~~~~~~~~~~~\textcolor{green}{PEND\_()}~~~~~~~~~!~tidy~up~tcgmsg~
+
+\textcolor{blue}{stop~}~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~!~exit~program~
+\end{lyxcode}
+The \emph{ma\_init }call looks like :
+\begin{lyxcode}
+status~=~ma\_init(type,~stack\_size,~heap\_size)
+\end{lyxcode}
+and it basically just goes to the OS and gets \emph{stack\_size+heap\_size}
+elements of size type. The amount of memory MA allocates need to be
+sufficient for storing global arrays on some platforms. Please refer
+to section \ref{sub:Memory-Allocation} for the details and information
+on more advanced usage of MA in GA programs. 
+
+
+\section{Building GA }
+
+Use\emph{ GNU make} to build the GA library and application programs
+on Unix and Microsoft nmake on Windows. The structure of the available
+makefiles are
+\begin{itemize}
+\item GNUmakefile: Unix makefile 
+\item MakeFile: Windows NT makefile 
+\item config/makefile.h: definitions \& include symbols
+\end{itemize}
+The user must specify TARGET as an environment variable (setenv TARGET
+TARGET\_name) or in the GNUmakefile or on the command line when calling
+make. For example: 
+
+(for IBM/SP platform)
+\begin{lyxcode}
+setenv~TARGET~LAPI~
+\end{lyxcode}
+(or) from the command line, 
+\begin{lyxcode}
+gmake~TARGET=LAPI
+\end{lyxcode}
+Valid TARGET\_name for various supported platforms can be found in
+the above table. Valid TARGETs can also be listed by calling make
+in the top level distribution directory on UNIX family of systems
+when TARGET is not defined. On Windows, WIN32, CYGNUS and INTERIX
+(previously known as OpenNT) are supported. 
+
+
+\paragraph{Compiler Settings (optional): }
+
+For various supported platforms, the default compilers and compiler
+options are specified in config/makefile.h. One could change the predefined
+default compilers and compiler flags in GA package either by specifying
+them on the command line or in the file config/makefile.h. Note: editing
+config/makefile.h for any platform requires extra care and is intended
+for intermediate/advanced users.
+\begin{itemize}
+\item CC - name of the C compiler (e.g., gcc, cc, or ccc ) 
+\item FC - name of the Fortran compiler (e.g., g77, f90, mpif77 or fort) 
+\item COPT - optimization or debug flags for the C compiler (e.g., -g, -O3) 
+\item FOPT - optimization or debug flags for the Fortran compiler (e.g.,
+-g, -O1)
+\end{itemize}
+For example,
+\begin{lyxcode}
+gmake~FC=f90~CC=cc~FOPT=-O4~COPT=-g
+\end{lyxcode}
+Note that GA provides only Fortran-77 interfaces. To use and compile
+with a Fortran 90 compiler, it has to support a subset of Fortran-77. 
+
+
+\subsection{Unix Environment }
+
+As mentioned in an earlier section, there are three possible configurations
+for building GA.
+\begin{enumerate}
+\item \textcolor{black}{\underbar{GA with MPI}} (recommended): To build
+GA directly with MPI, the user needs to define environmental variables
+MPI\_LIB and MPI\_INCLUDE which should point to the location of the
+MPI library and include directories. Additionally, the make/environmental
+variable MSG\_COMMS must be defined as MSG\_COMMS = MPI. (In csh/tcsh,
+setenv MSG\_COMMS MPI)
+\item \textcolor{black}{\underbar{GA with TCGMSG-MPI}}: To build GA with
+the TCGMSG-MPI, user needs to define environmental variables USE\_MPI,
+MPI\_LIB and MPI\_INCLUDE which should point to the location of the
+MPI library and include directories.
+
+
+\emph{Example}: using csh/tcsh (assume using MPICH installed in /usr/local
+on IBM workstation)
+\begin{lyxcode}
+setenv~USE\_MPI~y~
+
+setenv~MPI\_LOC~/usr/local/mpich~
+
+setenv~MPI\_LIB~\$MPI\_LOC/lib/rs6000/ch\_shmem~
+
+setenv~MPI\_INCLUDE~\$MPI\_LOC/include
+\end{lyxcode}
+\item \textcolor{black}{\underbar{GA with TCGMSG}}: To build GA directly
+with TCGMSG, the user must define the environmental variable MSG\_COMMS=TCGMSG.
+Note: When MSG\_COMMS=TCGMSG, make sure to unset the environment variable
+USE\_MPI (e.g. unsetenv USE\_MPI).
+\end{enumerate}
+After chosing the configuration, to build the GA library, type 
+\begin{lyxcode}
+make~
+\end{lyxcode}
+or 
+\begin{lyxcode}
+gmake
+\end{lyxcode}
+If the build is successful, a test program test.x will be created
+in global/testing directory. Refer to the Section \textquotedbl{}Running
+GA programs\textquotedbl{} on how to run this test.
+
+To build an application based on GA located in g/global/testing, for
+example, the application's name is app.c (or app.F, app.f), type 
+\begin{lyxcode}
+make~app.x~
+\end{lyxcode}
+or 
+\begin{lyxcode}
+gmake~app.x
+\end{lyxcode}
+Please refer to compiler flags in file g/config/makefile.h to make
+sure that Fortran and C compiler flags are consistent with flags uses
+to compile your application. This may be critical when Fortran compiler
+flags are used to change the default length of the integer datatype.
+
+
+\paragraph{Interface to ScaLAPACK}
+
+GA interface routines to ScaLAPACK are only available, when GA is
+build with MPI and ScaLAPACK. Before building GA, the user is required
+to define the environment variables USE\_SCALAPACK or USE\_SCALAPACK\_I8
+(for scalapack libraries compiled with 8-byte integers), and the location
+of ScaLAPACK \& Co. libraries in the env variable SCALAPACK.
+
+\emph{Example}: using csh/tcsh
+\begin{lyxcode}
+setenv~USE\_SCALAPACK~y~(or)~setenv~USE\_SCALAPACK\_I8~y~
+
+setenv~SCALAPACK~'-L/msrc/proj/scalapack/LIB/rs6000~
+
+~~~~~~~-lscalapack~-lpblas~-ltools~-lblacsF77cinit~-lblacs'~
+
+setenv~USE\_MPI~y
+\end{lyxcode}
+Since there are certain interdependencies between blacs and blacsF77cinit,
+some system might require specification of -lblacs twice to fix the
+unresolved external symbols from these libs.
+
+
+\paragraph{Installing GA C++ Bindings}
+
+By default, GA C++ bindings are not built. GA++ is built only if GA\_C\_CORE
+is defined as follows: 
+\begin{lyxcode}
+setenv~GA\_C\_CORE~y~
+
+cd~GA\_HOME~
+
+make~clean;~make~
+\end{lyxcode}
+(This will build GA with C core and C++ binding).
+
+
+\paragraph{Using GA\_C\_CORE}
+
+GA's internal core is implemented using Fortran and C. When GA\_C\_CORE
+is set, core Fortran functionalites are replaced by their C counterparts
+to eliminate the hassle involved in mixing Fortran and C with C++
+bindings on certain platforms or for some compilers (like, missing
+Fortran symols/libraries during the linking phase). NOTE: C and C++
+compilers should be from the same family. GA\_C\_CORE doesnot support
+mixing C and C++ compilers (e.g.using Intel compiler for C and GNU
+compiler for C++). 
+\begin{lyxcode}
+make~FC=ifort~CC=icc~CXX=g++~(not~supported~if~GA\_C\_CORE~is~set)~
+
+make~FC=ifort~CC=icc~CXX=icpc~(Intel~compiler~family~-~supported)
+\end{lyxcode}
+
+\subsection{Windows NT }
+
+To buid GA on Windows NT, MS Power Fortran 4 or DEC Visual Fortran
+5 or later, and MS Visual C 4 or later are needed. Other compilers
+might need the default compilation flags modified. When commercial
+Windows compilers are not available, one can choose to use CYGNUS
+or INTERIX and build it as any other Unix box using GNU compilers.
+
+First of all, one needs to set environment variables (same as in Unix
+enviroment). GA needs to know where find the MPI include files and
+libraries. To do this, select the Environment tab under the Control
+Panel, then set the variables to point to the location of MPI, for
+example for WMPI on disk D:
+\begin{lyxcode}
+set~MPI\_INCLUDE~as~d:\textbackslash{}Wmpi\textbackslash{}Include~
+
+set~MPI\_LIB~as~d:\textbackslash{}Wmpi\textbackslash{}Console
+\end{lyxcode}
+Make sure that the dynamic link libraries required by the particular
+implementation of MPI are copied to the appropriate location for the
+system DLLs. For WMPI, copy VWMPI.dll to \textbackslash{}winnt.
+
+In the top directory do,
+\begin{lyxcode}
+nmake
+\end{lyxcode}
+The GA test.exe program can be built in the g\textbackslash{}global\textbackslash{}testing
+directory:
+\begin{lyxcode}
+nmake~test.exe
+\end{lyxcode}
+In addition, the HPVM package from UCSD offers the GA interface in
+the NT/Myrinet cluster environment.
+
+GA could be built on Windows 95/98. However, due to the DOS shell
+limitations, the top level NTmakefile will not work. Therefore, each
+library has to be made separately in its own directory. The environment
+variables referring to MPI can be hardcoded in the NT makefiles.
+
+
+\subsection{Writing and building new GA programs}
+
+For small programs contained in a single file, the most convenient
+approach is to put your program file into the g/global/testing directory.
+\emph{The existing GNU make suffix rules would build an executable
+with the \textquotedbl{}.x\textquotedbl{} suffix from any C or Fortran
+source file}. You do not have to modify makefiles in g/global/testing
+at all. For example, if your program is contained in myfile.c or myfile.F
+and you place it in that directory, all you need to do to create an
+executable called myfile.x is to type: 
+\begin{lyxcode}
+make~myfile.x
+\end{lyxcode}
+Windows nmake is not as powerful as GNU make - you would need to modify
+the NT makefile.
+
+This approach obviously is not feasible for large packages that contain
+multiple source files and directories. In that case you need to provide
+apropriate definitions in your makefile:
+\begin{itemize}
+\item to header files located in the include directory, g/include, where
+all public header files are copied in the process of building GA 
+\item add references to libglobal.a (Unix) global.lib (Windows) and libma.a
+(Unix) ma.lib (Windows) in g/lib/\$(TARGET) and for the message-passing
+libraries 
+\item follow compilation flags for the GA test programs in GNU and Windows
+makefiles g/config/makefile.h. The recommended approach is to include
+g/config/makefile.h in your makefile.
+\end{itemize}
+Starting with GA 3.1, one could simplify linking of applications by
+including g/armci/config/makecoms.h and g/armci/config/makemp.h that
+define all the necessary platform specific libraries that are required
+by GA. 2.4 
+
+
+\section{Running GA Programs }
+
+Assume the GA program app.x had already been built. To run it,
+
+\textbf{\textcolor{black}{Running on shared memory systems and clusters}}\emph{:
+}(i.e., network of workstations/linux clusters)
+
+If the app.x is built based on MPI, run the program the same way as
+any other MPI programs. 
+
+\emph{Example}: to run on four processes on clusters, use 
+\begin{lyxcode}
+mpirun~-np~4~app.x
+\end{lyxcode}
+\emph{Example}: If you are using MPICH (or MPICH-like Implementations),
+and mpirun requires a machinefile or hostfile, then run the GA program
+same as any other MPI programs. \textit{\textcolor{black}{The only
+change required is to make sure the hostnames are specified in a consecutive
+manner in the machinefile}}. Not doing this will prevent SMP optimizations
+and would lead to poor resource utilization.
+\begin{lyxcode}
+mpirun~-np~4~-machinefile~machines.txt~app.x
+\end{lyxcode}
+\emph{Contents of machines.txt}: (Let us say we have two 2-way SMP
+nodes (host1 and host2, and correct formats for a 4-processor machinefile
+is shown in the table below).
+
+\begin{tabular}{|>{\centering}p{2cm}|>{\centering}p{2cm}|>{\raggedright}p{3cm}|}
+\hline 
+Correct & Correct & Incorrect\tabularnewline
+\hline
+\hline 
+host1
+
+host1
+
+host2
+
+host2 & host2
+
+host2
+
+host1
+
+host1 & host1
+
+host2
+
+host1 (This is wrong, the same hosts should be specified together)
+
+host2\tabularnewline
+\hline
+\end{tabular}
+
+If app.x is built based on TCGMSG (not including, Fujitsu, Cray J90,
+and Windows, because there are no native ports of TCGMSG), to execute
+the program on Unix workstations/servers, one should use the 'parallel'
+program (built in tcgmsg/ipcv4.0). After building the application,
+a file called 'app.x.p' would also be generated (If there is not such
+a file, make it: 
+\begin{lyxcode}
+make~app.x.p
+\end{lyxcode}
+This file can be edited to specify how many processors and tasks to
+use, and how to load the executables. Make sure that 'parallel' is
+accessible (you might copy it into your 'bin' directory). To execute,
+type:
+\begin{lyxcode}
+parallel~app.x~\end{lyxcode}
+\begin{enumerate}
+\item On MPPs, such as Cray XT3/XT4, or IMB SPs, use the appropriate system
+command to specify the number of processors, load and run the programs.
+Example: 
+
+\begin{itemize}
+\item to run on IBM SP, run as any other parallel programs (i.e., using
+\emph{poe}) 
+\item to run on Cray XT3/XT4, use \emph{yod}.
+\end{itemize}
+\item On Microsoft NT, there is no support for TCGMSG, which means you can
+only build your application based on MPI. Run the application program
+the same way as any other MPI programs. For, WMPI you need to create
+the .pg file. Example: \end{enumerate}
+\begin{lyxcode}
+R:\textbackslash{}nt\textbackslash{}g\textbackslash{}global\textbackslash{}testing>~start~/b~test.exe
+\end{lyxcode}
+
+\section{Building Intel Trace Analyzer (VAMPIR) Instrumented Global Arrays}
+
+
+\subsection{Introduction}
+
+The following topics are covered in this section.
+\begin{itemize}
+\item New functions needed for the instrumentation 
+\item Build instructions 
+\item Further information 
+\item Known problems
+\end{itemize}
+
+\subsection{New Functions Needed for the Instrumentation}
+\begin{itemize}
+\item To instrument the GA three C-functions are defined (see g/ga\_vt.c): 
+\item vampir\_symdef is defined to associate integer identifiers with user
+defined states and activities. It handles any errors that might occur. 
+\item vampir\_begin is defined to register entering a user defined state.
+It uses a global counter called <vampirtrace\_level> to avoid tracing
+the use of libraries within libraries. 
+\item vampir\_end is defined to register leaving a user defined state.
+\end{itemize}
+The interfaces of these functions are defined below.
+\begin{lyxcode}
+void~\textcolor{blue}{vampir\_symdef}~(int~id,~char~{*}state,~char~{*}activity,~
+
+~~~~~~~~~~~~~~~~~~~~char~{*}file,~int~line);~
+
+void~\textcolor{blue}{vampir\_begin}~(int~id,~char~{*}file,~int~line);~
+
+void~\textcolor{blue}{vampir\_end}~(int~id,~char~{*}file,~int~line);
+\end{lyxcode}
+In addition to these functions two functions are defined to initialise
+and finalise MPI when needed. The use of MPI is required because Vampirtrace
+uses it internally. The functions are
+\begin{lyxcode}
+void~\textcolor{blue}{vampir\_init}~(int~argc,~char~{*}{*}argv,~char~{*}file,~
+
+~~~~~~~~~~~~~~~~~~int~line);~
+
+void~\textcolor{blue}{vampir\_finalize}~(char~{*}file,~int~line);
+\end{lyxcode}
+If the cpp flag -DMPI is provided then these two functions will turn
+into null functions. In that case the use of MPI within the GAs will
+ensure that Vampirtrace will be initialised properly.
+
+The values for <file> and <line> are substitute with \_\_FILE\_\_
+and \_\_LINE\_\_ macros. On compilation the C-preprocessor replaces
+these macros with the actual file name and line number. These values
+are used to generate error messages if needed. These functions are
+defined in the file g/ga\_vt.h.
+
+For each of the instrumented libraries an initialisation routine must
+be defined that sets the state and activity tables up.
+\begin{itemize}
+\item \emph{tcgmsg}: tcgmsg\_vampir\_init in g/tcgmsg/tcgmsg\_vampir.c.
+This routine is called from within PBEGINF. 
+\item \emph{tcgmsg-mpi}: tcgmsg\_vampir\_init in g/tcgmsg-mpi/tcgmsg\_vampir.c
+called from ALT\_PBEGIN\_ in misc.c. 
+\item \emph{armci}: armci\_vampir\_init in g/armci/src/armci\_vampir.c called
+from ARMCI\_Init in armci.c. 
+\item \emph{global}: ga\_vampir\_init in g/global/src/ga\_vampir.c called
+from ga\_initialize\_ and ga\_initialize\_ltd\_ in global.armci.c
+\end{itemize}
+
+\subsection{Build Instructions }
+
+To build GA with Vampir (now called, Intel Trace Analyzer) set the
+environment variable GA\_USE\_VAMPIR.
+
+e.g., \texttt{\textcolor{black}{setenv GA\_USE\_VAMPIR y}}
+
+to compile the GAs including all the Vampirtrace instrumentation.
+Further environment variables that are required are
+\begin{lyxcode}
+LIBVT~:~The~name~of~the~library,~normally~-lVT~which~
+
+~~~~~~~~~~~~~is~the~default.~
+
+VT\_LIB~:~The~path~to~the~library,~-L<library-path>~
+
+~~~~~~~~~~~~~e.g.~setenv~VT\_LIB~/usr/local/vampir/lib~
+
+VT\_INCLUDE:~The~path~to~the~include~file~VT.h,~
+
+~~~~~~~~~~~~-I<include-path>.~e.g.~setenv~VT\_INCLUDE
+
+~~~~~~~~~~~~/usr/local/vampir/include
+\end{lyxcode}
+On some platforms it may be necessary to set LIBMPI to -lpmpi to load
+the MPI profile interfaces that vampirtrace needs.
+
+There are no defaults for VT\_PATH and VT\_INCLUDE. Beyond this point
+simply follow the GA make instructions.
+
+\noun{Note: }that libVT.a should be loaded before mpi or pmpi otherwise
+the vampirtracing will be ignored. 
+
+
+\subsection{Further Information }
+
+More information on using Intel Trace Analyzer can be found on the
+Intel website at
+
+\href{http://www.intel.com/software/products/cluster/tanalyzer/}{http://www.intel.com/software/products/cluster/tanalyzer/}
+
+From this location Vampir and Vampirtrace can be downloaded for various
+platforms including validation licenses if needed.
+
+
+\subsection{Known Problems}
+\begin{itemize}
+\item Vampirtrace and LAM-MPI clash
+\end{itemize}
+In an attempt to produce traces while running with LAM-MPI the program
+would always abort in MPI\_Init due to a segmentation violation. The
+Pallas website does not mention LAM-MPI at all, but does explicitly
+state that Vampirtrace does work with MPICH. Indeed the latter has
+been confirmed in tests. Therefore it is not recommended to use the
+Vampirtrace instrumentation with LAM-MPI. 

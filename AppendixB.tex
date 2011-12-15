@@ -1,0 +1,2811 @@
+
+\section*{Appendix B}
+
+GA\_INITIALIZE
+
+subroutine ga\_initialize()
+
+Allocate and initialize internal data structures for Global Arrays.
+This is a collective operation. GA\_INITIALIZE\_LTD
+
+subroutine ga\_initialize\_ltd(limit) integer limit - amount of memory
+in bytes perprocess {[}input{]}
+
+Allocate and initialize internal data structures for global arrays
+and set limit for memory used in global arrays.
+
+limit < 0 means \textquotedbl{}allow unlimited memory usage\textquotedbl{}
+
+This is a collective operation. GA\_PGROUP\_CREATE
+
+integer function ga\_pgroup\_create(list, size) integer size - number
+of processors in group {[}input{]} integer list(size) - list of processors
+in processor group {[}input{]}
+
+This command is used to create a processor group. At present, it must
+be invoked by all processors in the current default processor group.
+The list of processors use the indexing scheme of the default processor
+group. If the default processor group is the world group, then these
+indices are the usual processor indices. This function returns a process
+group handle that can be used to reference this group by other functions.
+
+This is a collective operation on the default processor group. GA\_PGROUP\_DESTROY
+
+logical function ga\_pgroup\_destroy(p\_handle) integer p\_handle
+- processor group handle {[}input{]}
+
+This command is used to free up a processor group handle. It returns
+false if the processor group handle was not previously active.
+
+This is a collective operation on the default processor group. GA\_PGROUP\_SET\_DEFAULT
+
+subroutine ga\_pgroup\_set\_default(p\_handle) integer p\_handle -
+processor group handle {[}input{]}
+
+This subroutine can be used to reset the default processor group on
+a collection of processors. All processors in the group referenced
+by p\_handle must make a call to this subroutine. Any standard global
+array call that is made resetting the default processor group will
+be restricted to processors in that group. Global arrays that are
+created after resetting the default processor group will only be defined
+on that group and global operations such as ga\_sync or ga\_igop will
+be restricted to processors in that group. The ga\_pgroup\_set\_default
+call can be used to rapidly convert large applications, written with
+GA, into routines that run on processor groups.
+
+The default processor group can be overridden by using GA calls that
+require an explicit group handle as one of the arguments.
+
+This is a collective operation on the group represented by the handle
+p\_handle. GA\_CREATE
+
+logical function ga\_create(type, dim1, dim2, array\_name, chunk1,
+chunk2, g\_a) character{*}({*}) array\_name - a unique character string
+{[}input{]} integer type - MA type {[}input{]} integer dim1/2 - array(dim1,dim2)
+as in FORTRAN {[}input{]} integer chunk1/2 - minimum size that dimensions
+should be chunked up into {[}input{]} integer g\_a - handle for future
+references {[}output{]}
+
+Creates a 2-dimensional global array.
+
+Setting chunk1=dim1 gives distribution by vertical strips (chunk2{*}columns);
+setting chunk2=dim2 gives distribution by horizontal strips (chunk1{*}rows).
+Actual chunks will be modified so that they are at least the size
+of the minimum and each process has either zero or one chunk. Specifying
+chunk1/2 as < 1 will cause that dimension to be distributed evenly.
+
+Return value: .true. means the call was succesful.This is a collective
+operation.
+
+logical function nga\_create(type, ndim, dims, array\_name, chunk,
+g\_a) character{*}({*}) array\_name - a unique character string {[}input{]}
+integer type - data type (MT\_DBL,MT\_INT,MT\_DCPL) {[}input{]} integer
+ndim - number of array dimensions {[}input{]} integer dims(ndim) -
+array of dimensions {[}input{]} integer chunk(ndim) - array of chunks,
+each element specifies minimum size that given dimensions should be
+chunked up into {[}input{]} integer g\_a - integer handle for future
+references {[}output{]}
+
+Creates an ndim-dimensional array using the regular distribution model
+and returns an integer handle representing the array.
+
+The array can be distributed evenly or not evenly. The control over
+the distribution is accomplished by specifying chunk (block) size
+for all or some of array dimensions. For example, for a 2-dimensional
+array, setting chunk(1)=dim(1) gives distribution by vertical strips
+(chunk(1){*}dims(1)); setting chunk(2)=dim(2) gives distribution by
+horizontal strips (chunk(2){*}dims(2)). Actual chunks will be modified
+so that they are at least the size of the minimum and each process
+has either zero or one chunk. Specifying chunk(i) as <1 will cause
+that dimension (i-th) to be distributed evenly.
+
+Return value: .true. means the call was succesful.This is a collective
+operation.
+
+GA\_CREATE\_CONFIG
+
+logical function nga\_create\_config(type, ndim, dims, array\_name,
+chunk, p\_handle, g\_a) character{*}({*}) array\_name - a unique character
+string {[}input{]} integer type - data type (MT\_DBL,MT\_INT,MT\_DCPL)
+{[}input{]} integer ndim - number of array dimensions {[}input{]}
+integer dims(ndim) - array of dimensions {[}input{]} integer chunk(ndim)
+- array of chunks, each element specifies minimum size that given
+dimensions should be chunked up into {[}input{]} integer p\_handle
+- processor group handle {[}input{]} integer g\_a - integer handle
+for future references {[}output{]}
+
+Creates an ndim-dimensional array using the regular distribution model
+but with an explicitly specified processor group handle and returns
+an integer handle representing the array.
+
+This call is essentially the same as the nga\_create call except for
+the processor group handle p\_handle. It can be used to create mirrored
+arrays.
+
+Return value: .true. means the call was succesful.This is a collective
+operation. GA\_CREATE\_GHOSTS
+
+logical function nga\_create\_ghosts(type, ndim, dims, width, array\_name,
+chunk, g\_a) character{*}({*}) array\_name - a unique character string
+{[}input{]} integer type - data type (MT\_DBL,MT\_INT,MT\_DCPL) {[}input{]}
+integer ndim - number of array dimensions {[}input{]} integer dims(ndim)
+- array of dimensions {[}input{]} integer width(ndim) - array of ghost
+cell widths {[}input{]} integer chunk(ndim) - array of chunks, each
+element specifies minimum size that given dimensions should be chunked
+up into {[}input{]} integer g\_a - integer handle for future references
+{[}output{]}
+
+Creates an ndim-dimensional array with a layer of ghost cells around
+the visible data on each processor using the regular distribution
+model and returns an integer handle representing the array.
+
+The array can be distributed evenly or not evenly. The control over
+the distribution is accomplished by specifying chunk (block) size
+for all or some of the array dimensions. For example, for a 2-dimensional
+array, setting chunk(1)=dim(1) gives distribution by vertical strips
+(chunk(1){*}dims(1)); setting chunk(2)=dim(2) gives distribution by
+horizontal strips (chunk(2){*}dims(2)). Actual chunks will be modified
+so that they are at least the size of the minimum and each process
+has either zero or one chunk. Specifying chunk(i) as <1 will cause
+that dimension (i-th) to be distributed evenly. The width of the ghost
+cell layer in each dimension is specified using the array width().
+The local data of the global array residing on each processor will
+have a layer width(n) ghosts cells wide on either side of the visible
+data along the dimension n.
+
+Return value: .true. means the call was succesful.This is a collective
+operation.
+
+GA\_CREATE\_GHOSTS\_CONFIG
+
+logical function nga\_create\_ghosts\_config(type, ndim, dims, width,
+array\_name, chunk, p\_handle, g\_a) character{*}({*}) array\_name
+- a unique character string {[}input{]} integer type - data type (MT\_DBL,MT\_INT,MT\_DCPL)
+{[}input{]} integer ndim - number of array dimensions {[}input{]}
+integer dims(ndim) - array of dimensions {[}input{]} integer width(ndim)
+- array of ghost cell widths {[}input{]} integer chunk(ndim) - array
+of chunks, each element specifies minimum size that given dimensions
+should be chunked up into {[}input{]} integer p\_handle - processor
+group handle {[}input{]} integer g\_a - integer handle for future
+references {[}output{]}
+
+Creates an ndim-dimensional array with a layer of ghost cells around
+the visible data on each processor using the regular distribution
+model but with an explicitly specified processor group handle and
+returns an integer handle representing the array.
+
+This call is essentially the same as the nga\_create\_ghosts call
+except for the processor group handle p\_handle. It can be used to
+create mirrored arrays.
+
+Return value: .true. means the call was succesful.This is a collective
+operation. GA\_CREATE\_IRREG
+
+logical function ga\_create\_irreg(type, dim1, dim2, array\_name,
+map1, nblock1, map2, nblock2, g\_a)
+
+character{*}({*}) array\_name - a unique character string {[}input{]}
+integer type - MA type {[}input{]} integer dim1/2 - array(dim1,dim2)
+as in FORTRAN {[}input{]} integer nblock1 - no. of blocks first dimension
+is divided into {[}input{]} integer nblock2 - no. of blocks second
+dimension is divided into{[}input{]} integer map1({*}) - ilo for each
+block {[}input{]} integer map2({*}) - jlo for each block {[}input{]}
+integer g\_a - integer handle for future references {[}output{]}
+
+Creates an array by following the user-specified distribution.
+
+Return value: .true. means the call was succesful.This is a collective
+operation.
+
+logical function nga\_create\_irreg(type, ndim, dims, array\_name,
+map, nblock, g\_a) character{*}({*}) array\_name - a unique character
+string {[}input{]} integer type - data type (MT\_DBL,MT\_INT,MT\_DCPL)
+{[}input{]} integer ndim - number of array dimensions {[}input{]}
+integer dims(ndim) - array of dimensions {[}input{]} integer nblock(ndim)
+- no. of blocks each dimension is divided into{[}input{]} integer
+map(s) - starting index for for each block; the size s is a sum of
+all elements of nblock array {[}input{]} integer g\_a - integer handle
+for future references {[}output{]}
+
+Creates an array by following the user-specified distribution and
+returns integer handle representing the array.
+
+The distribution is specified as a Cartesian product of distributions
+for each dimension. For example, the following figure demonstrates
+distribution of a 2-dimensional array 8x10 on 6 (or more) processors.
+nblock(2)=\{3,2\}, the size of map array is s=5 and array map contains
+the following elements map=\{1,3,7, 1, 6\}. The distribution is nonuniform
+because, P1 and P4 get 20 elements each and processors P0,P2,P3, and
+P5 only 10 elements each. 
+
+5 
+
+5 
+
+P0 
+
+P3 2 P1 
+
+P4 4 P2 
+
+P5 2
+
+Return value: .true. means the call was succesful. This is a collective
+operation.
+
+GA\_CREATE\_IRREG\_CONFIG
+
+logical function nga\_create\_irreg\_config(type, ndim, dims, array\_name,
+map, nblock, p\_handle, g\_a) character{*}({*}) array\_name - a unique
+character string {[}input{]} integer type - data type (MT\_DBL,MT\_INT,MT\_DCPL)
+{[}input{]} integer ndim - number of array dimensions {[}input{]}
+integer dims(ndim) - array of dimensions {[}input{]} integer nblock(ndim)
+- no. of blocks each dimension is divided into{[}input{]} integer
+map(s) - starting index for for each block; the size s is a sum of
+all elements of nblock array {[}input{]} integer p\_handle - processor
+group handle {[}input{]} integer g\_a - integer handle for future
+references {[}output{]}
+
+Creates an array by following the user-specified distribution but
+with an explicitly specified processor group and returns an integer
+handle representing the array.
+
+This call is essentially the same as the nga\_create\_irreg call except
+for the processor group handle p\_handle. It can be used to create
+mirrored arrays.
+
+This is a collective operation. GA\_CREATE\_GHOSTS\_IRREG
+
+logical function nga\_create\_ghosts\_irreg(type, ndim, dims, width,
+array\_name, map, nblock, g\_a) character{*}({*}) array\_name - a
+unique character string {[}input{]} integer type - data type (MT\_DBL,MT\_INT,MT\_DCPL)
+{[}input{]} integer ndim - number of array dimensions {[}input{]}
+integer dims(ndim) - array of dimensions {[}input{]} integer width(ndim)
+- array of ghost cell widths {[}input{]} integer nblock(ndim) - no.
+of blocks each dimension is divided into{[}input{]} integer map(s)
+- starting index for for each block; the size s is a sum of all elements
+of nblock array {[}input{]} integer g\_a - integer handle for future
+references {[}output{]}
+
+Creates an array with ghost cells by following the user-specified
+distribution and returns integer handle representing the array.
+
+The distribution is specified as a Cartesian product of distributions
+for each dimension. For example, the following figure demonstrates
+distribution of a 2-dimensional array 8x10 on 6 (or more) processors.
+nblock(2)=\{3,2\}, the size of map array is s=5 and array map contains
+the following elements map=\{1,3,7, 1, 6\}. The distribution is nonuniform
+because, P1 and P4 get 20 elements each and processors P0,P2,P3, and
+P5 only 10 elements each. 
+
+5 
+
+5 
+
+P0 
+
+P3 2 P1 
+
+P4 4 P2 
+
+P5 2
+
+The array width() is used to control the width of the ghost cell boundary
+around the visible data on each processor. The local data of the global
+array residing on each processor will have a layer width(n) ghosts
+cells wide on either side of the visible data along the dimension
+n.
+
+Return value: .true. means the call was succesful. This is a collective
+operation.
+
+GA\_CREATE\_GHOSTS\_IRREG\_CONFIG
+
+logical function nga\_create\_ghosts\_irreg\_config(type, ndim, dims,
+width, array\_name,map, nblock, p\_handle, g\_a) character{*}({*})
+array\_name - a unique character string {[}input{]} integer type -
+data type (MT\_DBL,MT\_INT,MT\_DCPL) {[}input{]} integer ndim - number
+of array dimensions {[}input{]} integer dims(ndim) - array of dimensions
+{[}input{]} integer width(ndim) - array of ghost cell widths {[}input{]}
+integer nblock(ndim) - no. of blocks each dimension is divided into{[}input{]}
+integer map(s) - starting index for for each block; the size s is
+a sum of all elements of nblock array {[}input{]} integer p\_handle
+- processor group handle {[}input{]} integer g\_a - integer handle
+for future references {[}output{]}
+
+Creates an array with ghost cells by following the user-specified
+distribution and an explicitly specified processor group and returns
+an integer handle representing the array.
+
+This call is essentially the same as the nga\_create\_ghosts\_irreg
+call except for the processor group handle p\_handle. It can be used
+to create mirrored arrays.
+
+This is a collective operation.
+
+GA\_CREATE\_HANDLE
+
+integer function ga\_create\_handle()
+
+This function returns a global array handle that can then be used
+to create a new global array. This is part of a new API for creating
+global arrays that is designed to replace the old interface built
+around the ga\_create\_xxx calls. The sequence of operations is to
+begin with a call to ga\_create\_handle to get a new array handle.
+The attributes of the array, such as dimension, size, type, etc. can
+then be set using successive calls to the nga\_set\_xxx subroutines.
+When all array attributes have been set, the ga\_allocate subroutine
+is called and the global array is actually created and memory for
+it is allocated.
+
+This is a collective operation. GA\_SET\_ARRAY\_NAME
+
+subroutine ga\_set\_array\_name(g\_a, name) integer g\_a - global
+array handle {[}input{]} character{*}({*}) name - a unique character
+string {[}input{]}
+
+This subroutine can be used to assign a unique character string name
+to a global array handle that was obtained using the nga\_create\_handle
+function.
+
+This is a collective operation.
+
+GA\_SET\_DATA
+
+subroutine ga\_set\_data(g\_a, ndim, dims, type) integer g\_a - global
+array handle {[}input{]} integer ndim - dimension of array {[}input{]}
+integer dims(ndim) - array dimensions {[}input{]} integer type - data
+type (MT\_DBL,MT\_INT,etc.) {[}input{]}
+
+This subroutine can be used to set the array dimension, coordinate
+dimenstions, and data type assigned to a global array handle that
+was obtained using the nga\_create\_handlefunction.
+
+This is a collectiveoperation. GA\_SET\_IRREG\_DISTR
+
+subroutine ga\_set\_irreg\_distr(g\_a, mapc, nblock) integer g\_a
+- global array handle {[}input{]} integer map(s) - starting index
+for for each block; the size s is a sum of all elements of nblock
+array {[}input{]} integer nblock(ndim) - no. of blocks each dimension
+is divided into {[}input{]}
+
+This subroutine can be used to partition the array data among the
+individual processors for a global array handle obtained using the
+nga\_create\_handle function.
+
+The distribution is specified as a Cartesian product of distributions
+for each dimension. For example, the following figure demonstrates
+distribution of a 2-dimensional array 8x10 on 6 (or more) processors.
+nblock(2)=\{3,2\}, the size of map array is s=5 and array map contains
+the following elements map=\{1,3,7, 1, 6\}. The distribution is nonuniform
+because, P1 and P4 get 20 elements each and processors P0,P2,P3, and
+P5 only 10 elements each. 
+
+5 
+
+5 
+
+P0 
+
+P3 2 P1 
+
+P4 4 P2 
+
+P5 2
+
+The array width() is used to control the width of the ghost cell boundary
+around the visible data on each processor. The local data of the global
+array residing on each processor will have a layer width(n) ghosts
+cells wide on either side of the visible data along the dimension
+n.
+
+This is a collective operation. GA\_SET\_PGROUP
+
+subroutine ga\_set\_pgroup(g\_a, p\_handle) integer g\_a - global
+array handle {[}input{]} integer p\_handle - processor group handle
+{[}input{]}
+
+This subroutine can be used to set the processor configuration assigned
+to a global array handle that was obtained using the ga\_create\_handle
+function. It can also be used to create mirrored arrays by using the
+mirrored array processor configuration in this function call. It can
+also be used to create an array on a processor group by using a processor
+group handle in this call.
+
+This is a collective operation. GA\_SET\_GHOSTS
+
+subroutine ga\_set\_ghosts(g\_a, width) integer g\_a - global array
+handle {[}input{]} integer width(ndim)- array of ghost cell widths
+{[}input{]}
+
+This subroutine can be used to set the ghost cell widths for a global
+array handle that was obtained using the ga\_create\_handle function.
+The ghost cell widths indicate how many ghost cells are used to pad
+the locally held global array data along each dimension. The padding
+can be set independently for coordinate direction.
+
+This is a collective operation. GA\_SET\_CHUNK
+
+subroutine ga\_set\_chunk(g\_a, chunk) integer g\_a - global array
+handle {[}input{]} integer chunk(ndim)- array of chunk widths {[}input{]}
+
+This subroutine is used to set the chunk array for a global array
+handle obtained using the ga\_create\_handle function. The chunk array
+is used to determine the minimum number of array elements that are
+assigned to each processor along each coordinate direction.
+
+This is a collective operation GA\_SET\_BLOCK\_CYCLIC
+
+subroutine ga\_set\_block\_cyclic(g\_a, dims) integer g\_a - global
+array handle {[}input{]} integer dims(ndim)- array of block dimensions
+{[}input{]}
+
+This subroutine is used to create a global array with a simple block-cyclic
+data distribution. The array is broken up into blocks of size dims
+and each block is numbered sequentially using a column major indexing
+scheme. The blocks are then assigned in a simple round-robin fashion
+to processors. This is illustrated in the figure below for an array
+containing 25 blocks distributed on 4 processors. Blocks at the edge
+of the array may be smaller than the block size specified in dims.
+In the example below, blocks 4,9,14,19,20,21,22,23, and 24 might be
+smaller thatn the remaining blocks. Most global array operations are
+insensitive to whether or not a block-cyclic data distribution is
+used, although performance may be slower in some cases if the global
+array is using a block-cyclic data distribution. Individual data blocks
+can be accessesed using the block-cyclic access functions.
+
+0 P0 5 P1 10 P2 15 P3 20 P0 1 P1 6 P2 11 P3 16 P0 21 P1 2 P2 7 P3
+12 P0 17 P1 22 P2 3 P3 8 P0 13 P1 18 P2 23 P3 4 P0 9 P1 14 P2 19 P3
+24 P4
+
+This is a collective operation. GA\_SET\_BLOCK\_CYCLIC\_PROC\_GRID
+
+subroutine ga\_set\_block\_cyclic\_proc\_grid(g\_a, dims, proc\_grid)
+integer g\_a - global array handle {[}input{]} integer dims(ndim)
+- array of block dimensions {[}input{]} integer proc\_grid(ndim)-
+processor grid dimensions {[}input{]}
+
+This subroutine is used to create a global array with a SCALAPACK-type
+block cyclic data distribution. The user specifies the dimensions
+of the processor grid in the array proc\_grid. The product of the
+processor grid dimensions must equal the number of total number of
+processors and the number of dimensions in the processor grid must
+be the same as the number of dimensions in the global array. The data
+blocks are mapped onto the processor grid in a cyclic manner along
+each of the processor grid axes. This is illustrated below for an
+array consisting of 25 data blocks disributed on 6 processors. The
+6 processors are configured in a 3 by 2 processor grid. Blocks at
+the edge of the array may be smaller than the block size specified
+in dims. Most global array operations are insensitive to whether or
+not a block-cyclic data distribution is used, although performance
+may be slower in some cases if the global array is using a block-cyclic
+data distribution. Individual data blocks can be accessesed using
+the block-cyclic access functions.
+
+(0,0) P0 (0,1) P3 (0,0) P0 (0,1) P3 (0,0) P0 (1,0) P1 (1,1) P4 (1,0)
+P1 (1,1) P4 (1,0) P1 (2,0) P2 (2,1) P5 (2,0) P2 (2,1) P5 (2,0) P2
+(0,0) P0 (0,1) P3 (0,0) P0 (0,1) P3 (0,0) P0 (1,0) P1 (1,1) P4 (1,0)
+P1 (1,1) P4 (1.0) P1
+
+This is a collective operation. GA\_ALLOCATE
+
+logical function ga\_allocate(g\_a) integer g\_a - global array handle
+{[}input{]}
+
+This function allocates memory for the global array handle originally
+obtained using the ga\_create\_handle function and returns true if
+the allocation was successful. At a minimum, the nga\_set\_data subroutine
+must be called before the memory is allocated. Other nga\_set\_xxx
+functions can also be called before invoking this function.
+
+This is a collective operation. GA\_UPDATE\_GHOSTS
+
+subroutine ga\_update\_ghosts(g\_a) integer g\_a {[}input{]}
+
+This call updates the ghost cell regions on each processor with the
+corresponding neighbor data from other processors. The operation assumes
+that all data is wrapped around using periodic boundary data so that
+ghost cell data that goes beyound an array boundary is wrapped around
+to the other end of the array.
+
+This is a collective operation. GA\_UPDATE\_GHOST\_DIR
+
+logical function nga\_update\_ghost\_dir(g\_a,dimension,idir,cflag)
+integer g\_a {[}input{]} integer dimension - array dimension that
+is to be updated {[}input{]} integer idir - direction of update (+/-
+1) {[}input{]} logical cflag - flag to include corners in update {[}input{]}
+
+This function can be used to update the ghost cells along individual
+directions. It is designed for algorithms that can overlap updates
+with computation. The variable dimension indicates which coordinate
+direction is to be updated (e.g. dimension = 2 would correspond to
+the y axis in a two or three dimensional system), the variable idir
+can take the values +/-1 and indicates whether the side that is to
+be updated lies in the positive or negative direction, and cflag indicates
+whether or not the corners on the side being updated are to be included
+in the update. The following calls would be equivalent to a call to
+ga\_update\_ghosts for a 2-dimensional system: 
+
+status = nga\_update\_ghost\_dir(g\_a,1,-1,.true.) status = nga\_update\_ghost\_dir(g\_a,1,1,.true.)
+status = nga\_update\_ghost\_dir(g\_a,2,-1,.false.) status = nga\_update\_ghost\_dir(g\_a,2,1,.false.)
+
+The variable cflag is set equal to .true. in the first two calls so
+that the corner ghost cells are update, it is set equal to .false.
+in the second two calls to avoid redundant updates of the corners.
+Note that updating the ghosts cells using several independent calls
+to the nga\_update\_ghost\_dir functions is generally not as efficient
+as using ga\_update\_ghosts unless the individual calls can be effectively
+overlapped with computation.
+
+This is a collective operation. GA\_HAS\_GHOSTS
+
+logical function ga\_has\_ghosts(g\_a) integer g\_a {[}input{]}
+
+This function returns true if the global array has some dimensions
+for which the ghost cell width is greater than zero, it returns false
+otherwise. This is a collective operation. GA\_ACCESS\_GHOSTS
+
+subroutine nga\_access\_ghosts(g\_a, dims, index, ld) integer g\_a
+{[}input{]} integer dims(ndim) - array of dimensions of local patch,
+including ghost cells {[}output{]}
+
+integer index - returns an index corresponding to the origin the global
+array patch held locally on the processor {[}output{]} integer ld(ndim)
+- physical dimenstions of the local array patch, including ghost cells
+{[}output{]}
+
+Provides access to the local patch of the global array. Returns leading
+dimension ld and and MA-like index for the data. This routine will
+provide access to the ghost cell data residing on each processor.
+Calls to nga\_access\_ghosts should normally follow a call to ga\_distribution
+that returns coordinates of the visible data patch associated with
+a processor. You need to make sure that the coordinates of the patch
+are valid (test values returned from nga\_distribution).
+
+Your code should include a MA include file, mafdecls.h. The addressing
+convention:
+
+dbl\_mb(index) - for double precision data int\_mb(index) - for integer
+data dcpl\_mb(index) - for double complex data
+
+refers the first element of the patch. However, you can only pass
+that reference to another subroutine where it could be used like a
+normal array, see the following example. This constraint caused by
+the HP fortran compiler inability to reference shared memory data
+properly. The C interface has no such restrictions.
+
+Example
+
+For a given global array in 2 dimensions with a local data patch whose
+characteristics are
+
+number of rows of visible data : irow number of columns of visible
+data : jcol width of ghost cell data in first dimension: iwidth width
+of ghost cell data in second dimension: jwidth
+
+a call to ga\_access\_ghosts returns
+
+dims(1) = irow + 2{*}iwidth dims(2) = jrow + 2{*}jwidth ld(1) = irow
++ 2{*}iwidth
+
+After choosing the variables
+
+nrows = dims(1) ncols = dims(2) lda = ld(1)
+
+the ghost cell data can be accessed creating a dummy routine
+
+subroutine foo(A, nrows, ncols lda) double precision A(lda,{*}) integer
+nrows, ncols .... end
+
+you can reference A(1:irow+2{*}iwidth,1:jrow+2{*}jwidth) in the following
+way:
+
+call foo(dbl\_mb(index), nrows, ncols, lda)
+
+It will be up to the programmer to keep track of the fact that the
+visible portion of the global array data corresponds to the ranges
+(iwidth+1:irow+iwidth,jwidth+1:jcol+jwidth). Correctly accessing this
+data may require additional arguments in the call to foo.
+
+NOTE: You have to worry about mutual exclusion in simultaneous overlapping
+access to the data by multiple processors.
+
+Each call to ga\_access\_ghosts has to be followed by a call to either
+ga\_release or ga\_release\_update. You can access only local data.
+This is a local operation. GA\_ACCESS\_GHOST\_ELEMENT
+
+subroutine nga\_access\_ghost\_element(g\_a, index, subscript, ld)
+integer g\_a {[}input{]} integer index - index pointing to location
+of element indexed by subscript() {[}output{]} integer subscript(ndim)
+- array of integers that index desired element {[}input{]} integer
+ld(ndim-1) - array of strides for local data patch. These include
+ghost cell widths. {[}output{]}
+
+This function can be used to return an index to any data element in
+the locally held portion of the global array and can be used to directly
+access ghost cell data. The array subscript refers to the local index
+of the element relative to the origin of the local patch (which is
+assumed to be indexed by (1,1,...)). This is a local operation. GA\_TOTAL\_BLOCKS
+
+integer function ga\_total\_blocks(g\_a) integer g\_a {[}input{]}
+
+This function returns the total number of blocks contained in a global
+array with a block-cyclic data distribution. This is a local operation.
+GA\_GET\_BLOCK\_INFO
+
+subroutine ga\_get\_block\_info(g\_a, num\_blocks, block\_dims) integer
+g\_a {[}input{]} integer num\_blocks(ndim) - number of blocks along
+each axis {[}output{]} integer block\_dims(ndim) - dimensions of block
+{[}output{]}
+
+This subroutine returns information about the block-cyclic distribution
+associated with global array g\_a. The number of blocks along each
+of the array axes are returned in the array num\_blocks and the dimensions
+of the individual blocks, specified in the ga\_set\_block\_cyclic
+or ga\_set\_block\_cyclic\_proc\_grid subroutine, are returned in
+block\_dims. This is a local function.
+
+GA\_DUPLICATE
+
+logical function ga\_duplicate(g\_a, g\_b, array\_name) integer g\_a,
+g\_b; character{*}({*}) array\_name;
+
+array\_name - a character string {[}input{]} g\_a - Integer handle
+for reference array {[}input{]} g\_b - Integer handle for new array
+{[}output{]}
+
+Creates a new array by applying all the properties of another existing
+array. This is a collective operation. GA\_DESTROY
+
+logical function ga\_destroy(g\_a) integer g\_a {[}input{]}
+
+Deallocates the array and frees any associated resources. This is
+a collective operation. GA\_TERMINATE
+
+subroutine ga\_terminate()
+
+Delete all active arrays and destroy internal data structures. This
+is a collective operation. GA\_SYNC
+
+subroutine ga\_sync()
+
+Synchronize processes (a barrier) and ensure that all global array
+operations are complete (or at least appear complete). This is a collective
+operation. GA\_MASK\_SYNC
+
+subroutine ga\_mask\_sync(first,last)
+
+logical first - mask for prior internal synchronization {[}input{]}
+logical last - mask for post internal synchronization {[}input{]}
+
+This subroutine can be used to remove synchronization calls from around
+collective operations. Setting the parameter first = .false. removes
+the synchronization prior to the collective operation, setting last
+= .false. removes the synchronization call after the collective operation.
+This call is applicable to all collective operations. It most be invoked
+before each collective operation. This is a collective operation.
+GA\_ZERO
+
+subroutine ga\_zero(g\_a)
+
+integer g\_a {[}input{]}
+
+Sets value of all elements in the array to zero. This is a collective
+operation. GA\_FILL
+
+subroutine ga\_fill(g\_a, s)
+
+integer g\_a {[}input{]} double precision/complex/integer s {[}input{]}
+
+Assign a single value to all elements in the array. This is a collective
+operation. GA\_DDOT
+
+double precision function ga\_ddot(g\_a, g\_b)
+
+integer g\_a, g\_b {[}input{]}
+
+Computes the element-wise dot product of the two arrays which must
+be double precision, the same shape and identically aligned:
+
+ga\_ddot = SUM\_ij a(i,j){*}b(i,j)
+
+This is a collective operation. GA\_ZDOT
+
+double complex function ga\_zdot(g\_a, g\_b)
+
+integer g\_a, g\_b {[}input{]}
+
+Computes the element-wise dot product of the two arrays which must
+be double complex, the same shape and identically aligned:
+
+ga\_zdot = SUM\_ij a(i,j){*}b(i,j)
+
+This is a collective operation.
+
+GA\_DDOT\_PATCH
+
+double precision function ga\_ddot\_patch(g\_a, ta, ailo, aihi, ajlo,
+ajhi, g\_b, tb, bilo, bihi, bjlo, bjhi) 
+
+integer g\_a, g\_b {[}input{]} integer ailo, aihi, ajlo, ajhi {[}input{]}
+g\_a patch coordinates integer bilo, bihi, bjlo, bjhi {[}input{]}
+g\_b patch coordinates character{*}1 ta, tb {[}input{]} transpose
+flags
+
+Computes the element-wise dot product of the two (possibly transposed)
+patches which must be double precision and have the same number of
+elements. This is a collective operation.
+
+double precision function nga\_ddot\_patch(g\_a, ta, alo, ahi, g\_b,
+tb, bio, bhi) 
+
+integer g\_a, g\_b {[}input{]} integer ndim number of dimensions integer
+alo(ndim), ahi(ndim) {[}input{]} g\_a patch coordinates integer blo(ndim),
+bhi(ndim) {[}input{]} g\_b patch coordinates character{*}1 ta, tb
+{[}input{]} transpose flags
+
+Computes the element-wise dot product of the two (possibly transposed)
+patches which must be double precision and have the same number of
+elements. This is a collective operation. GA\_ZDOT\_PATCH
+
+double complex function ga\_zdot\_patch(g\_a, ta, ailo, aihi, ajlo,
+ajhi, g\_b, tb, bilo, bihi, bjlo, bjhi)
+
+integer g\_a, g\_b {[}input{]} integer ailo, aihi, ajlo, ajhi {[}input{]}
+g\_a patch coordinates integer bilo, bihi, bjlo, bjhi {[}input{]}
+g\_b patch coordinates character{*}1 ta, tb {[}input{]} transpose
+flags
+
+Computes the element-wise dot product of the two (possibly transposed)
+patches which must be double complex and have the same number of elements.
+This is a collective operation.
+
+double complex function nga\_zdot\_patch(g\_a, ta, alo, ahi, g\_b,
+tb, blo, bhi)
+
+integer g\_a, g\_b {[}input{]} integer ndim number of dimensions integer
+alo(ndim), ahi(ndim) {[}input{]} g\_a patch coordinates integer blo(ndim),
+bhi(ndim) {[}input{]} g\_b patch coordinates character{*}1 ta, tb
+{[}input{]} transpose flags
+
+Computes the element-wise dot product of the two (possibly transposed)
+patches which must be double complex and have the same number of elements.
+This is a collective operation. GA\_MATMUL\_PATCH
+
+subroutine ga\_matmul\_patch(transa, transb, alpha, beta, g\_a, ailo,
+aihi, ajlo, ajhi, g\_b, bilo, bihi, bjlo, bjhi, g\_c, cilo, cihi,
+cjlo, cjhi)
+
+integer g\_a, ailo, aihi, ajlo, ajhi {[}input{]} patch of g\_a integer
+g\_b, bilo, bihi, bjlo, bjhi {[}input{]} patch of g\_b integer g\_c,
+cilo, cihi, cjlo, cjhi {[}input{]} patch of g\_c double precision/complex
+alpha, beta {[}input{]} character{*}1 transa, transb {[}input{]}
+
+ga\_matmul\_patch is a patch version of ga\_dgemm:
+
+C{[}cilo:cihi,cjlo:cjhi{]} := alpha{*} AA{[}ailo:aihi,ajlo:ajhi{]}
+{*} BB{[}bilo:bihi,bjlo:bjhi{]} ) + beta{*}C{[}cilo:cihi,cjlo:cjhi{]},
+
+where AA = op(A), BB = op(B), and op( X ) is one of
+
+op( X ) = X or op( X ) = X',
+
+Valid values for transpose arguments: 'n', 'N', 't', 'T'. It works
+for both double precision and double complex data tape. This is a
+collective operation. GA\_MATMUL\_PATCH
+
+subroutine nga\_matmul\_patch(transa, transb, alpha, beta, g\_a, alo,
+ahi, g\_b, blo, bhi, g\_c, clo, chi)
+
+integer g\_a, alo, ahi {[}input{]} patch of g\_a integer g\_b, blo,
+bhi {[}input{]} patch of g\_b integer g\_c, clo, chi {[}input{]} patch
+of g\_c double precision/complex alpha, beta {[}input{]} character{*}1
+transa, transb {[}input{]}
+
+nga\_matmul\_patch is a n-dimensional patch version of ga\_dgemm:
+
+C{[}clo{[}{]}:chi{[}{]}{]} := alpha{*} AA{[}alo{[}{]}:ahi{[}{]}{]}
+{*} BB{[}blo{[}{]}:bhi{[}{]}{]} ) + beta{*}C{[}clo{[}{]}:chi{[}{]}{]},
+
+where AA = op(A), BB = op(B), and op( X ) is one of
+
+op( X ) = X or op( X ) = X',
+
+Valid values for transpose arguments: 'n', 'N', 't', 'T'. It works
+for both double precision and double complex data tape. This is a
+collective operation. GA\_SCALE
+
+subroutine ga\_scale(g\_a, s) integer g\_a {[}input{]} double precision/complex/integer
+s {[}input{]}
+
+Scales an array by the constant s. This is a collective operation.
+GA\_ZERO\_PATCH
+
+subroutine nga\_zero\_patch(g\_a, alo, ahi)
+
+integer g\_a {[}input{]} integer ndim number of dimensions integer
+alo(ndim), ahi(ndim) {[}input{]} g\_a patch coordinates
+
+Set all the elements in the patch to zero. This is a collective operation.
+GA\_SCALE\_PATCH
+
+subroutine ga\_scale\_patch(g\_a, ailo, aihi, ajlo, ajhi, s)
+
+integer g\_a {[}input{]} double precision/complex/integer s {[}input{]}
+integer ailo, aihi, ajlo, ajhi {[}input{]} g\_a patch coordinates
+
+Scales a patch of an array by the constant s. This is a collective
+operation.
+
+subroutine nga\_scale\_patch(g\_a, alo, ahi, s)
+
+integer g\_a {[}input{]} double precision/complex/integer s {[}input{]}
+integer ndim number of dimensions integer alo(ndim), ahi(ndim) {[}input{]}
+g\_a patch coordinates
+
+Scales a patch of an array by the constant s. This is a collective
+operation. GA\_ADD
+
+subroutine ga\_add(alpha, g\_a, beta, g\_b, g\_c)
+
+integer g\_a, g\_b, g\_c {[}input{]} double precision/complex/integer
+alpha, beta {[}input{]}
+
+The arrays (which must be the same shape and identically aligned)
+are added together element-wise
+
+c = alpha {*} a + beta {*} b.
+
+The result (c) may replace one of the input arrays (a/b). This is
+a collective operation. GA\_ADD\_PATCH
+
+subroutine ga\_add\_patch (alpha, g\_a, ailo, aihi, ajlo, ajhi, beta,
+g\_b, bilo, bihi, bjlo, bjhi, g\_c, cilo, cihi, cjlo, cjhi)
+
+integer g\_a, g\_b, g\_c {[}input{]} double precision/complex/integer
+alpha, beta {[}input{]} integer ailo, aihi, ajlo, ajhi {[}input{]}
+g\_a patch coordinates integer bilo, bihi, bjlo, bjhi {[}input{]}
+g\_b patch coordinates integer cilo, cihi, cjlo, cjhi {[}input{]}
+g\_c patch coordinates
+
+Patches of arrays (which must have the same number of elements) are
+added together element-wise. This is a collective operation.
+
+subroutine nga\_add\_patch (alpha, g\_a, alo, ahi, beta, g\_b, blo,
+bhi g\_c, clo, chi) integer g\_a, g\_b, g\_c {[}input{]} double precision/complex/integer
+alpha, beta {[}input{]} integer ndim number of dimensions integer
+alo(ndim), ahi(ndim) {[}input{]} g\_a patch coordinates integer blo(ndim),
+bhi(ndim) {[}input{]} g\_b patch coordinates integer clo(ndim), chi(ndim)
+{[}input{]} g\_c patch coordinates
+
+Patches of arrays (which must have the same number of elements) are
+added together element-wise.
+
+This is a collective operation. GA\_FILL\_PATCH
+
+subroutine ga\_fill\_patch(g\_a, ailo, aihi, ajlo, ajhi, s)
+
+integer g\_a {[}input{]} double precision/complex/integer s {[}input{]}
+integer ailo, aihi, ajlo, ajhi {[}input{]} g\_a patch coordinates
+
+Fills the patch of an array with value s. Type of s and array must
+match.
+
+This is a collective operation.
+
+subroutine nga\_fill\_patch(g\_a, alo, ahi, s)
+
+integer g\_a {[}input{]} double precision/complex/integer s {[}input{]}
+integer ndim number of dimensions integer alo(ndim), ahi(ndim) {[}input{]}
+g\_a patch coordinates
+
+Fills the patch of an array with value s. Type of s and array must
+match.
+
+This is a collective operation. GA\_SELECT\_ELEM
+
+subroutine nga\_select\_elem(g\_a, op, val, index)
+
+integer g\_a - array handle Control {[}input{]} character{*} op -
+operator \{'min','max'\} {[}input{]} val - address where selected
+value should be stored {[}output{]} index{[}ndim{]} - array index
+for the selected element {[}output{]}
+
+Returns the value and index for an element that is selected by the
+specified operator in a global array corresponding to g\_a handle.
+This is a collective operation. GA\_SUMMARIZE
+
+subroutine ga\_summarize(verbose) logical verbose {[}input{]}! If
+true print distribution info
+
+Prints info about allocated arrays. This is a local operation. GA\_SYMMETRIZE
+
+subroutine ga\_symmetrize(g\_a)
+
+integer g\_a {[}input/output{]}
+
+Symmetrizes matrix A represented with handle g\_a: A:= .5 {*} (A+A').
+This is a collective operation. GA\_TRANSPOSE
+
+subroutine ga\_transpose(g\_a, g\_b)
+
+integer g\_a {[}input{]} ! remains unchanged integer g\_b {[}output{]}
+
+Transposes a matrix: B = A', where A and B are represented by handles
+g\_a and g\_b. This is a collective operation. GA\_DIAG
+
+subroutine ga\_diag(g\_a, g\_s, g\_v, eval)
+
+integer g\_a {[}input{]} ! Matrix to diagonalize integer g\_s {[}input{]}
+! Metric integer g\_v {[}output{]} ! Global matrix to return evecs
+double precision eval({*}) {[}output{]} ! Local array to return evals
+
+Solve the generalized eigen-value problem returning all eigen-vectors
+and values in ascending order. The input matrices are not overwritten
+or destroyed. This is a collective operation. GA\_DIAG\_REUSE
+
+subroutine ga\_diag\_reuse(control, g\_a, g\_s, g\_v, eval)
+
+integer control {[}input{]} ! Control flag integer g\_a {[}input{]}
+! Matrix to diagonalize integer g\_s {[}input{]} ! Metric integer
+g\_v {[}output{]} ! Global matrix to return evecs double precision
+eval({*}) {[}output{]} ! Local array to return evals
+
+Solve the generalized eigen-value problem returning all eigen-vectors
+and values in ascending order. Recommended for REPEATED calls if g\_s
+is unchanged. Values of the control flag:
+
+value action/purpose 0 indicates first call to the eigensolver >0
+consecutive calls (reuses factored g\_s) <0 only erases factorized
+g\_s; g\_v and eval unchanged (should be called after previous use
+if another eigenproblem, i.e., different g\_a and g\_s, is to be solved)
+
+The input matrices are not destroyed. This is a collective operation.
+GA\_DIAG\_STD
+
+subroutine ga\_diag\_std(g\_a, g\_v, eval)
+
+integer g\_a {[}input{]} ! Matrix to diagonalize integer g\_v {[}output{]}
+! Global matrix to return evecs double precision eval({*}) {[}output{]}
+! Local array to return evals
+
+Solve the standard (non-generalized) eigenvalue problem returning
+all eigenvectors and values in the ascending order. The input matrix
+is neither overwritten nor destroyed.
+
+This is a collective operation. GA\_LU\_SOLVE
+
+subroutine ga\_lu\_solve(trans, g\_a, g\_b)
+
+character trans {[}input{]} ! transpose or not transpose integer g\_a
+{[}input{]} ! coefficient matrix integer g\_b {[}output/output{]}
+! rhs/solution matrix
+
+Solve the system of linear equations op(A)X = B based on the LU factorization.
+
+op(A) = A or A' depending on the parameter trans: trans = 'N' or 'n'
+means that the transpose operator should not be applied. trans = 'T'
+or 't' means that the transpose operator should be applied. Matrix
+A is a general real matrix. Matrix B contains possibly multiple rhs
+vectors. The array associated with the handle g\_b is overwritten
+by the solution matrix X.
+
+This is a collective operation. GA\_SPD\_INVERT
+
+integer function ga\_spd\_invert(g\_a) integer g\_a {[}input/output{]}
+! matrix
+
+It computes the inverse of a double precision using the Cholesky factorization
+of a NxN double precision symmetric positive definite matrix A stored
+in the global array represented by g\_a. On successful exit, A will
+contain the inverse.
+
+It returns
+
+= 0 : successful exit > 0 : the leading minor of this order is not
+positive definite and the factorization could not be completed < 0
+: it returns the index i of the (i,i) element of the factor L/U that
+is zero and the inverse could not be computed
+
+This is a collective operation. GA\_LLT\_SOLVE
+
+integer function ga\_llt\_solve(g\_a, g\_b)
+
+integer g\_a {[}input{]} ! coefficient matrix integer g\_b {[}output/output{]}
+! rhs/solution matrix
+
+Solves a system of linear equations
+
+A {*} X = B
+
+using the Cholesky factorization of an NxN double precision symmetric
+positive definite matrix A (epresented by handle g\_a). On successful
+exit B will contain the solution X. It returns:
+
+= 0 : successful exit > 0 : the leading minor of this order is not
+positive definite and the factorization could not be completed
+
+This is a collective operation. GA\_SOLVE
+
+integer function ga\_solve(g\_a, g\_b) integer g\_a {[}input{]} !
+coefficient matrix integer g\_b {[}output/output{]} ! rhs/solution
+matrix
+
+Solves a system of linear equations
+
+A {*} X = B
+
+It first will call the Cholesky factorization routine and, if sucessfully,
+will solve the system with the Cholesky solver. If Cholesky will be
+not be able to factorize A, then it will call the LU factorization
+routine and will solve the system with forward/backward substitution.
+On exit B will contain the solution X.
+
+It returns
+
+= 0 : Cholesky factoriztion was succesful > 0 : the leading minor
+of this order is not positive definite, Cholesky factorization could
+not be completed and LU factoriztion was used
+
+This is a collective operation. GA\_GEMM
+
+subroutine ga\_dgemm(transa, transb, m, n, k, alpha, g\_a, g\_b, beta,
+g\_c )
+
+subroutine ga\_sgemm(transa, transb, m, n, k, alpha, g\_a, g\_b, beta,
+g\_c )
+
+subroutine ga\_zgemm(transa, transb, m, n, k, alpha, g\_a, g\_b, beta,
+g\_c )
+
+Character{*}1 transa, transb {[}input{]} Integer m, n, k {[}input{]}
+Double Precision alpha, beta {[}input{]} (DGEMM) Double Complex alpha,
+beta {[}input{]} (ZGEMM) Integer g\_a, g\_b, {[}input{]} Integer g\_c
+{[}output{]}
+
+Performs one of the matrix-matrix operations:
+
+C := alpha{*}op( A ){*}op( B ) + beta{*}C,
+
+where op( X ) is one of
+
+op( X ) = X or op( X ) = X',
+
+alpha and beta are scalars, and A, B and C are matrices, with op(
+A ) an m by k matrix, op( B ) a k by n matrix and C an m by n matrix.
+
+On entry, transa specifies the form of op( A ) to be used in the matrix
+multiplication as follows:
+
+transa = 'N' or 'n', op( A ) = A. transa = 'T' or 't', op( A ) = A'.
+m - On entry, m specifies the number of rows of the matrix op( A )
+and of the matrix C. m must be at least zero. n - On entry, n specifies
+the number of columns of the matrix op( B ) and the number of columns
+of the matrix C. n must be at least zero. k - On entry, k specifies
+the number of columns of the matrix op( A ) and the number of rows
+of the matrix op( B ). K must be at least zero.
+
+This is a collective operation.
+
+GA\_COPY
+
+subroutine ga\_copy(g\_a, g\_b) integer g\_a, g\_b {[}input{]}
+
+Copies elements in array represented by g\_a into the array represented
+by g\_b. The arrays must be the same type, shape, and identically
+aligned.
+
+This is a collective operation. GA\_COPY\_PATCH
+
+subroutine ga\_copy\_patch(trans, g\_a, ailo, aihi, ajlo, ajhi, g\_b,
+bilo, bihi, bjlo, bjhi) character trans {[}input{]} transpose operator
+integer g\_a, g\_b {[}input{]} integer ailo, aihi, ajlo, ajhi {[}input{]}
+g\_a patch coordinates integer bilo, bihi, bjlo, bjhi {[}input{]}
+g\_b patch coordinates
+
+Copies elements in a patch of one array into another one. The patches
+of arrays should not overloap (when g\_a=g\_b) and must have the same
+number of elements. trans = 'N' or 'n' means that the transpose operator
+should not be applied. trans = 'T' or 't' means that transpose operator
+should be applied.
+
+This is a collective operation.
+
+subroutine nga\_copy\_patch(trans, g\_a, alo, ahi, g\_b, blo, bhi)
+character trans {[}input{]} transpose operator integer g\_a, g\_b
+{[}input{]} integer ndim number of dimensions integer alo(ndim), ahi(ndim)
+{[}input{]} g\_a patch coordinates integer blo(ndim), bhi(ndim) {[}input{]}
+g\_b patch coordinates
+
+Copies elements in a patch of one array into another one. The patches
+of arrays should not overloap (when g\_a=g\_b) and must have the same
+number of elements. trans = 'N' or 'n' means that the transpose operator
+should not be applied. trans = 'T' or 't' means that transpose operator
+should be applied. This is a collective operation. GA\_GET
+
+subroutine ga\_get(g\_a, ilo, ihi, jlo, jhi, buf, ld)
+
+integer g\_a {[}input{]} integer ilo, ihi, jlo, jhi {[}input{]} double
+precision/complex/integer buf {[}output{]} integer ld {[}input{]}
+
+Performs the equivalent of the following Fortran-90.
+
+dimension A(1:dim1,1:dim2) dimension buf(1:ld, 1:{*})
+
+buf(1:ihi-ilo+1, 1:jhi-jlo+1) = A(ilo:ihi, jlo:jhi)
+
+where g\_a represents a handle to the array A. Array bounds are always
+checked. This is a one-sided/independent operation.
+
+subroutine nga\_get(g\_a, lo, hi, buf, ld) integer g\_a - global array
+handle {[}input{]} integer ndim - number of dimensions of the global
+array integer lo(ndim) - array of starting indices for global array
+section {[}input{]} integer hi(ndim) - array of ending indices for
+global array section {[}input{]} <type> buf - local buffer array where
+the data goes to {[}output{]} integer ld(ndim-1) - array specifying
+leading dimensions for buffer array {[}input{]}
+
+Copies data from global array section to the local array buffer. The
+local array is assumed to be have the same number of dimensions as
+the global array. Any detected inconsitencies/errors in the input
+arguments are fatal.
+
+Example: For ga\_get operation transfering data from the (11:15,1:5)
+section of 2-dimensional 15x10 global array into local buffer 5x10
+array we have: lo=\{11,1\}, hi=\{15,5\}, ld=\{10\} 
+
+15 5 
+
+10 
+
+10 
+
+This is a one-sided/independent operation. GA\_PERIODIC\_GET subroutine
+nga\_periodic\_get(g\_a, lo, hi, buf, ld) integer g\_a - global array
+handle {[}input{]} integer ndim - number of dimensions of the global
+array integer lo(ndim) - array of starting indices for global array
+section {[}input{]} integer hi(ndim) - array of ending indices for
+global array section {[}input{]} <type> buf - local buffer array where
+the data goes to {[}output{]} integer ld(ndim-1) - array specifying
+leading dimensions for buffer array {[}input{]}
+
+Same as nga\_get except the indices can extend beyond the array boundary/dimensions
+in which case the library wraps them around. This is a one-sided/independent
+operation. GA\_STRIDED\_GET
+
+subroutine nga\_strided\_get(g\_a, lo, hi, skip, buf, ld) integer
+g\_a - global array handle {[}input{]} integer ndim - number of dimensions
+of the global array integer lo(ndim) - array of starting indices for
+global array section {[}input{]} integer hi(ndim) - array of ending
+indices for global array section {[}input{]} integer skip(ndim) -
+array of strides for each dimension {[}input{]} <type> buf - local
+buffer array where the data comes from {[}output{]} integer ld(ndim-1)
+- array specifying leading dimensions for buffer array {[}input{]}
+
+This operation is the same as nga\_get, except that the values corresponding
+to dimension n in buf correspond to every skip(n) values of the global
+array g\_a. This is a onesided/independent operation. GA\_PUT
+
+subroutine ga\_put(g\_a, ilo, ihi, jlo, jhi, buf, ld)
+
+integer g\_a {[}input{]} integer ilo, ihi, jlo, jhi {[}input{]} double
+precision/complex/integer buf {[}output{]} integer ld {[}input{]}
+
+Performs the equivalent of the following Fortran-90: dimension g\_a(1:dim1,1:dim2)
+dimension buf(1:ld, 1:{*})
+
+g\_a(ilo:ihi, jlo:jhi) = buf(1:ihi-ilo+1, 1:jhi-jlo+1)
+
+where g\_a represents a handle to the array A. Array bounds are always
+checked. This is a one-sided/independent operation.
+
+subroutine nga\_put(g\_a, lo, hi, buf, ld) integer g\_a - global array
+handle {[}input{]} integer ndim - number of dimensions of the global
+array integer lo(ndim) - array of starting indices for global array
+section {[}input{]} integer hi(ndim) - array of ending indices for
+global array section {[}input{]} <type> buf - local buffer array where
+the data comes from {[}output{]} integer ld(ndim-1) - array specifying
+leading dimensions for buffer array {[}input{]}
+
+Copies data from local array buffer to the global array section .
+The local array is assumed to be have the same number of dimensions
+as the global array. Any detected inconsitencies/errors in input arguments
+are fatal. This is a one-sided/independent operation. GA\_PERIODIC\_PUT
+
+subroutine nga\_periodic\_put(g\_a, lo, hi, buf, ld) integer g\_a
+- global array handle {[}input{]} integer ndim - number of dimensions
+of the global array integer lo(ndim) - array of starting indices for
+global array section {[}input{]} integer hi(ndim) - array of ending
+indices for global array section {[}input{]} <type> buf - local buffer
+array where the data comes from {[}output{]} integer ld(ndim-1) -
+array specifying leading dimensions for buffer array {[}input{]}
+
+Same as nga\_put except the indices can extend beyond the array boundary/dimensions
+in which case the library wraps them around. This is a one-sided/independent
+operation. GA\_STRIDED\_PUT
+
+subroutine nga\_strided\_put(g\_a, lo, hi, skip, buf, ld) integer
+g\_a - global array handle {[}input{]} integer ndim - number of dimensions
+of the global array integer lo(ndim) - array of starting indices for
+global array section {[}input{]} integer hi(ndim) - array of ending
+indices for global array section {[}input{]} integer skip(ndim) -
+array of strides for each dimension {[}input{]} <type> buf - local
+buffer array where the data comes from {[}output{]} integer ld(ndim-1)
+- array specifying leading dimensions for buffer array {[}input{]}
+
+This operation is the same as nga\_put, except that the values corresponding
+to dimension n in buf are copied to every skip(n) value of the global
+array g\_a. This is a onesided/independent operation. GA\_ACC
+
+subroutine ga\_acc(g\_a, ilo, ihi, jlo, jhi, buf, ld, alpha)
+
+integer g\_a {[}input{]} integer ilo, ihi, jlo, jhi {[}input{]} double
+precision/complex buf {[}input{]} integer ld {[}input{]} double precision/complex
+alpha {[}input{]}
+
+Performs the equivalent of the following Fortran-90. Array bounds
+are always checked. Double precision/complex types are supported.
+The operation is atomic.
+
+dimension g\_a(1:dim1,1:dim2) dimension buf(1:ld, 1:{*})
+
+A(ilo:ihi, jlo:jhi) = A(ilo:ihi, jlo:jhi) + alpha{*}buf(1:ihi-ilo+1,
+1:jhi-jlo+1)
+
+where g\_a represents a handle to the array A.
+
+This is a one-sided/independent and atomic operation.
+
+subroutine nga\_acc(g\_a, lo, hi, buf, ld, alpha) integer g\_a - global
+array handle {[}input{]} integer ndim - number of dimensions of the
+global array integer lo(ndim) - array of starting indices for global
+array section {[}input{]} integer hi(ndim) - array of ending indices
+for global array section {[}input{]} <type> buf - local buffer array
+where the local data is {[}output{]} integer ld(ndim-1) - array specifying
+leading dimensions for buffer array {[}input{]} <type> alpha - scale
+argument for accumulate {[}input{]}
+
+Combines data from local array buffer with data in the global array
+section. The local array is assumed to be have the same number of
+dimensions as the global array.
+
+global array section (lo(),hi()) += alpha {*} buffer()
+
+This is a one-sided/independent and atomic operation. GA\_PERIODIC\_ACC
+
+subroutine nga\_periodic\_acc(g\_a, lo, hi, buf, ld, alpha) integer
+g\_a - global array handle {[}input{]} integer ndim - number of dimensions
+of the global array integer lo(ndim) - array of starting indices for
+global array section {[}input{]} integer hi(ndim) - array of ending
+indices for global array section {[}input{]} <type> buf - local buffer
+array where the local data is {[}output{]} integer ld(ndim-1) - array
+specifying leading dimensions for buffer array {[}input{]} <type>
+alpha - scale argument for accumulate {[}input{]}
+
+Same as nga\_acc except the indices can extend beyond the array boundary/dimensions
+in which case the library wraps them around. This is a one-sided/independent
+and atomic operation. GA\_STRIDED\_ACC
+
+subroutine nga\_strided\_acc(g\_a, lo, hi, skip, buf, ld, alpha) integer
+g\_a - global array handle {[}input{]} integer ndim - number of dimensions
+of the global array integer lo(ndim) - array of starting indices for
+global array section {[}input{]} integer hi(ndim) - array of ending
+indices for global array section {[}input{]} integer skip(ndim) -
+array of strides for each dimension {[}input{]} <type> buf - local
+buffer array where the data comes from {[}output{]} integer ld(ndim-1)
+- array specifying leading dimensions for buffer array {[}input{]}
+<type> alpha - scale argument for accumulate {[}input{]}
+
+This operation is the same as nga\_acc, except that the values corresponding
+to dimension n in buf are accumulated to every skip(n) value of the
+global array g\_a. This is a onesided/independent operation. GA\_DISTRIBUTION
+
+subroutine ga\_distribution(g\_a, iproc, ilo, ihi, jlo, jhi) integer
+g\_a - array handle {[}input{]} integer iproc - process number {[}input{]}
+integer ilo,ihi,jlo,jhi - range held by process iproc {[}output{]}
+
+Returns the range of a global array held by a specified process. If
+no array elements are owned by process iproc, the range is returned
+as {[}0, -1{]} for the i and {[}0,-1{]} for thej dimensions. This
+is a local operation.
+
+subroutine nga\_distribution(g\_a, iproc, lo, hi) integer g\_a - array
+handle {[}input{]} integer iproc - process number {[}input{]} integer
+ndim - number of dimensions integer lo(ndim),hi(ndim) - range held
+by process iproc {[}output{]}
+
+Returns the range of a global array held by a specified process. If
+no array elements are owned by process iproc, the range is returned
+as lo(i) =0 and hi(i)= -1 for i=1,ndim dimensions. This is the n-dimensional
+version of ga\_distribution.
+
+This is a local operation. GA\_COMPARE\_DISTR
+
+logical function ga\_compare\_distr(g\_a, g\_b)
+
+integer g\_a, g\_b {[}input{]}
+
+Compares distributions of two global arrays. Returns .TRUE. if distributions
+are identical. This is a local operation (as of release 3.0). GA\_ACCESS
+
+subroutine ga\_access(g\_a, ilo, ihi, jlo, jhi, index, ld)
+
+integer g\_a {[}input{]} integer ilo, ihi, jlo, jhi {[}input{]} integer
+index {[}output{]} integer ld {[}output{]}
+
+Provides access to the specified patch of array. Returns leading dimension
+ld and and MA-like index for the data. This routine is intended for
+writing new GA operations. Call to ga\_access should normally follow
+a call to ga\_distribution that returns coordinates of the patch associated
+with a processor. You need to make sure that the coordinates of the
+patch are valid (test values returned from ga\_distribution).
+
+Your code should include a MA include file, mafdecls.h. The addressing
+convention:
+
+dbl\_mb(index) - for double precision data int\_mb(index) - for integer
+data dcpl\_mb(index) - for double complex data
+
+refers the first element (ilo,jlo) of the patch. However, you can
+only pass that reference to another subroutine where it could be used
+like a normal array, see the following example. This constraint caused
+by the HP fortran compiler inability to reference shared memory data
+properly. The C interface has no such restrictions.
+
+Example
+
+For a given subroutine:
+
+subroutine foo(A, nrows, ncols lda) double precision A(lda,{*}) integer
+nrows, ncols .... end
+
+you can reference A(ilo:ihi,jlo:jhi) in the following way:
+
+call foo(dbl\_mb(index), ihi-ilo+1, jhi-jlo+1, lda)
+
+NOTE: You have to worry about mutual exclusion in simultaneous overlapping
+access to the data by multiple processors.
+
+Each call to ga\_access has to be followed by a call to either ga\_release
+or ga\_release\_update. You can access only local data. This is a
+local operation.
+
+subroutine nga\_access(g\_a, lo, hi, index, ld)
+
+integer g\_a array handle {[}input{]} integer ndim number of array
+dimensions integer lo(ndim),hi(ndim) patch specification {[}input{]}
+integer index reference to local data {[}output{]} integer ld(ndim-1)
+array of leading dimensions {[}output{]}
+
+An n-dimensional version of ga\_access. This is a local operation.
+GA\_ACCESS\_BLOCK\_SEGMENT
+
+subroutine nga\_access\_block\_segment(g\_a, proc, index, len)
+
+integer g\_a array handle {[}input{]} integer proc processor ID {[}input{]}
+integer index reference to local data {[}output{]} integer len length
+of data on processor {[}output{]}
+
+This function can be used to gain access to the all the locally held
+data on a particular processor that is associated with a block-cyclic
+distributed array. Once the index has been returned, local data can
+be accessed as described in the documentation for ga\_access. The
+parameter len is the number of data elements that are held locally.
+The data inside this segment has a lot of additional structure so
+this function is not generally useful to developers. It is primarily
+used inside the GA library to implement other GA routines. Each call
+to ga\_access\_block\_segment should be followed by a call to either
+nga\_release\_block\_segment or nga\_release\_update\_block\_segment.
+
+This is a local operation. GA\_ACCESS\_BLOCK
+
+subroutine nga\_access\_block(g\_a, idx, index, ld)
+
+integer g\_a array handle {[}input{]} integer ndim number of array
+dimensions integer idx block index {[}input{]} integer index reference
+to local data {[}output{]} integer ld(ndim-1) array of leading dimensions
+{[}output{]}
+
+This function can be used to gain direct access to the data represented
+by a single block in a global array with a block-cyclic data distribution.
+The index idx is the index of the block in the array assuming that
+blocks are numbered sequentially in a column-major order. A quick
+way of determining whether a block with index idx is held locally
+on a processor is to calculate whether mod(idx,nproc) equals the processor
+ID, where nproc is the total number of processors. Once the index
+has been returned, local data can be accessed as described in the
+documentation for ga\_access. Each call to ga\_access\_block should
+be followed by a call to either nga\_release\_block or nga\_release\_update\_block.
+
+This is a local operation. GA\_ACCESS\_BLOCK\_GRID
+
+subroutine nga\_access\_block\_grid(g\_a, subscript, index, ld)
+
+integer g\_a array handle {[}input{]} integer ndim number of array
+dimensions integer subscript(ndim) subscript of block in array {[}input{]}
+integer index reference to local data {[}output{]} integer ld(ndim-1)
+array of leading dimensions {[}output{]}
+
+This function can be used to gain direct access to the data represented
+by a single block in a global array with a SCALAPACK block-cyclic
+data distribution that is based on an underlying processor grid. The
+subscript array contains the subscript of the block in the array of
+blocks. This subscript is based on the location of the block in a
+grid, each of whose dimensions is equal to the number of blocks that
+fit along that dimension. Once the index has been returned, local
+data can be accessed as described in the documentation for ga\_access.
+Each call to ga\_access\_block\_grid should be followed by a call
+to either nga\_release\_block\_grid or nga\_release\_update\_block\_grid.
+
+This is a local operation.
+
+GA\_RELEASE
+
+subroutine ga\_release(g\_a, ilo, ihi, jlo, jhi)
+
+integer g\_a {[}input{]} integer ilo, ihi, jlo, jhi {[}input{]}
+
+Releases access to a global array when the data was read only.
+
+Your code should look like:
+
+call ga\_distribution(g\_a, myproc, ilo,ihi,jlo,jhi) call ga\_access(g\_a,
+ilo, ihi, jlo, jhi, index, ld) < operate on the data >
+
+call ga\_release(g\_a, ilo, ihi, jlo, jhi)
+
+NOTE: see restrictions specified for ga\_access. This is a local operation.
+
+subroutine nga\_release(g\_a, lo, hi)
+
+integer g\_a array handle {[}input{]} integer ndim number of array
+dimensions integer lo(ndim),hi(ndim) patch specification {[}input{]}
+
+Releases access to local elements of global array when the data was
+accessed as read only.This is a local operation. GA\_RELEASE\_UPDATE
+
+subroutine ga\_release\_update(g\_a, ilo, ihi, jlo, jhi)
+
+integer g\_a {[}input{]} integer ilo, ihi, jlo, jhi {[}input{]}
+
+Releases access to the data. It must be used if the data was accessed
+for writing. NOTE: see restrictions specified for ga\_access. This
+is a local operation.
+
+subroutine nga\_release\_update(g\_a, lo, hi)
+
+integer g\_a array handle {[}input{]} integer ndim number of array
+dimensions integer lo(ndim),hi(ndim) patch specification {[}input{]}
+
+Releases access to local elements of global array when the data was
+accessed in read -write mode. GA\_RELEASE\_BLOCK
+
+subroutine nga\_release\_block(g\_a, index)
+
+integer g\_a array handle {[}input{]} integer index block index {[}input{]}
+
+Releases access to the block of data specified by the integer index
+when data was accessed as read only. This is only applicable to block-cyclic
+data distributions created using the simple block-cyclic distribution.
+This is a local operation. GA\_RELEASE\_UPDATE\_BLOCK
+
+subroutine nga\_release\_update\_block(g\_a, index)
+
+integer g\_a array handle {[}input{]} integer index block index {[}input{]}
+
+Releases access to the block of data specified by the integer index
+when data was accessed in read-write mode. This is only applicable
+to block-cyclic data distributions created using the simple block-cyclic
+distribution. This is a local operation. GA\_RELEASE\_BLOCK\_GRID
+
+subroutine nga\_release\_block\_grid(g\_a, subscript)
+
+integer g\_a array handle {[}input{]} integer subscript(ndim) indices
+of block in array {[}input{]}
+
+Releases access to the block of data specified by the subscript array
+when data was accessed as read only. This is only applicable to block-cyclic
+data distributions created using the SCALAPACK data distribution.
+This is a local operation. GA\_RELEASE\_UPDATE\_BLOCK\_GRID
+
+subroutine nga\_release\_update\_block\_grid(g\_a, subscript)
+
+integer g\_a array handle {[}input{]} integer subscript(ndim) indices
+of block in array {[}input{]}
+
+Releases access to the block of data specified by the subscript array
+when data was accessed in read-write mode. This is only applicable
+to block-cyclic data distributions created using the SCALAPACK data
+distribution. This is a local operation. GA\_RELEASE\_BLOCK\_SEGMENT
+
+subroutine nga\_release\_block\_segment(g\_a, iproc)
+
+integer g\_a array handle {[}input{]} integer iproc processor ID {[}input{]}
+
+Releases access to the block of locally held data for a block-cyclic
+array, when data was accessed as read-only. This is a local operation.
+GA\_RELEASE\_UPDATE\_BLOCK\_SEGMENT
+
+subroutine nga\_release\_update\_block\_segment(g\_a, iproc)
+
+integer g\_a array handle {[}input{]} integer iproc processor ID {[}input{]}
+
+Releases access to the block of locally held data for a block-cyclic
+array, when data was accessed in read-write mode. This is a local
+operation. GA\_RELEASE\_GHOST\_ELEMENT
+
+subroutine nga\_release\_ghost\_element(g\_a, subscript)
+
+integer g\_a array handle {[}input{]} integer subscript(ndim) element
+subscript {[}input{]}
+
+Releases access to the locally held data for an array with ghost elements,
+when data was accessed as read-only. This is a local operation. GA\_RELEASE\_UPDATE\_GHOST\_ELEMENT
+
+subroutine nga\_release\_update\_ghost\_element(g\_a, subscript)
+
+integer g\_a array handle {[}input{]} integer subscript(ndim) element
+subscript {[}input{]}
+
+Releases access to the locally held data for an array with ghost elements,
+when data was accessed in read-write mode. This is a local operation.
+GA\_RELEASE\_GHOSTS
+
+subroutine nga\_release\_ghosts(g\_a)
+
+integer g\_a array handle {[}input{]}
+
+Releases access to the locally held block of data containing ghost
+elements, when data was accessed as read-only. This is a local operation.
+GA\_RELEASE\_UPDATE\_GHOSTS
+
+subroutine nga\_release\_update\_ghosts(g\_a)
+
+integer g\_a array handle {[}input{]}
+
+Releases access to the locally held block of data containing ghost
+elements, when data was accessed in read-write mode. This is a local
+operation.
+
+GA\_READ\_INC
+
+integer function ga\_read\_inc(g\_a, i, j, inc)
+
+integer g\_a {[}input{]} integer i, j, inc {[}input{]}
+
+Atomically read and increment an element in an integer array.
+
+{*}BEGIN CRITICAL SECTION{*} return value = a(i,j) a(i,j) += inc {*}END
+CRITICAL SECTION{*}
+
+This is a one-sided/independent operation.
+
+integer function nga\_read\_inc(g\_a, subscript, inc)
+
+integer g\_a {[}input{]} integer i, j, inc {[}input{]}
+
+Atomically read and increment an element in an integer array. An n-dimensional
+version of ga\_read\_inc.
+
+This is a one-sided/independent operation. GA\_SCATTER
+
+subroutine ga\_scatter(g\_a, v, i, j, n)
+
+integer g\_a {[}input{]} double precision v(n) {[}input{]} integer
+i(n), j(n), n {[}input{]}
+
+Scatters the array elements into the array. The contents of the input
+arrays (v, i, j) are preserved, but their contents might be (consistently)
+shuffled on return.
+
+do k = 1, nv a(i(k),j(k)) = v(k) enddo
+
+This is a one-sided/independent operation.
+
+subroutine nga\_scatter(g\_a, v, subsArray, n) integer g\_a - global
+array handle {[}input{]} integer n - number of elements {[}input{]}
+<type> v(n) - array containing values {[}input{]} integer ndim - number
+of array dimensions subsArray (ndim,n) - array of subscripts for each
+element {[}input{]}
+
+Scatters array elements into a global array. The contents of the input
+arrays (v,subscrArray) are preserved, but their contents might be
+(consistently) shuffled on return.
+
+do k = 1, n a(subsArray(1,k),subsArray(2,k), ...) = v(k) enddo
+
+This is a one-sided/independent operation. GA\_GATHER
+
+subroutine ga\_gather(g\_a, v, i, j, n)
+
+integer g\_a {[}input{]} double precision v(n) {[}output{]} integer
+i(n), j(n), n {[}input{]}
+
+Gathers specified elements (i,j) from the global array into a local
+single-dimesional array. The contents of the arrays (v, i, j) might
+be (consistently) shuffled on return.
+
+do k = 1, nv v(k) = a(i(k),j(k)) enddo
+
+This is a one-sided/independent operation.
+
+subroutine nga\_gather(g\_a, v, subsArray, n) integer g\_a - global
+array handle {[}input{]} {[}output{]} integer n - number of elements
+{[}input{]} <type> v(n) - array containing values {[}output{]} integer
+ndim - number of array dimensions subsArray (ndim,n) - array of subscripts
+for each element {[}input{]}
+
+Gathers array elements from a global array into a local array. The
+contents of the input arrays (v, subscrArray) are preserved, but their
+contents might be (consistently) shuffled on return.
+
+do k = 1, n v(k) = a(subsArray(1,k),subsArray(2,k), ...) enddo
+
+This is a one-sided/independent operation. GA\_SCATTER\_ACC
+
+subroutine ga\_scatter\_acc(g\_a, v, i, j, n, alpha) integer g\_a
+- global array handle {[}input{]} integer n - number of elements {[}input{]}
+<type> v(n) - array containing value {[}input{]} integer i(n),j(n)
+- arrays of indices {[}input{]} double precision/complex alpha - multiplicative
+value {[}input{]} 
+
+Scatters array elements from a local array into a global array. Adds
+values from the local array to existing values in the global array
+after multiplying by alpha. The contents of the arrays v, i, j may
+be (consistently) shuffled on return.
+
+This is a one-sided/independent operation.
+
+subroutine nga\_scatter\_acc(g\_a, v, subsArray, n, alpha) integer
+g\_a - global array handle {[}input{]} integer n - number of elements
+{[}input{]} <type> v(n) - array containing value {[}input{]} integer
+ndim - number of array dimensions subsArray(ndim,n) - array of subscripts
+{[}input{]} double precision/complex alpha - multiplicative value
+{[}input{]}
+
+Scatters array elements from a local array into a global array. Adds
+values from the local array to existing values in the global array
+after multiplying by alpha. The contents of v and subsArray may be
+(consistently) shuffled on return.
+
+This is a one-sided/independent operation.
+
+GA\_ERROR
+
+subroutine ga\_error(message, code) character{*}1 message({*}) {[}input{]}
+integer code {[}input{]}
+
+To be called in case of an error. Print an error message and an integer
+value that is intended to be the error code. Releases some system
+resources. This is the recomended way of aborting the program execution.
+GA\_LOCATE
+
+logical function ga\_locate(g\_a, i, j, owner)
+
+integer g\_a array handle {[}input{]} integer i, j element subscript
+{[}input{]} integer owner process id {[}output{]}
+
+Return in owner the GA compute process id that 'owns' the data. If
+i/j are out of bounds .FALSE. is returned, otherwise .TRUE.. This
+is a local operation.
+
+logical function nga\_locate(g\_a, subscript, owner)
+
+integer g\_a array handle {[}input{]} integer subscript element subscript
+{[}input{]} integer owner process id {[}output{]}
+
+Return in owner the GA compute process id that 'owns' the array element.
+If subscript contains values out of bounds .FALSE. is returned, otherwise
+.TRUE. This is a local operation. GA\_LOCATE\_REGION
+
+logical function ga\_locate\_region(g\_a, ilo, ihi, jlo, jhi, map,
+np )
+
+integer g\_a, ilo, ihi, jlo, jhi {[}input{]} integer map(5,{*}), np
+{[}output{]}
+
+Parts of the specified patch might be actually 'owned' by several
+(precisely np) processes. Return the list of the GA processes id that
+'own' the data. If i/j are out of bounds .FALSE. is returned, otherwise
+.TRUE..
+
+map(1,{*}) - ilo map(2,{*}) - ihi map(3,{*}) - jlo map(4,{*}) - jhi
+
+specify coordinates of a subpatch 'held' by the process which number
+is stored in map(5,{*}) This is a local operation.
+
+logical function nga\_locate\_region(g\_a, lo, hi, map, proclist,
+np )
+
+integer g\_a array handle {[}input{]} integer ndim number of dimensions
+integer lo(ndim),hi(ndim) region(patch) specifications {[}input{]}
+integer map(2{*}ndim,{*}) patch ownership array {[}output{]} integer
+proclist(np) list of processes {[}output{]} integer np number of processes
+{[}output{]}
+
+An n-dimensional version of ga\_locate\_region. The list of processes
+that contain parts for the region are in proclist. Array map is defined
+as
+
+map(1:ndim,i) - contains lower bound dimensions for part owned by
+process proclist(i) map(ndim+1:2{*}ndim,i) - contains upper bound
+dimensions for part owned by process proclist(i)
+
+This is a local operation. GA\_INQUIRE
+
+subroutine ga\_inquire(g\_a, type, dim1, dim2)
+
+integer g\_a {[}input{]} integer type {[}output{]} integer dim1 {[}output{]}
+integer dim2 {[}output{]}
+
+Returns type and dimensions of array. This is a local operation.
+
+subroutine nga\_inquire(g\_a, type, ndim, dims)
+
+integer g\_a array handle {[}input{]} integer type data type id {[}output{]}
+integer ndim number of dimensions {[}output{]} integer dims(ndim)
+array of dimensions {[}output{]}
+
+Returns type and dimensions of an n-dimensional array. This is a local
+operation. GA\_INQUIRE\_MEMORY
+
+integer function ga\_inquire\_memory()
+
+Returns amount of memory (in bytes) used in the allocated global arrays
+on the calling processor. This is a local operation. GA\_INQUIRE\_NAME
+
+subroutine ga\_inquire\_name(g\_a, array\_name)
+
+integer g\_a {[}input{]} character{*}({*}) array\_name {[}output{]}
+
+Returns the name of an array represented by the handle g\_a. This
+is a local operation. GA\_NDIM
+
+integer function ga\_ndim(g\_a)
+
+integer g\_a {[}input{]}
+
+Returns the number ot dimensions in an array represented by the handle
+g\_a. This is a local operation. GA\_NBLOCK
+
+subroutine ga\_nblock(g\_a, nblock) integer g\_a - array handle {[}input{]}
+integer nblock{[}ndim{]} - number of partitions for each dimension
+{[}output{]}
+
+Given a distribution of an array represented by the handle g\_a, returns
+the number of partitions of each array dimension. This operation is
+local. GA\_MEMORY\_AVAIL
+
+integer function ga\_memory\_avail()
+
+Returns amount of memory (in bytes) left for allocation of new global
+arrays on the calling processor.
+
+Note: If ga\_uses\_ma returns true, then ga\_memory\_avail returns
+the lesser of the amount available under the GA limit and the amount
+available from MA (according to ma\_inquire\_avail operation). If
+no GA limit has been set, it returns what MA says is available.
+
+If ( ! ga\_uses\_ma() \&\& ! ga\_memory\_limited() ) returns < 0,
+indicating that the bound on currently available memory cannot be
+determined. This is a local operation. GA\_USES\_MA
+
+logical function ga\_uses\_ma()
+
+Returns .true. if memory in global arrays comes from the Memory Allocator
+(MA). .false. means that memory comes from another source, for example
+System V shared memory is used. This is a local operation. GA\_MEMORY\_LIMITED
+
+logical function ga\_memory\_limited()
+
+Indicates if limit is set on memory usage in Global Arrays on the
+calling processor. This is a local operation. GA\_SET\_MEMORY\_LIMIT
+
+subroutine ga\_set\_memory\_limit(limit)
+
+integer limit {[}input{]}
+
+Sets the amount of memory (in bytes) to be used per process. This
+is a local operation. GA\_PROC\_TOPOLOGY
+
+subroutine ga\_proc\_topology(g\_a, proc, prow, pcol)
+
+integer g\_a {[}input{]} integer proc {[}input{]} integer prow, pcol
+{[}output{]}
+
+Based on the distribution of the array associated with handle g\_a,
+determines block row and column coordinates for the array section
+'owned' by specified processor. The numbering starts from 0. The value
+of -1 means that the processor doesn't 'own' any section of array
+represented by g\_a. This is a local operation. GA\_PRINT\_PATCH
+
+subroutine ga\_print\_patch(g\_a,ilo,ihi,jlo,jhi,pretty) integer g\_a
+{[}input{]} integer ilo,ihi,jlo,jhi {[}input{]} coordinates of the
+patch integer pretty {[}input{]}
+
+Prints a patch of g\_a array to the standard output. If pretty has
+the value 0 then output is printed in a dense fashion. If pretty has
+the value 1 then output is formatted and rows/columns labeled. This
+is a collective operation. GA\_PRINT
+
+subroutine ga\_print(g\_a) integer g\_a {[}input{]}
+
+Prints an entire array to the standard output. This is a collective
+operation. GA\_PRINT\_STATS
+
+subroutine ga\_print\_stats()
+
+This non-collective (MIMD) operation prints information about:
+
+{*} number of calls to the GA create/duplicate, destroy, get, put,
+scatter, gather, and read\_and\_inc operations {*} total amount of
+data moved in the GA primitive operations {*} amount of data moved
+in GA primitive operations to logicaly remote locations {*} maximum
+memory consumption in global arrays, and {*} number of requests serviced
+in the interrupt-driven implementations by the calling process.
+
+This is a local operation. GA\_PRINT\_DISTRIBUTION
+
+subroutine ga\_print\_distribution(g\_a) integer g\_a {[}input{]}
+
+Prints array distribution.
+
+This is a collective operation. GA\_CHECK\_HANDLE
+
+subroutine ga\_check\_handle(g\_a, string)
+
+integer g\_a {[}input{]} character {*}({*}) string {[}input{]}
+
+Check that the global array handle g\_a is valid ... if not call ga\_error
+with the string provided and some more info. GA\_INIT\_FENCE
+
+subroutine ga\_init\_fence()
+
+Initializes tracing of completion status of data movement operations.
+This is a local operation. GA\_FENCE
+
+subroutine ga\_fence()
+
+Blocks the calling process until all the data transfers corresponding
+to GA operations called after ga\_init\_fence complete. For example,
+since ga\_put might return before the data reaches the final destination
+ga\_init\_fence and ga\_fence allow process to wait until the data
+is actually moved:
+
+call ga\_init\_fence() call ga\_put(g\_a, ...) call ga\_fence()
+
+ga\_fence must be called after ga\_init\_fence. A barrier, ga\_sync,
+assures completion of all data transfers and implicitly cancels outstandingga\_init\_fence.
+ga\_init\_fence and ga\_fence must be used in pairs, multiple calls
+to ga\_fence require the same number of corresponding ga\_init\_fence
+calls. ga\_init\_fence/ga\_fence pairs can be nested.
+
+ga\_fence works for multiple GA operations. For example:
+
+call ga\_init\_fence() call ga\_put(g\_a, ...) call ga\_scatter(g\_a,
+...) call ga\_put(g\_b, ...) call ga\_fence()
+
+The calling process will be blocked until data movements initiated
+by two calls to ga\_put and one ga\_scatter complete. GA\_CREATE\_MUTEXES
+
+logical function ga\_create\_mutexes(number)
+
+integer number {[}input{]}
+
+Creates a set containing the number of mutexes. Returns .true. if
+the opereation succeeded or .false. when failed. Mutex is simple synchronization
+object used to protect Critical Section. Only one set of mutexes can
+exist at a time. Mutexes can be created and destroyed as many times
+as needed.
+
+Mutexes are numbered: 0, ..., number -1.
+
+This is a collective operation. GA\_DESTROY\_MUTEXES
+
+logical function ga\_destroy\_mutexes()
+
+Destroys the set of mutexes created with ga\_create\_mutexes. Returns
+.true. if the operation succeeded or .false. when failed.
+
+This is a collective operation. GA\_LOCK
+
+subroutine ga\_lock(mutex)
+
+integer mutex {[}input{]} ! mutex id
+
+Locks a mutex object identified by the mutex number. It is a fatal
+error for a process to attempt to lock a mutex which was already locked
+by this process. GA\_UNLOCK
+
+subroutine ga\_unlock(mutex) integer mutex {[}input{]} ! mutex id
+
+Unlocks a mutex object identified by the mutex number. It is a fatal
+error for a process to attempt to unlock a mutex which has not been
+locked by this process. GA\_NODEID
+
+integer function ga\_nodeid()
+
+Returns the GA process id (0, ..., ga\_nnodes()-1) of the requesting
+compute process. This is a local operation.
+
+NOTE: the GA process id might not be the same as message-passing node
+id. GA\_NNODES
+
+integer function ga\_nnodes()
+
+Returns the number of the GA compute (user) processes.
+
+NOTE: the number of the GA processes might not be the same as the
+number of the message-passing nodes in releases <3.0 of the GA package.
+This is a local operation. GA\_BRDCST
+
+subroutine ga\_brdcst(type, buf, lenbuf, root) integer type {[}input{]}
+! message type for broadcast byte buf(lenbuf) {[}input/output{]} integer
+lenbuf {[}input{]} integer root {[}input{]}
+
+Broadcast from process root to all other processes a message of length
+lenbuf.
+
+This is a convenience operation available regardless of the message-passing
+library that GA is running with.
+
+This is a collective operation. GA\_DGOP
+
+subroutine ga\_dgop(type, x, n, op) integer type {[}input{]} double
+precision x(n) {[}input/output{]} character{*}({*}) op {[}input{]}
+
+Double Global OPeration.
+
+X(1:N) is a vector present on each process. DGOP 'sums' elements of
+X accross all nodes using the commutative operator OP. The result
+is broadcast to all nodes. Supported operations include '+', '{*}',
+'max', 'min', 'absmax', 'absmin'. The use of lowerecase for operators
+is necessary.
+
+This is a convenience operation, available regardless of the message-passing
+library that GA is running with.
+
+This is a collective operation. GA\_IGOP
+
+subroutine ga\_igop(type, x, n, op) integer type {[}input{]} integer
+x(n) {[}input/output{]} character{*}({*}) OP {[}input{]}
+
+Integer Global OPeration. The integer version of ga\_dgop described
+above, also include the bitwise OR operation.
+
+This is a convenience operation available regardless of the message-passing
+library that GA is running with.
+
+This is a collective operation. GA\_CLUSTER\_NNODES
+
+integer function ga\_cluster\_nnodes()
+
+This functions returns the total number of nodes that the program
+is running on. On SMP architectures, this will be less than or equal
+to the total number of processors.
+
+This is a local operation. GA\_CLUSTER\_NODEID
+
+integer function ga\_cluster\_nodeid()
+
+This function returns the node ID of the process. On SMP architectures
+with more than one processor per node, several processes may return
+the same node id.
+
+This is a local operation. GA\_CLUSTER\_PROC\_NODEID
+
+integer function ga\_cluster\_proc\_nodeid(proc)
+
+integer proc {[}input{]}
+
+This function returns the node ID of the specified process proc. On
+SMP architectures with more than one processor per node, several processes
+may return the same node id.
+
+This is a local operation. GA\_CLUSTER\_NPROCS
+
+integer function ga\_cluster\_nprocs(inode)
+
+integer inode {[}input{]}
+
+This function returns the number of processors available on node inode.
+
+This is a local operation. GA\_CLUSTER\_PROCID
+
+integer function ga\_cluster\_procid(inode,iproc)
+
+integer inode,iproc {[}input{]}
+
+This function returns the processor id associated with node inode
+and the local processor id iproc. If node inode has N processors,
+then the value of iproc lies between 0 and N-1.
+
+This is a local operation. GA\_LIST\_NODEID
+
+subroutine ga\_list\_nodeid(list, n)
+
+integer n {[}input{]} integer list(n) {[}output{]}
+
+Returns message-passing process ID (rank in MPI) for the GA processes
+in the range 0 .. n-1. For MPI, the ranks are in MPI\_COMM\_WORLD.
+Obsolete as of release 3.0. GA\_MPI\_COMMUNICATOR
+
+void ga\_mpi\_communicator(GA\_COMM) MPI\_Comm {*}GA\_COMM; {[}output{]}
+
+Available in C only if MPI is used. Returns communicator handle for
+GA processes (group). Obsolete as of release 3.0. GA\_ABS\_VALUE
+
+subroutine ga\_abs\_value(g\_a)
+
+integer g\_a - array handle {[}input{]}
+
+Take element-wise absolute value of the array. This is a collective
+operation. GA\_ABS\_VALUE\_PATCH
+
+subroutine ga\_abs\_value\_patch(g\_a, lo, hi)
+
+integer g\_a - array handle {[}input{]} integer lo(ndim), hi(ndim)
+- g\_a patch coordinates {[}input{]} 
+
+Take element-wise absolute value of the patch. This is a collective
+operation. GA\_ADD\_CONSTANT
+
+subroutine ga\_add\_constant(g\_a, alpha)
+
+integer g\_a - array handle {[}input{]} double/complex/integer/float
+alpha {[}input{]}
+
+Add the contant pointed by alpha to each element of the array. This
+is a collective operation. GA\_ADD\_CONSTANT\_PATCH
+
+subroutine ga\_add\_constant\_patch(g\_a, lo, hi, alpha)
+
+integer g\_a - array handle {[}input{]} integer ndim - number of dimensions
+{[}input{]} integer lo(ndim), hi(ndim) - patch coordinates {[}input{]}
+double/complex/integer/float alpha {[}input{]}
+
+Add the contant pointed by alpha to each element of the patch. This
+is a collective operation. GA\_RECIP
+
+subroutine ga\_recip(g\_a)
+
+integer g\_a - array handle {[}input{]} 
+
+Take element-wise reciprocal of the array. This is a collective operation.
+GA\_RECIP\_PATCH
+
+subroutine ga\_recip\_patch(g\_a, lo, hi)
+
+integer g\_a - array handle {[}input{]} integer ndim - number of dimensions
+{[}input{]} integer lo(ndim), hi(ndim) - patch coordinates {[}input{]}
+
+Take element-wise reciprocal of the patch. This is a collective operation.
+GA\_ELEM\_MULTIPLY
+
+subroutine ga\_elem\_multiply(g\_a, g\_b, g\_c)
+
+integer g\_a, g\_b - array handles {[}input{]} integer g\_c - array
+handle {[}output{]}
+
+Computes the element-wise product of the two arrays which must be
+of the same types and same number of elements. For two-dimensional
+arrays,
+
+c(i, j) = a(i,j){*}b(i,j)
+
+The result (c) may replace one of the input arrays (a/b). This is
+a collective operation. GA\_ELEM\_MULTIPLY\_PATCH
+
+subroutine ga\_elem\_multiply\_patch(g\_a, alo, ahi, g\_b, blo, bhi,
+g\_c, clo, chi)
+
+integer g\_a, g\_b - array handles {[}input{]} integer g\_c - array
+handle {[}output{]} integer ndim - number of dimensions {[}input{]}
+integer alo(ndim), ahi(ndim) - g\_a patch dimensions {[}input{]} integer
+blo(ndim), bhi(ndim) - g\_b patch dimensions {[}input{]} integer clo(ndim),
+chi(ndim) - g\_c patch dimensions {[}input{]}
+
+Computes the element-wise product of the two patches which must be
+of the same types and same number of elements. For two-dimensional
+arrays,
+
+c(i, j) = a(i,j){*}b(i,j)
+
+The result (c) may replace one of the input arrays (a/b). This is
+a collective operation. GA\_ELEM\_DIVIDE
+
+subroutine ga\_elem\_divide(g\_a, g\_b, g\_c)
+
+integer g\_a, g\_b - array handles {[}input{]} integer g\_c - array
+handle {[}output{]}
+
+Computes the element-wise quotient of the two arrays which must be
+of the same types and same number of elements. For two-dimensional
+arrays,
+
+c(i, j) = a(i,j)/b(i,j)
+
+The result (c) may replace one of the input arrays (a/b). If one of
+the elements of array g\_b is zero, the quotient for the element of
+g\_c will be set to GA\_NEGATIVE\_INFINITY.
+
+This is a collectiveoperation. GA\_ELEM\_DIVIDE\_PATCH
+
+subroutine ga\_elem\_divide\_patch(g\_a, alo, ahi, g\_b, blo, bhi,
+g\_c, clo, chi)
+
+integer g\_a, g\_b - array handles {[}input{]} integer g\_c - array
+handle {[}output{]} integer ndim - number of dimensions {[}input{]}
+integer alo(ndim), ahi(ndim) - g\_a patch dimensions {[}input{]} integer
+blo(ndim), bhi(ndim) - g\_b patch dimensions {[}input{]} integer clo(ndim),
+chi(ndim) - g\_c patch dimensions {[}input{]}
+
+Computes the element-wise quotient of the two patches which must be
+of the same types and same number of elements. For two-dimensional
+arrays,
+
+c(i, j) = a(i,j)/b(i,j)
+
+The result (c) may replace one of the input arrays (a/b). This is
+a collective operation. GA\_ELEM\_MAXIMUM
+
+subroutine ga\_elem\_maximum(g\_a, g\_b, g\_c)
+
+integer g\_a, g\_b - array handles {[}input{]} integer g\_c - array
+handle {[}output{]}
+
+Computes the element-wise maximum of the two arrays which must be
+of the same types and same number of elements. For two dimensional
+arrays,
+
+c(i, j) = max\{a(i,j), b(i,j)\}
+
+The result (c) may replace one of the input arrays (a/b). This is
+a collective operation. GA\_ELEM\_MAXIMUM\_PATCH
+
+subroutine ga\_elem\_maximum\_patch(g\_a, alo, ahi, g\_b, blo, bhi,
+g\_c, clo, chi)
+
+integer g\_a, g\_b - array handles {[}input{]} integer g\_c - array
+handle {[}output{]} integer ndim - number of dimensions {[}input{]}
+integer alo(ndim), ahi(ndim) - g\_a patch dimensions {[}input{]} integer
+blo(ndim), bhi(ndim) - g\_b patch dimensions {[}input{]} integer clo(ndim),
+chi(ndim) - g\_c patch dimensions {[}input{]}
+
+Computes the element-wise maximum of the two patches which must be
+of the same types and same number of elements. For two-dimensional
+of noncomplex arrays,
+
+c(i, j) = max\{a(i,j), b(i,j)\}
+
+If the data type is complex, then c(i, j).real = max\{ |a(i,j)|, |b(i,j)|\}
+while c(i,j).image = 0.
+
+The result (c) may replace one of the input arrays (a/b). This is
+a collective operation. GA\_ELEM\_MINIMUM
+
+subroutine ga\_elem\_minimum(g\_a, g\_b, g\_c)
+
+integer g\_a, g\_b - array handles {[}input{]} integer g\_c - array
+handle {[}output{]}
+
+Computes the element-wise minimum of the two arrays which must be
+of the same types and same number of elements. For two dimensional
+arrays,
+
+c(i, j) = min\{a(i,j), b(i,j)\}
+
+The result (c) may replace one of the input arrays (a/b). This is
+a collective operation. GA\_ELEM\_MINIMUM\_PATCH
+
+subroutine ga\_elem\_minimum\_patch(g\_a, alo, ahi, g\_b, blo, bhi,
+g\_c, clo, chi)
+
+integer g\_a, g\_b - array handles {[}input{]} integer g\_c - array
+handle {[}output{]} integer ndim - number of dimensions {[}input{]}
+integer alo(ndim), ahi(ndim) - g\_a patch dimensions {[}input{]} integer
+blo(ndim), bhi(ndim) - g\_b patch dimensions {[}input{]} integer clo(ndim),
+chi(ndim) - g\_c patch dimensions {[}input{]}
+
+Computes the element-wise minimum of the two patches which must be
+of the same types and same number of elements. For two-dimensional
+of noncomplex arrays,
+
+c(i, j) = min\{a(i,j), b(i,j)\}
+
+If the data type is complex, then c(i, j).real = min\{ |a(i,j)|, |b(i,j)|\}
+while c(i,j).image = 0.
+
+The result (c) may replace one of the input arrays (a/b). This is
+a collective operation. GA\_SHIFT\_DIAGONAL
+
+subroutine ga\_shift\_diagonal(g\_a, c)
+
+integer g\_a - array handle {[}input{]} double/complex/integer/float
+{[}input{]}
+
+Adds this constant to the diagonal elements of the matrix. This is
+a collective operation. GA\_SET\_DIAGONAL
+
+subroutine ga\_set\_diagonal(g\_a, g\_v)
+
+integer g\_a, g\_v - array handles {[}input{]}
+
+Sets the diagonal elements of this matrix g\_a with the elements of
+the vector g\_v. This is a collective operation. GA\_ZERO\_DIAGONAL
+
+subroutine ga\_zero\_diagonal(g\_a)
+
+integer g\_a - array handle {[}input{]}
+
+Sets the diagonal elements of this matrix g\_a with zeros. This is
+a collective operation. GA\_ADD\_DIAGONAL
+
+subroutine ga\_add\_diagonal(g\_a, g\_v)
+
+integer g\_a, g\_v - array handles {[}input{]}
+
+Adds the elements of the vector g\_v to the diagonal of this matrix
+g\_a. This is a collective operation. GA\_GET\_DIAG
+
+subroutine ga\_get\_diag(g\_a, g\_v)
+
+integer g\_a - array handle {[}input{]} integer g\_v - array handle
+{[}input{]}
+
+Inserts the diagonal elements of this matrix g\_a into the vector
+g\_v. This is a collective operation. GA\_SCALE\_ROWS
+
+subroutine ga\_scale\_rows(g\_a, g\_v)
+
+integer g\_a, g\_v - array handles {[}input{]}
+
+Scales the rows of this matrix g\_a using the vector g\_v. This is
+a collective operation. GA\_SCALE\_COLS
+
+subroutine ga\_scale\_cols(g\_a, g\_v)
+
+integer g\_a, g\_v - array handles {[}input{]}
+
+Scales the columns of this matrix g\_a using the vector g\_v. This
+is a collective operation. GA\_NORM1
+
+subroutine ga\_norm1(g\_a, nm)
+
+integer g\_a - array handle {[}input{]} double precision nm - matrix/vector
+1-norm value {[}output{]}
+
+Computes the 1-norm of the matrix or vector g\_a. This is a collective
+operation. GA\_NORM\_INFINITY
+
+subroutine ga\_norm\_infinity(g\_a, nm)
+
+integer g\_a - array handle {[}input{]} double precision nm - matrix/vector
+infinity-norm value {[}output{]}
+
+Computes the infinity-norm of the matrix or vector g\_a. This is a
+collective operation. GA\_MEDIAN
+
+subroutine ga\_median(g\_a, g\_b, g\_c, g\_m)
+
+integer g\_a, g\_b, g\_c - array handles {[}input{]} integer g\_m
+- array handle {[}output{]}
+
+Computes the componentwise median of three arrays g\_a, g\_b, and
+g\_c, and stores the result in this array g\_m. The result (m) may
+replace one of the input arrays (a/b/c). This is a collective operation.
+GA\_MEDIAN\_PATCH
+
+subroutine ga\_median\_patch(g\_a,alo,ahi,g\_b,blo,bhi,g\_c,clo,chi,g\_m,mlo,mhi)
+
+integer g\_a, g\_b, g\_c - array handles {[}input{]} integer g\_m
+- array handle {[}output{]} integer ndim - number of dimensions {[}input{]}
+integer alo(ndim), ahi(ndim) - g\_a patch dimensions {[}input{]} integer
+blo(ndim), bhi(ndim) - g\_b patch dimensions {[}input{]} integer clo(ndim),
+chi(ndim) - g\_c patch dimensions {[}input{]} integer mlo(ndim), mhi(ndim)
+- g\_m patch dimensions {[}input{]}
+
+Computes the componentwise median of three patches g\_a, g\_b, and
+g\_c, and stores the result in this patch g\_m. The result (m) may
+replace one of the input patches (a/b/c). This is a collective operation.
+GA\_STEP\_MAX
+
+subroutine ga\_step\_max(g\_a, g\_b, step)
+
+integer g\_a, g\_b - array handles {[}input{]} double precision step
+- the maximum step {[}output{]}
+
+Calculates the largest multiple of a vector g\_b that can be added
+to this vector g\_a while keeping each element of this vector nonnegative.
+This is a collective operation. GA\_STEP\_MAX2
+
+subroutine ga\_step\_max2(g\_xx, g\_vv, g\_xxll, g\_xxuu, step2)
+
+integer g\_xx, g\_vv, g\_xxll, g\_xxuu - array handles {[}input{]}
+double precision step2 - the maximum step size {[}output{]}
+
+where
+
+g\_vv - the step direction g\_xxll - lower bounds g\_xxuu - upper
+bounds
+
+Calculates the largest step size that should be used in a projected
+bound line search. This is a collective operation. GA\_STEP\_MAX\_PATCH
+
+subroutine ga\_step\_max\_patch(g\_a, alo, ahi, g\_b, blo, bhi, step)
+
+integer g\_a, g\_b - array handles where g\_b is step direction {[}input{]}
+integer alo, ahi, blo, bhi - patch coordinates of g\_a and g\_b {[}input{]}
+double precision step - the maximum step {[}output{]}
+
+Calculates the largest multiple of a vector g\_b that can be added
+to this vector g\_a while keeping each element of this vector nonnegative.
+This is a collective operation. GA\_STEP\_MAX2\_PATCH
+
+subroutine ga\_step\_max2\_patch(g\_xx, xxlo, xxhi, g\_vv, vvlo, vvhi,
+g\_xxll, xxlllo, xxllhi, g\_xxuu, xxuulo, xxuuhi, step2)
+
+integer g\_xx, g\_vv, g\_xxll, g\_xxuu - array handles {[}input{]}
+integer xxlo, xxhi, vvlo, vvhi - patch coordinates {[}input{]} integer
+xxlllo, xxllhi, xxuulo, xxuuhi - patch coordinates {[}input{]} double
+precision step2 - the maximum step size {[}output{]}
+
+where g\_vv - the step direction g\_xxll - lower bounds g\_xxuu -
+upper bounds
+
+Calculates the largest step size that should be used in a projected
+bound line search. This is a collective operation. GA\_PGROUP\_GET\_DEFAULT
+
+integer function ga\_pgroup\_get\_default()
+
+This function will return a handle to the default processor group
+which can then be used to create a global array using one of the nga\_create\_{*}\_config
+or ga\_set\_pgroup calls.
+
+This is a local operation. GA\_PGROUP\_GET\_MIRROR
+
+integer function ga\_pgroup\_get\_mirror()
+
+This function will return a handle to the mirrored processor group,
+which can then be used to create a mirrored global array using one
+of the nga\_create\_{*}\_config or ga\_set\_pgroup calls.
+
+This is a local operation. GA\_PGROUP\_GET\_WORLD
+
+integer function ga\_pgroup\_get\_world()
+
+This function will return a handle to the world group, i.e. the group
+containing all processors that the code is running on. This function
+can be used to get access to the world group if the default group
+has been set to a subset of processors.
+
+This is a local operation. GA\_PGROUP\_SYNC
+
+subroutine ga\_pgroup\_sync(p\_handle) integer p\_handle - processor
+group handle {[}input{]}
+
+This operation executes a synchronization group across the processors
+in the processor group specified by p\_handle. Nodes outside this
+group are unaffected.
+
+This is a collective operation on the processor group specified by
+p\_handle. GA\_PGROUP\_BRDCST
+
+subroutine ga\_pgroup\_brdcst(p\_handle, type, buf, lenbuf, root)
+integer p\_handle - processor group handle {[}input{]} integer type
+- message index {[}input{]} byte buf(lenbuf) - local message buffer
+{[}input/output{]} integer lenbuf - length of message {[}input{]}
+integer root - processor sending message {[}input{]}
+
+Broadcast data from processor specified by root to all other processors
+in the processor group specified by p\_handle. The length of the message
+in bytes is specified by lenbuf. Type is an arbitrary index assigned
+to each call to distinguish if from other broadcast calls.
+
+This is a collective operation on the processor group specified by
+p\_handle. GA\_PGROUP\_DGOP
+
+subroutine ga\_pgroup\_dgop(p\_handle, type, buf, n, op) integer p\_handle
+- processor group handle {[}input{]} integer type - message index
+{[}input{]} double precision buf(n) - double precision array {[}input/output{]}
+integer n - number elements in array {[}input{]} character{*}({*})
+op - operation on data {[}input{]}
+
+buf(n) is a double precision array present on each processor in the
+processor group p\_handle. The ga\_pgroup\_dgop 'sums' all elements
+in buf(n) across all processors in the group specified by p\_handle
+using the commutative operation specified by the character string
+op. The result is broadcast to all processor in p\_handle. Allowed
+strings are '+', '{*}', 'max', 'min', 'absmax', 'absmin'. The use
+of lowerecase for operators is necessary.
+
+This is a collective operation on the processor group specifed by
+p\_handle. GA\_PGROUP\_IGOP
+
+subroutine ga\_pgroup\_igop(p\_handle, type, buf, n, op) integer p\_handle
+- processor group handle {[}input{]} integer type - message index
+{[}input{]} integer buf(n) - integer array {[}input/output{]} integer
+n - number elements in array {[}input{]} character{*}({*}) op - operation
+on data {[}input{]}
+
+buf(n) is an integer array present on each processor in the processor
+group p\_handle. The ga\_pgroup\_igop 'sums' all elements in buf(n)
+across all processors in the group specified by p\_handle using the
+commutative operation specified by the character string op. The result
+is broadcast to all processor in p\_handle. Allowed strings are '+',
+'{*}', 'max', 'min', 'absmax', 'absmin'. The use of lowerecase for
+operators is necessary.
+
+This is a collective operation on the processor group specified by
+p\_handle. GA\_PGROUP\_SGOP
+
+subroutine ga\_pgroup\_sgop(p\_handle, type, buf, n, op) integer p\_handle
+- processor group handle {[}input{]} integer type - message index
+{[}input{]} real buf(n) - single precision array {[}input/output{]}
+integer n - number elements in array {[}input{]} character{*}({*})
+op - operation on data {[}input{]}
+
+buf(n) is a single precsion array present on each processor in the
+processor group p\_handle. The ga\_pgroup\_sgop 'sums' all elements
+in buf(n) across all processors in the group specified by p\_handle
+using the commutative operation specified by the character string
+op. The result is broadcast to all processor in p\_handle. Allowed
+strings are '+', '{*}', 'max', 'min', 'absmax', 'absmin'. The use
+of lowerecase for operators is necessary.
+
+This is a collective operation on the processor group specified by
+p\_handle. GA\_PGROUP\_NNODES
+
+integer function ga\_pgroup\_nnodes(p\_handle) integer p\_handle -
+processor group handle {[}input{]}
+
+This function returns the number of processors contained in the group
+specifed by p\_handle.
+
+This is a local operation. GA\_PGROUP\_NODEID
+
+integer function ga\_pgroup\_nodeid(p\_handle) integer p\_handle -
+processor group handle {[}input{]}
+
+This function returns the relative index of the processor in the processor
+group specified by p\_handle. This index will generally differ from
+the absolute processor index returned by ga\_nodeid if the processor
+group is not the world group.
+
+This is a local operation.
+
+GA\_MERGE\_MIRRORED
+
+subroutine ga\_merge\_mirrored(g\_a) integer g\_a {[}input{]}
+
+This subroutine merges mirrored arrays by adding the contents of each
+array across nodes. The result is that the each mirrored copy of the
+array represented by g\_a is the sum of the individual arrays before
+the merge operation. After the merge, all mirrored arrays are equal.
+
+This is a collective operation.
+
+GA\_IS\_MIRRORED
+
+integer ga\_is\_mirrored(g\_a) integer g\_a array handle {[}input{]}
+
+This subroutine checks if the array is mirrored array or not. Returns
+1 if it is a mirrored array, else returns 0.
+
+This is a local operation.
+
+GA\_MERGE\_DISTR\_PATCH
+
+integer nga\_merge\_distr\_patch(g\_a, alo, ahi, g\_b, blo, bhi)
+
+integer g\_a, g\_b - array handles {[}input{]} integer ndim - number
+of dimensions of the global array integer alo(ndim), ahi(ndim) - g\_a
+patch coordinates {[}input{]} integer blo(ndim), bhi(ndim) - g\_b
+patch coordinates {[}input{]}
+
+This function merges all copies of a patch of a mirrored array (g\_a)
+into a patch in a distributed array (g\_b).
+
+This is a collective operation. GA\_NBGET
+
+subroutine ga\_nbget(g\_a, ilo, ihi, jlo, jhi, buf, ld, nbhandle)
+
+integer g\_a - global array handle {[}input{]} integer ndim - number
+of dimensions of the global array integer ilo, ihi - starting indices
+for global array section {[}input{]} integer jlo, jhi - ending indices
+for global array section {[}input{]} <type> buf - local buffer array
+where the data goes {[}output{]} integer ld - leading dimension/stride/extent
+for buffer array {[}input{]} integer nbhandle - non-blocking request
+handle {[}input{]}
+
+Non-blocking version of the blocking get operation. The get operation
+can be completed locally by making a call to the wait (e.g.NGA\_NbWait)
+routine.
+
+This is a non-blocking one-sided operation.
+
+subroutine nga\_nbget(g\_a, lo, hi, buf, ld, nbhandle)
+
+integer g\_a - global array handle {[}input{]} integer ndim - number
+of dimensions of the global array integer lo{[}ndim{]} - array of
+starting indices for global array section {[}input{]} integer hi{[}ndim{]}
+- array of ending indices for global array section {[}input{]} <type>
+buf - local buffer array where the data goes {[}output{]} integer
+ld{[}ndim-1{]} - array specifying leading dimensions/strides/extents
+for buffer array {[}input{]} integer nbhandle - non-blocking request
+handle {[}input{]}
+
+Non-blocking version of the blocking get operation. The get operation
+can be completed locally by making a call to the wait (e.g.NGA\_NbWait)
+routine.
+
+This is a non-blocking one-sided operation. GA\_NBPUT
+
+subroutine ga\_nbput(g\_a, ilo, ihi, jlo, jhi, buf, ld, nbhandle)
+
+integer g\_a - global array handle {[}input{]} integer ilo, ihi -
+starting indices for global array section {[}input{]} integer jlo,
+jhi - ending indices for global array section {[}input{]} <type>buf
+- local buffer array where the data is {[}input{]} integer ld - leading
+dimension/stride/extent for buffer array {[}input{]} integer nbhandle
+- non-blocking request handle {[}input{]}
+
+Non-blocking version of the blocking put operation. The put operation
+can be completed locally by making a call to the wait (e.g.NGA\_NbWait)
+routine.
+
+This is a non-blocking one-sided operation.
+
+subroutine nga\_nbput(g\_a, lo, hi, buf, ld, nbhandle)
+
+integer g\_a - global array handle {[}input{]} integer ndim - number
+of dimensions of the global array integer lo{[}ndim{]} - array of
+starting indices for global array section {[}input{]} integer hi{[}ndim{]}
+- array of ending indices for global array section {[}input{]} <type>buf
+- local buffer array where the data is {[}input{]} integer ld{[}ndim-1{]}
+- array specifying leading dimensions/strides/extents for buffer array
+{[}input{]} integer nbhandle - non-blocking request handle {[}input{]}
+
+Non-blocking version of the blocking put operation. The put operation
+can be completed locally by making a call to the wait (e.g.NGA\_NbWait)
+routine.
+
+This is a non-blocking one-sided operation. GA\_NBACC
+
+subroutine ga\_nbacc(g\_a, ilo, ihi, jlo, jhi, buf, ld, alpha, nbhandle)
+
+integer g\_a - global array handle {[}input{]} integer ilo, ihi -
+starting indices for global array section {[}input{]} integer jlo,
+jhi - ending indices for global array section {[}input{]} <type>buf
+- local buffer array where the data is {[}input{]} integer ld - leading
+dimension/stride/extent for buffer array {[}input{]} double precision/complex
+alpha - scale factor {[}input{]} integer nbhandle - non-blocking request
+handle {[}input{]}
+
+Non-blocking version of the blocking accumulate operation. The accumulate
+operation can be completed locally by making a call to the wait (e.g.NGA\_NbWait)
+routine.
+
+This is a non-blocking one-sided operation.
+
+subroutine nga\_nbacc(g\_a, lo, hi, buf, ld, alpha, nbhandle)
+
+integer g\_a - global array handle {[}input{]} integer ndim - number
+of dimensions of the global array integer lo{[}ndim{]} - array of
+starting indices for global array section {[}input{]} integer hi{[}ndim{]}
+- array of ending indices for global array section {[}input{]} <type>buf
+- local buffer array where the data is {[}input{]} integer ld{[}ndim-1{]}
+- array specifying leading dimensions/strides/extents for buffer array
+{[}input{]} double precision/complex alpha - scale factor {[}input{]}
+integer nbhandle - non-blocking request handle {[}input{]}
+
+Non-blocking version of the blocking accumulate operation. The accumulate
+operation can be completed locally by making a call to the wait (e.g.NGA\_NbWait)
+routine.
+
+This is a non-blocking one-sided operation. GA\_NBWAIT
+
+subroutine ga\_nbwait(nbhandle)
+
+integer nbhandle - non-blocking request handle {[}input{]}
+
+This function completes a non-blocking one-sided operation locally.
+Waiting on a nonblocking put or an accumulate operation assures that
+data was injected into the network and the user buffer can be now
+be reused. Completing a get operation assures data has arrived into
+the user memory and is ready for use. Wait operation ensures only
+local completion. Unlike their blocking counterparts, the nonblocking
+operations are not ordered with respect to the destination. Performance
+being one reason, the other reason is that by ensuring ordering we
+incur additional and possibly unnecessary overhead on applications
+that do not require their operations to be ordered. For cases where
+ordering is necessary, it can be done by calling a fence operation.
+The fence operation is provided to the user to confirm remote completion
+if needed.
+
+subroutine nga\_nbwait(nbhandle)
+
+integer nbhandle - non-blocking request handle {[}input{]}
+
+This function completes a non-blocking one-sided operation locally.
+Waiting on a nonblocking put or an accumulate operation assures that
+data was injected into the network and the user buffer can be now
+be reused. Completing a get operation assures data has arrived into
+the user memory and is ready for use. Wait operation ensures only
+local completion. Unlike their blocking counterparts, the nonblocking
+operations are not ordered with respect to the destination. Performance
+being one reason, the other reason is that by ensuring ordering we
+incur additional and possibly unnecessary overhead on applications
+that do not require their operations to be ordered. For cases where
+ordering is necessary, it can be done by calling a fence operation.
+The fence operation is provided to the user to confirm remote completion
+if needed. GA\_WTIME
+
+double precision function ga\_wtime()
+
+This function return a wall (or elapsed) time on the calling processor.
+Returns time in seconds representing elapsed wall-clock time since
+an arbitrary time in the past. Example:
+
+double precision starttime, endtime starttime = GA\_Wtime() .... code
+snippet to be timed .... endtime = GA\_Wtime() print {*}, 'Time taken
+(seconds) = ', endtime-starttime
+
+This is a local operation. This function is only available in release
+4.1 or greater. GA\_SET\_DEBUG
+
+subroutine ga\_set\_debug(flag)
+
+logical flag - value to set internal debug flag {[}input{]}
+
+This function sets an internal flag in the GA library to either true
+or false. The value of this flag can be recovered at any time using
+the ga\_get\_debug function. The flag is set to false when the the
+GA library is initialized. This can be useful in a number of debugging
+situations, especially when examining the behavior of routines that
+are called in multiple locations in a code.
+
+This is a local operation. GA\_GET\_DEBUG
+
+logical function ga\_get\_debug()
+
+This function returns the value of an internal flag in the GA library
+whose value can be set using the ga\_set\_debug subroutine.
+
+This is a local operation GA\_PATCH\_ENUM
+
+subroutine ga\_patch\_enum(g\_a, lo, hi, istart, inc)
+
+integer g\_a - array handle {[}input/output{]} integer lo, hi - low
+and high values of array patch {[}input{]} integer istart - starting
+value of enumeration {[}input{]} integer inc - increment value {[}input{]}
+
+This subroutine enumerates the values of an array between elements
+lo and hi starting with the value istart and incrementing each subsequent
+value by inc. This operation is only applicable to 1-dimensional arrays.
+An example of its use is shown below:
+
+call ga\_patch\_enum(g\_a, 1, n, 7, 2) g\_a: 7 9 11 13 15 17 19 21
+23 ...
+
+This is a collective operation. GA\_SCAN\_ADD
+
+subroutine ga\_scan\_add(g\_src, g\_dest, g\_mask, lo, hi, excl)
+
+integer g\_src - handle for source array {[}input{]} integer g\_dest
+- handle for destination array {[}output{]} integer g\_mask - handle
+for integer array representing a bit-mask {[}input{]} integer lo,
+hi - low and high values of range on which operation is performed
+{[}input{]} integer excl - value to signify if masked values are included
+in add {[}input{]}
+
+This operation will add successive elements in a source vector g\_src
+and put the results in a destination vector g\_dest. The addition
+will restart based on the values of the integer mask vector g\_mask.
+The scan is performed within the range specified by the integer values
+lo and hi. Note that this operation can only be applied to 1-dimensional
+arrays. The excl flag determines whether the sum starts with the value
+in the source vector corresponding to the location of a 1 in the mask
+vector (excl=0) or whether the first value is set equal to 0 (excl=1).
+Some examples of this operation are given below.
+
+call ga\_scan\_add(g\_src, g\_dest, g\_mask, 1, n, 0) g\_mask: 1 0
+0 0 0 0 1 0 1 0 0 1 0 0 1 1 0 g\_src: 1 2 3 4 5 6 7 8 9 10 11 12 13
+14 15 16 17 g\_dest: 1 3 6 10 16 21 7 15 9 19 30 12 25 39 15 16 33
+
+call ga\_scan\_add(g\_src, g\_dest, g\_mask, 1, n, 1) g\_mask: 1 0
+0 0 0 0 1 0 1 0 0 1 0 0 1 1 0 g\_src: 1 2 3 4 5 6 7 8 9 10 11 12 13
+14 15 16 17 g\_dest: 0 1 3 6 10 15 0 7 0 9 19 0 12 25 0 0 16
+
+This is a collective operation. GA\_SCAN\_COPY
+
+subroutine ga\_scan\_copy(g\_src, g\_dest, g\_mask, lo, hi)
+
+integer g\_src - handle for source array {[}input{]} integer g\_dest
+- handle for destination array {[}output{]} integer g\_mask - handle
+for integer array representing a bit-mask {[}input{]} integer lo,
+hi - low and high values of range on which operation is performed
+{[}input{]}
+
+This subroutine does a segmented scan-copy of values in the source
+array g\_src into a destination array g\_dest with segments defined
+by values in the integer mask array g\_mask. The scan-copy operation
+is only applied to the range between the lo and hi indices. This operation
+is restriced to 1-dimensional arrays. The resulting destination array
+will consist of segments of consecutive elements with the same value.
+An example is shown below
+
+call ga\_scan\_copy(g\_src, g\_dest, g\_mask, 1, n) g\_mask: 1 0 0
+0 0 0 1 0 1 0 0 1 0 0 1 1 0 g\_src: 1 2 3 4 5 6 7 8 9 10 11 12 13
+14 15 16 17 g\_dest: 1 1 1 1 1 1 7 7 9 9 9 12 12 12 15 16 16
+
+This is a collective operation. GA\_PACK
+
+subroutine ga\_pack(g\_src, g\_dest, g\_mask, lo, hi, icount)
+
+integer g\_src - handle for source array {[}input{]} integer g\_dest
+- handle for destination array {[}output{]} integer g\_mask - handle
+for integer array representing a bit-mask {[}input{]} integer lo,
+hi - low and high values of range on which operation is performed
+{[}input{]} integer icount - number of values in compressed array
+{[}output{]}
+
+The pack subroutine is designed to compress the values in the source
+vector g\_src into a smaller destination array g\_dest based on the
+values in an integer mask array g\_mask. The values lo and hi denote
+the range of elements that should be compressed and icount is a variable
+that on output lists the number of values placed in the compressed
+array. This operation is the complement of the ga\_unpack operation.
+An example is shown below
+
+call ga\_pack(g\_src, g\_dest, g\_mask, 1, n, icount) g\_mask: 1 0
+0 0 0 0 1 0 1 0 0 1 0 0 1 1 0 g\_src: 1 2 3 4 5 6 7 8 9 10 11 12 13
+14 15 16 17 g\_dest: 1 7 9 12 15 16 icount: 6
+
+This is a collective operation. GA\_UNPACK
+
+subroutine ga\_unpack(g\_src, g\_dest, g\_mask, lo, hi, icount)
+
+integer g\_src - handle for source array {[}input{]} integer g\_dest
+- handle for destination array {[}output{]} integer g\_mask - handle
+for integer array representing a bit-mask {[}input{]} integer lo,
+hi - low and high values of range on which operation is performed
+{[}input{]} integer icount - number of values in uncompressed array
+{[}output{]}
+
+The unpack subroutine is designed to expand the values in the source
+vector g\_src into a larger destination array g\_dest based on the
+values in an integer mask array g\_mask. The values lo and hi denote
+the range of elements that should be compressed and icount is a variable
+that on output lists the number of values placed in the uncompressed
+array. This operation is the complement of the ga\_pack operation.
+An example is shown below
+
+call ga\_unpack(g\_src, g\_dest, g\_mask, 1, n, icount) g\_src: 1
+7 9 12 15 16 g\_mask: 1 0 0 0 0 0 1 0 1 0 0 1 0 0 1 1 0 g\_dest: 1
+0 0 0 0 0 7 0 9 0 0 12 0 0 15 16 0 icount: 6
+
+This is a collective operation. Additional Explanations Global arrays
+are distributed array objects supported in a message-passing program
+through the GA library calls. They can be created, destroyed and manipulated
+using a set of GA operations. Attributes of GA operations one-sided/independent
+- references shared or remote data without remote process cooperation
+(unlike send/receive pair) collective - requires all processes to
+make the call local - operation is local to each process and does
+not require communication atomic - operation has mutual exclusion
+built in non-blocking - Nonblocking operations initiate a communication
+call and then return control to the application. A return from a nonblocking
+operation call indicates a mere initiation of the data transfer process
+and the operation can be completed locally by making a call to the
+wait (e.g. nga\_nbwait) routine. Language Interoperability GA provides
+C and Fortran interfaces to the same array objects in the same (mixed-language)
+program. /Higher-dimensional Array API All releases of GA < 3.0 supported
+only 2-dimensional arrays. Starting with the release 3.0 GA arrays
+can be be essentially arbitrary dimensional but the package as compiled
+supports up to 7 dimensions (Fortran limit for multidimensional arrays).
+The 2-D API for backward compatibility with older versions of the
+toolkit remained unchanged. For some GA operations, two versions of
+the API are available. They are identified with \textquotedbl{}GA\textquotedbl{}
+or \textquotedbl{}NGA\textquotedbl{} prefix that correspond to either
+the old 2-dimensional or the new arbitrary(N)-dimensional version,
+respectively. 
