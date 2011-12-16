@@ -116,6 +116,7 @@ Ethernet & TCP/IP & -{}-with-sockets (the default, so you don't need to specify 
 \end{tabular}
 
 \subsection{Selection of the message-passing library}
+\label{sec:selection-of-the-message-passing-library}
 
 As explained in Section \ref{sec:Initialization-and-Termination}, GA works with
 either MPI or TCGMSG message-passing libraries. That means GA applications can
@@ -229,11 +230,6 @@ elements of size \emph{type}. The amount of memory MA allocates need to be
 sufficient for storing global arrays on some platforms. Please refer to section
 \ref{sub:Memory-Allocation} for the details and information on more advanced
 usage of MA in GA programs. 
-
-MA is optional for C programs. You can replace GA's internal MA memory handling
-with \texttt{malloc()} and \texttt{free()} by using the function
-\texttt{GA\_Register\_stack\_memory()}.
-\input{replace_ma.tex}
 
 \section{Building GA}
 

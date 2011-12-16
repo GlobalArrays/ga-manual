@@ -56,7 +56,9 @@ LATEX2HTML_FLAGS = -split 0 -no_navigation
 
 #all: GA-UserManual-Main.pdf GA-UserManual-Main/index.html
 
+# run pdflatex twice in case references need to be updated
 GA-UserManual-Main.pdf: $(MANUAL_DEPS)
+	pdflatex GA-UserManual-Main.tex
 	pdflatex GA-UserManual-Main.tex
 
 GA-UserManual-Main/index.html: $(MANUAL_DEPS)
