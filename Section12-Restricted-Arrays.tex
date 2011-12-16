@@ -1,3 +1,4 @@
+\chapter{Restricted Arrays}
 
 \section{Overview}
 
@@ -89,13 +90,13 @@ decomposed into a 4x4 grid of data blocks. }
 
 
 \section{Restricted Arrays Operations}
-\begin{lyxcode}
+\begin{verbatim}
 \textcolor{blue}{Fortran}~subroutine~ga\_set\_restricted(g\_a,~list,~nproc)~
 
 \textcolor{blue}{C~}~~~~~~void~GA\_Set\_restricted(int~g\_a,~int~list{[}{]},~int~nproc)~
 
 \textcolor{blue}{C++}~~~~~GA::GlobalArray::setRestricted(int~list{[}{]},~int~nproc)~const
-\end{lyxcode}
+\end{verbatim}
 This subroutine restricts data in the global array \texttt{g\_a} to
 only the \texttt{nproc} processors listed in the array list. The value
 of \texttt{nproc} must be less than or equal to the number of available
@@ -108,7 +109,7 @@ the data that would be mapped to process 1 will get mapped to \texttt{list{[}1{]
 etc. This can be used to restructure the data layout in a global array
 even if the value of \texttt{nproc} equals the total number of processors
 available. 
-\begin{lyxcode}
+\begin{verbatim}
 \textcolor{blue}{Fortran}~subroutine~ga\_set\_restricted\_range(g\_a,~list,~nproc)~
 
 \textcolor{blue}{C}~~~~~~~void~GA\_Set\_restricted\_range(int~g\_a,~int~lo\_proc,~
@@ -118,7 +119,7 @@ available.
 \textcolor{blue}{C++~}~~~~GA::GlobalArray::setRestrictedRange(int~lo\_proc,~
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~int~hi\_proc)~const
-\end{lyxcode}
+\end{verbatim}
 This subroutine restricts data in the global array \texttt{g\_a} to
 the processors beginning with\texttt{ lo\_proc} and ending with \texttt{hi\_proc}.
 Both \texttt{lo\_proc} and \texttt{hi\_proc} must be less than or

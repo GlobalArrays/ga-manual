@@ -1,3 +1,4 @@
+\chapter{Processor Groups}
 
 \section{Overview}
 
@@ -75,11 +76,11 @@ below.
 
 
 \section{Creating New Groups}
-\begin{lyxcode}
+\begin{verbatim}
 \textcolor{blue}{Fortran}~integer~function~\href{http://www.emsl.pnl.gov/docs/global/ga_ops.html\#GA_PGROUP_CREATE}{ga\_{}pgroup\_{}create}(list,~size)
 
 \textcolor{blue}{C}~~~~~~~int~\href{http://www.emsl.pnl.gov/docs/global/c_nga_ops.html\#GA_PGROUP_CREATE}{GA\_{}Pgroup\_{}create}(int~{*}list,~int~size)
-\end{lyxcode}
+\end{verbatim}
 This call can be used to create a processor group of size \texttt{size}
 containing the processors in the array \texttt{list}. This call must
 be executed on all processors in the group. It returns an integer
@@ -87,11 +88,11 @@ handle (for the processors group) that can be used to reference the
 processor group in other library calls.
 
 Assigning groups:
-\begin{lyxcode}
+\begin{verbatim}
 \textcolor{blue}{Fortran}~subroutine~\href{http://www.emsl.pnl.gov/docs/global/ga_ops.html\#GA_SET_PGROUP}{ga\_{}set\_{}pgroup}(g\_a,~p\_handle)
 
 \textcolor{blue}{C}~~~~~~~void~\href{http://www.emsl.pnl.gov/docs/global/c_nga_ops.html\#GA_SET_PGROUP}{GA\_{}Set\_{}pgroup}(int~g\_a,~int~p\_handle)
-\end{lyxcode}
+\end{verbatim}
 This call can be used to assign the processor group \texttt{p\_handle}
 to a global array handle \texttt{g\_a} that has been previously created
 using the \texttt{ga\_create\_handle} call. The processor group associated
@@ -100,11 +101,11 @@ one of the \texttt{nga\_create\_XXX\_config} calls.
 
 
 \section{Setting the Default Group}
-\begin{lyxcode}
+\begin{verbatim}
 \textcolor{blue}{Fortran}~subroutine~\href{http://www.emsl.pnl.gov/docs/global/ga_ops.html\#GA_PGROUP_SET_DEFAULT}{ga\_{}pgroup\_{}set\_{}default}(p\_handle)
 
 \textcolor{blue}{C}~~~~~~~void~\href{http://www.emsl.pnl.gov/docs/global/c_nga_ops.html\#GA_PGROUP_SET_DEFAULT}{GA\_{}Pgroup\_{}set\_{}default}(int~p\_handle)
-\end{lyxcode}
+\end{verbatim}
 This call can be used to set the default group to something besides
 the world group. This call must be made on all processors contained
 in the group represented by \texttt{p\_handle}. Once the default group
@@ -113,7 +114,7 @@ explicitly stated otherwise.
 
 
 \section{Inquiry functions}
-\begin{lyxcode}
+\begin{verbatim}
 \textcolor{blue}{Fortran}~integer~function~\href{http://www.emsl.pnl.gov/docs/global/ga_ops.html\#GA_PGROUP_NNODES}{ga\_{}pgroup\_{}nnodes}(p\_handle)
 
 \textcolor{blue}{C}~~~~~~~int~\href{http://www.emsl.pnl.gov/docs/global/c_nga_ops.html\#GA_PGROUP_NNODES}{GA\_{}Pgroup\_{}nnodes}(int~p\_handle)
@@ -121,12 +122,12 @@ explicitly stated otherwise.
 \textcolor{blue}{Fortran}~integer~function~\href{http://www.emsl.pnl.gov/docs/global/ga_ops.html\#GA_PGROUP_NODEID}{ga\_{}pgroup\_{}nodeid}(p\_handle)
 
 \textcolor{blue}{C}~~~~~~~int~\href{http://www.emsl.pnl.gov/docs/global/c_nga_ops.html\#GA_PGROUP_NODEID}{GA\_{}Pgroup\_{}nodeid}(int~p\_handle)
-\end{lyxcode}
+\end{verbatim}
 These functions can be used to access information about the group.
 The \texttt{ga\_pgroup\_nnodes} function returns the number of processors
 in the group specified by the handle \texttt{p\_handle}, \texttt{ga\_pgroup\_nodeid}
 returns the local node ID of the processor within the group.
-\begin{lyxcode}
+\begin{verbatim}
 \textcolor{blue}{Fortran}~integer~function~\href{http://www.emsl.pnl.gov/docs/global/ga_ops.html\#GA_PGROUP_GET_DEFAULT}{ga\_{}pgroup\_{}get\_{}default}()
 
 \textcolor{blue}{C}~~~~~~~int~\href{http://www.emsl.pnl.gov/docs/global/c_nga_ops.html\#GA_PGROUP_GET_DEFAULT}{GA\_{}Pgroup\_{}get\_{}default}()
@@ -138,7 +139,7 @@ returns the local node ID of the processor within the group.
 \textcolor{blue}{Fortran}~integer~function~\href{http://www.emsl.pnl.gov/docs/global/ga_ops.html\#GA_PGROUP_GET_WORLD}{ga\_{}pgroup\_{}get\_{}world}()
 
 \textcolor{blue}{C}~~~~~~~int~\href{http://www.emsl.pnl.gov/docs/global/c_nga_ops.html\#GA_PGROUP_GET_WORLD}{GA\_{}Pgroup\_{}get\_{}world}()
-\end{lyxcode}
+\end{verbatim}
 These functions can be used to get the handles for some standard groups
 at any point in the program. This is particularly useful for gaining
 access to the world group if the default group has been reset to a
@@ -148,7 +149,7 @@ is actually a group defined on the complete set of processors.
 
 
 \section{Collective operations on groups}
-\begin{lyxcode}
+\begin{verbatim}
 \textcolor{blue}{Fortran}~subroutine~\href{http://www.emsl.pnl.gov/docs/global/ga_ops.html\#GA_PGROUP_SYNC}{ga\_{}pgroup\_{}sync}(p\_handle)
 
 \textcolor{blue}{C}~~~~~~~void~\href{http://www.emsl.pnl.gov/docs/global/ga_ops.html\#GA_PGROUP_SYNC}{ga\_{}pgroup\_{}sync}(p\_handle)
@@ -188,7 +189,7 @@ is actually a group defined on the complete set of processors.
 \textcolor{blue}{C}~~~~~~~void~\href{http://www.emsl.pnl.gov/docs/global/c_nga_ops.html\#GA_PGROUP_LGOP}{GA\_{}Pgroup\_{}lgop}(int~p\_handle,~long~
 
 ~~~~~~~~~~~~~~~~~~~{*}buf,~int~lenbuf,~char~{*}op)
-\end{lyxcode}
+\end{verbatim}
 These operations are all identical to the standard global operations,
 the only difference is that they have an extra argument that takes
 a group handle. The action of these calls is restricted to the set

@@ -1,5 +1,3 @@
-%% LyX 1.6.6.1 created this file.  For more info, see http://www.lyx.org/.
-%% Do not edit unless you really know what you are doing.
 \documentclass[oneside,english]{book}
 \usepackage[T1]{fontenc}
 \usepackage[latin9]{inputenc}
@@ -17,30 +15,9 @@
  breaklinks=false,pdfborder={0 0 1},backref=false,colorlinks=false]
  {hyperref}
 
-\makeatletter
+% we don't require that pygments and the minted package be installed so we
+% created a minted stylesheet externally rather than \usepackage{minted}.
 \input{mintedstyle}
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% LyX specific LaTeX commands.
-\newcommand{\noun}[1]{\textsc{#1}}
-%% Because html converters don't know tabularnewline
-\providecommand{\tabularnewline}{\\}
-%% A simple dot to overcome graphicx limitations
-\newcommand{\lyxdot}{.}
-
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Textclass specific LaTeX commands.
-\newenvironment{lyxcode}
-{\par\begin{list}{}{
-\setlength{\rightmargin}{\leftmargin}
-\setlength{\listparindent}{0pt}% needed for AMS classes
-\raggedright
-\setlength{\itemsep}{0pt}
-\setlength{\parsep}{0pt}
-\normalfont\ttfamily}%
- \item[]}
-{\end{list}}
-
-\makeatother
 
 \begin{document}
 
@@ -51,9 +28,12 @@ Sriram Krishnamoorthy, Jeff Daily, Daniel Chavarria}
 
 \maketitle
 \begin{center}
-This document is intended to be used with version 5.0 of Global Arrays
+This document is intended to be used with version 5.1 of Global Arrays
 \par\end{center}
 
+% TODO Do we need a new TR number since this is for 5.1 and not 4.3 and
+% earlier? We didn't get a new TR number for the 5.0 release but there were
+% significant additions...
 \begin{center}
 (Pacific Northwest National Laboratory Technical Report Number PNNL-13130)
 \par\end{center}
@@ -77,67 +57,46 @@ non-exclusive, irrevocable worldwide license to reproduce, prepare derivative
 works, perform publicly and display publicly by or for the US Government,
 including the right to distribute to other US Government contractors. 
 
-\date{November, 2010 }
+\date{December, 2011}
 
 \tableofcontents{}
 
-\chapter{Introduction}
-
 \include{Section1-Introduction}
-
-\chapter{Writing, Building and Running GA Programs}
 
 \include{Section2-WritingBuildRunGAProg}
 
-\chapter{\label{sec:Initialization-and-Termination}Initialization and Termination}
-
 \include{Section3-Initialization-Termination}
-
-\chapter{One-sided Communication Operations}
 
 \include{Section4-One-SideComm_Operations}
 
-\chapter{Interprocess Synchronization}
-
 \include{Section5-InterprocessSync}
-
-\chapter{Collective Array Operations}
 
 \include{Section6-CollectiveArrayOperations}
 
-\chapter{Utility Operations}
-
 \include{Section7-UtilityOperations}
-
-\chapter{GA++: C++ Bindings for Global Arrays}
 
 \include{Section8-GA-CplusBindingsforGA}
 
-\chapter{Mirrored Arrays}
-
 \include{Section9-MirroredArrays}
-
-\chapter{Processor Groups}
 
 \include{Section10-ProcessorGroups}
 
-\chapter{Sparse Data Operations}
-
 \include{Section11-SparseDataOperations}
 
-\chapter{Restricted Arrays}
+\include{Section12-Restricted-Arrays}
 
-\include{\string"Section12-Restricted-Arrays\string"}
+\appendix
 
-%\chapter{Appendix A - List of C Functions}
+\chapter{List of C Functions}
 
+TODO
 %\href{http://www.emsl.pnl.gov/docs/global/Capi.html}{Online listing of C functions. }
 
-%\chapter{Appendix B - List of Fortran Functions}
+\chapter{List of Fortran Functions}
 
+TODO
 %\href{http://www.emsl.pnl.gov/docs/global/GAapi.html}{Online listing of Fortran functions. }
 
-\chapter{Appendix C - Global Arrays on Older Systems}
-
 \include{AppendixC}
+
 \end{document}

@@ -1,3 +1,4 @@
+\chapter{GA++: C++ Bindings for Global Arrays}
 
 \section{Overview }
 
@@ -18,7 +19,7 @@ part of the ANSI C++ standard, not all C++ compilers support namespaces
 (A non-instantiable GA class is provided for implementations using
 compilers without namespace). \textbf{Note}: define the variable \_GA\_USENAMESPACE\_
 as 0 in ga++.h if your compiler does not support namespaces. 
-\begin{lyxcode}
+\begin{verbatim}
 namespace~GA~\{
 
 ~~~~~~class~GAServices;~
@@ -26,7 +27,7 @@ namespace~GA~\{
 ~~~~~~class~GlobalArray;~
 
 \};
-\end{lyxcode}
+\end{verbatim}
 The current implementation has no derived classes (no (virtual) inheritance),
 templates, or exception handling. Eventually, more object oriented
 functionalities will be added, and standard library facilities will

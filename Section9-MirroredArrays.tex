@@ -1,3 +1,4 @@
+\chapter{Mirrored Arrays}
 
 \section{Overview}
 
@@ -58,29 +59,29 @@ processors.
 
 
 \section{Mirrored Array Operations}
-\begin{lyxcode}
+\begin{verbatim}
 Fortran~integer~\href{http://www.emsl.pnl.gov/docs/global/ga_ops.html\#GA_PGROUP_GET_MIRROR}{ga\_{}pgroup\_{}get\_{}mirror}()~
 
 C~~~~~~~int~\href{http://www.emsl.pnl.gov/docs/global/c_nga_ops.html\#GA_PGROUP_GET_MIRROR}{ga\_{}pgroup\_{}get\_{}mirror}()~
 
 C++~~~~~int~GA::GAServices::pgroupGetMirror()
-\end{lyxcode}
+\end{verbatim}
 This function returns a handle to the mirrored processor list, which
 can then be used to create a mirrored global array using one of the
 NGA\_Create\_{*}\_config calls.
-\begin{lyxcode}
+\begin{verbatim}
 Fortran~integer~\href{http://www.emsl.pnl.gov/docs/global/ga_ops.html\#GA_MERGE_MIRRORED}{ga\_{}merge\_{}mirrored}(g\_a)~
 
 C~~~~~~~int~\href{http://www.emsl.pnl.gov/docs/global/c_nga_ops.html\#GA_MERGE_MIRRORED}{GA\_{}Merge\_{}mirrored}(int~g\_a)~
 
 C++~~~~~int~GA::GlobalArray::mergeMirrored()
-\end{lyxcode}
+\end{verbatim}
 This subroutine merges mirrored arrays by adding the contents of each
 array across nodes. The result is that the each mirrored copy of the
 array represented by g\_a is the sum of the individual arrays before
 the merge operation. After the merge, all mirrored arrays are equal.
 This is a collective operation.
-\begin{lyxcode}
+\begin{verbatim}
 Fortran~integer~\href{http://www.emsl.pnl.gov/docs/global/ga_ops.html\#GA_MERGE_DISTR_PATCH}{nga\_{}merge\_{}distr\_{}patch}(g\_a,~alo,~ahi,~
 
 ~~~~~~~~~~~~~~~~g\_b,~blo,~bhi)~
@@ -92,17 +93,17 @@ C~~~~~~~int~\href{http://www.emsl.pnl.gov/docs/global/c_nga_ops.html\#GA_MERGE_D
 C++~~~~~int~GA::GlobalArray::mergeDistrPatch(int~alo{[}{]},~
 
 ~~~~~~~~~~~~~~~~int~ahi{[}{]},~int~g\_b,~int~blo{[}{]},~int~bhi{[}{]})
-\end{lyxcode}
+\end{verbatim}
 This function merges all copies of a patch of a mirrored array (g\_a)
 into a patch in a distributed array (g\_b). This is same as GA\_merge\_mirrored,
 except, this function is operated on a patch rather than the whole
 array. This is a collective operation.
-\begin{lyxcode}
+\begin{verbatim}
 Fortran~integer~\href{http://www.emsl.pnl.gov/docs/global/ga_ops.html\#ga_is_mirrored}{ga\_{}is\_{}mirrored}(g\_a)~
 
 C~~~~~~~int~\href{http://www.emsl.pnl.gov/docs/global/c_nga_ops.html\#ga_is_mirrored}{GA\_{}Is\_{}mirrored}(int~g\_a)~
 
 C++~~~~~int~GA::GlobalArray::isMirrored()
-\end{lyxcode}
+\end{verbatim}
 This subroutine checks if the array is mirrored array or not. Returns
 1 if it is a mirrored array, else it returns 0. This is a local operation. 

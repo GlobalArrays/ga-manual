@@ -1,3 +1,5 @@
+\chapter{Sparse Data Operations}
+
 The Global Arrays Toolkit contains several subroutines designed to
 support operations on sparse data sets. Most sparse data objects,
 such as sparse matrices, are generally described using a collection
@@ -6,18 +8,18 @@ focused on 1D Global Arrays. The discussion of sparse data operations
 will begin by describing the sparse data subroutines and then will
 show how they can be used by describing an algorithm for doing a sparse
 matrix-dense vector multiply.
-\begin{lyxcode}
+\begin{verbatim}
 Fortran~subroutine~ga\_patch\_enum(g\_a,~lo,~hi,~istart,~istride)~
 
 C~~~~~~~void~GA\_Patch\_enum(int~g\_a,~int~lo,~int~hi,~
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~int~istart,~int~istride)
-\end{lyxcode}
+\end{verbatim}
 This subroutine enumerates the elements of an array between elements
 \texttt{lo} and \texttt{hi} starting with the value istart and incrementing
 each subsequent value by \texttt{istride}. This is a collective operation.
 Some examples of its use are shown below:
-\begin{lyxcode}
+\begin{verbatim}
 call~ga\_patch\_enum(g\_a,~1,~n,~1,~1)~
 
 g\_a:~1~2~3~4~5~6~7~8~9~10~...~n
@@ -33,7 +35,7 @@ Fortran~subroutine~ga\_scan\_copy(g\_src,~g\_dest,~g\_mask,~lo,~hi)~
 C~~~~~~~void~GA\_Scan\_copy(int~g\_src,~int~g\_dest,~int~g\_mask,~
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~int~lo,~int~hi)
-\end{lyxcode}
+\end{verbatim}
 This subroutine does a segmented scan-copy of values in the source
 array \texttt{g\_src} into a destination array \texttt{g\_dest} with
 segments defined by values in an integer mask array \texttt{g\_mask}.
@@ -42,7 +44,7 @@ and \texttt{hi} indices. The resulting destination array will contain
 segments of consecutive elements with the same value. This is a collective
 operation. An example is shown below to illustrate the behavior of
 this operation. 
-\begin{lyxcode}
+\begin{verbatim}
 call~ga\_scan\_copy(g\_src,~g\_dest,~g\_mask,~1,~n)~
 
 g\_mask:~1~0~0~0~0~1~0~1~0~0~1~0~0~0~1~1~0~
@@ -58,7 +60,7 @@ Fortran~subroutine~ga\_scan\_add(g\_src,~g\_dest,~g\_mask,~lo,~hi,~excl)~
 C~~~~~~~void~GA\_Scan\_add(int~g\_src,~int~g\_dest,~int~g\_mask,~
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~int~lo,~int~hi,~int~excl)
-\end{lyxcode}
+\end{verbatim}
 This operation will add successive elements in a source vector \texttt{g\_src
 }and put the results in a destination vector \texttt{g\_dest}. The
 addition will restart based on the values of the integer mask vector
@@ -68,7 +70,7 @@ whether the sum starts with the value in the source vector corresponding
 to the location of a 1 in the mask vector (\texttt{excl=0}) or whether
 the first value is set equal to 0 (\texttt{excl=1}). Some examples
 of this operation are given below.
-\begin{lyxcode}
+\begin{verbatim}
 call~ga\_scan\_add(g\_src,~g\_dest,~g\_mask,~1,~n,~0)~
 
 g\_mask:~1~0~0~0~0~0~1~0~1~0~0~1~0~0~1~1~0~
@@ -94,7 +96,7 @@ Fortran~subroutine~ga\_pack(g\_src,~g\_dest,~g\_sbit,~lo,~hi,~icount)~
 C~~~~~~~void~GA\_Pack(int~g\_src,~int~g\_dest,~
 
 ~~~~~~~~~~~~~~~~~~~~~int~g\_sbit,~int~lo,~int~hi,~int~icount)
-\end{lyxcode}
+\end{verbatim}
 The pack routine is designed to compress the values in the source
 vector\texttt{ g\_src} into a smaller destination array\texttt{ g\_dest}
 based on the values in an integer mask array \texttt{g\_mask}. The
@@ -102,7 +104,7 @@ values \texttt{lo} and \texttt{hi} denote the range of elements that
 should be compressed and \texttt{icount} is a variable that on output
 lists the number of values placed in the compressed array. This is
 a collective operation. An example of its use is shown below.
-\begin{lyxcode}
+\begin{verbatim}
 call~ga\_pack(g\_src,~g\_dest,~g\_mask,~1,~n,~icount)~
 
 g\_mask:~1~0~0~0~0~1~0~1~0~0~1~0~0~0~1~0~0~
@@ -120,7 +122,7 @@ Fortran~subroutine~ga\_unpack(g\_src,~g\_dest,~g\_sbit,~lo,~hi,~icount)~
 C~~~~~~~void~GA\_Pack(int~g\_src,~int~g\_dest,~int~g\_sbit,~
 
 ~~~~~~~~~~~~~~~~~~~~~int~lo,~int~hi,~int~icount)
-\end{lyxcode}
+\end{verbatim}
 The unpack routine is designed to expand the values in the source
 vector \texttt{g\_src} into a larger destination array \texttt{g\_dest}
 based on the values in an integer mask array \texttt{g\_mask}. The
@@ -128,7 +130,7 @@ values \texttt{lo} and \texttt{hi} denote the range of elements that
 should be expanded and icount is a variable that on output lists the
 number of values placed in the uncompressed array. This is a collective
 operation. An example of its use is shown below.
-\begin{lyxcode}
+\begin{verbatim}
 call~ga\_unpack(g\_src,~g\_dest,~g\_mask,~1,~n,~icount)~
 
 g\_mask:~1~0~0~0~0~1~0~1~0~0~1~0~0~0~1~0~0~
@@ -138,7 +140,7 @@ g\_src:~1~6~8~11~15~
 g\_dest:~1~0~0~0~0~6~0~8~0~0~11~0~0~0~15~0~0~
 
 icount:~5
-\end{lyxcode}
+\end{verbatim}
 
 \section{Sparse Matrix-Vector Multiply Example:}
 
@@ -158,7 +160,7 @@ should contain the same number of elements. Within each row the values
 are ordered by increasing values of the j index and then by increasing
 values of the i index. An example of a sparse matrix and its CSR representation
 is shown below. 
-\begin{lyxcode}
+\begin{verbatim}
 ~~~~~0~0~1~3~0
 
 ~~~~~2~0~0~0~5
@@ -168,15 +170,15 @@ is shown below.
 ~~~~~3~0~4~0~5
 
 ~~~~~0~2~0~0~6
-\end{lyxcode}
+\end{verbatim}
 The CSR representation of this matrix is
-\begin{lyxcode}
+\begin{verbatim}
 VALUES:~1~3~2~5~7~9~3~4~5~2~6~
 
 J-INDEX:~3~4~1~5~2~4~1~3~5~2~5~
 
 I-INDEX:~1~3~5~7~10~12
-\end{lyxcode}
+\end{verbatim}
 Note that each value in I-INDEX corresponds to the location of the
 first element of the row in J-INDEX. The last element in I-INDEX equals
 one plust the total number of non-zero elements in the matrix and
@@ -198,7 +200,7 @@ to the processor. In the example shown above, assume that the matrix
 is divided between three processors and that processes 0 and 1 have
 two rows each and process 2 has one row. The layout on the three processes
 looks like
-\begin{lyxcode}
+\begin{verbatim}
 Process~0~
 
 VALUES:~1~3~2~5~
@@ -232,7 +234,7 @@ J-INDEX:~2~5~
 I-INDEX:~1~
 
 INC:~2~
-\end{lyxcode}
+\end{verbatim}
 The local array INC contains the number of non-zero elements in each
 row. The total number of non-zero elements in the matrix can be found
 by summing the number of non-zero values on each process. This value
@@ -245,7 +247,7 @@ also needed. This array is initialized so that the first element is
 1 and the remaining elements are all zero. To create the distributed
 array I-INDEX a temporary Global Array of length N+1 is created. The
 following code fragment illustrates the construction of I-INDEX
-\begin{lyxcode}
+\begin{verbatim}
 lo~=~imin~+~1~\textcolor{blue}{!~imin~is~lower~index~of~i~values~on~}
 
 \textcolor{blue}{{}~~~~~~~~~~~~~~!~this~processor~}
@@ -265,7 +267,7 @@ call~nga\_put(g\_tmp,~lo,~hi,~inc,~one)~
 call~ga\_sync~isize~=~n~+~1~
 
 call~ga\_scan\_add(g\_tmp,g\_i\_index,~g\_sbit,~isize,~0)
-\end{lyxcode}
+\end{verbatim}
 The variable ONE is an integer variable set equal to 1. This code
 fragment results in a distributed array containing the elements of
 I-INDEX as described above. Note that the N+1 element in \texttt{g\_i\_index}
@@ -279,7 +281,7 @@ at the locations corresponding to the start of each row in the CSR
 and zeros everywhere else. This can be constructed from the I-INDEX
 array in a fairly straightforward way using the \texttt{nga\_scatter
 }routine. The code fragment for constructing this is
-\begin{lyxcode}
+\begin{verbatim}
 call~ga\_zero(g\_mask)~
 
 call~nga\_distribution(g\_i\_index,~me,~lo,~hi)~
@@ -301,7 +303,7 @@ end~do~
 call~nga\_scatter(g\_mask,~ones,~int\_mb(idx),~ntot)~
 
 call~nga\_release(g\_i\_index,~lo,~hi)
-\end{lyxcode}
+\end{verbatim}
 This code will create an appropriate mask array with 1\textquoteright{}s
 corresponding to the start of each row in the VALUES and J-INDEX arrays.
 The last element in the I-INDEX array contains the total number of
@@ -311,7 +313,7 @@ the value of NTOT is decreased by 1 for the last processor.
 Finally, the remaining task is to copy the values of the j indices
 and the matrix values from the local arrays into the corresponding
 Global Arrays. The code fragment for this is
-\begin{lyxcode}
+\begin{verbatim}
 call~nga\_get(g\_i\_index,~imin,~imin,~jmin,~one)~
 
 call~nga\_get(g\_i\_index,~imax+1,~imax+1,~jmax,~one)~
@@ -321,7 +323,7 @@ jmax~=~jmax~\textendash{}~1~
 call~nga\_put(g\_j\_index,~jmin,~jmax,~jvalues,~one)~
 
 call~nga\_put(g\_values,~jmin,~jmax,~values,~one)
-\end{lyxcode}
+\end{verbatim}
 The value of \texttt{jmax} is decreased by 1 since this represents
 the start of the \texttt{imax+1} row. The value for the last row works
 out correctly since we defined the N+1 element of I-INDEX to equal
@@ -380,7 +382,7 @@ The first step in performing the multiply operation is to create a
 VALUES array and has the same distribution across processors. Denoting
 the handle of this array as \texttt{g\_tmp}, it can be filled with
 the following sequence of operations
-\begin{lyxcode}
+\begin{verbatim}
 call~nga\_distribution(g\_j\_index,~me,~lo,~hi)~
 
 call~nga\_access(g\_j\_index,~lo,~hi,~idx,~ld)~
@@ -394,7 +396,7 @@ call~nga\_gather(g\_b,~dbl\_mb(id\_tmp),int\_mb(idx),ld)~
 call~nga\_release(g\_j\_index,~lo,~hi)~
 
 call~nga\_release(g\_tmp,lo,hi)
-\end{lyxcode}
+\end{verbatim}
 The first three lines find the location in memory of the local portions
 of the J-VALUES vector and the \texttt{g\_tmp} array. These should
 both correspond to the same values of \texttt{lo} and \texttt{hi}.
@@ -418,7 +420,7 @@ elements just before the locations indicated by the g\_mask array.
 To get these values back into an ordinary compressed vector, the g\_mask
 vector is shifted to the left by one place, using the following code
 fragment
-\begin{lyxcode}
+\begin{verbatim}
 call~nga\_distribution~(g\_mask,~me,~lo,~hi)~
 
 call~nga\_access(g\_mask,~lo,~hi,~idx,~ld)~
@@ -450,7 +452,7 @@ call~ga\_sync~
 call~nga\_put(g\_mask,~idx,~idx,~isav,~ld)~
 
 call~g\_sync
-\end{lyxcode}
+\end{verbatim}
 The results in \texttt{g\_tmp} can now be packed into the final results
 vector \texttt{g\_c} using a single call to \texttt{ga\_pack}(\texttt{t\_tmp},
 \texttt{g\_c}, \texttt{g\_mask}, \texttt{one}, \texttt{ntot}, \texttt{icnt}). 

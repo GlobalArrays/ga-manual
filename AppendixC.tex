@@ -1,11 +1,13 @@
-\label{Appendix_C}Global Arrays supports many computing platforms.
-This appendix discusses those platforms, including older systems.
+\chapter{Global Arrays on Older Systems}
 
-The web page \url{www.emsl.pnl.gov/docs/global/support.html} contains
-updated information about using GA on different platforms. Please
-refer to this page frequently for most recent updates and platform
-information. 
+\label{Appendix_C}
 
+Global Arrays supports many computing platforms.  This appendix discusses those
+platforms, including older systems.
+
+The web page \url{www.emsl.pnl.gov/docs/global/support.html} contains updated
+information about using GA on different platforms. Please refer to this page
+frequently for most recent updates and platform information. 
 
 \section{Platform and Library Dependencies }
 
@@ -190,9 +192,9 @@ directory names as a part of compiler flags), or (starting with GA
 the prefix, OR 
 \item use MPI aware compiler wrappers e.g., mpicc and mpif77 to build GA
 right out of the box on UNIX workstations: \end{itemize}
-\begin{lyxcode}
+\begin{verbatim}
 make~FC=mpif77~CC=mpicc~
-\end{lyxcode}
+\end{verbatim}
 One disadvantage of the second approach it that GA makefile in some
 circumstances might be not able to determine which compiler (e.g.,
 GNU or PGI) is called underneath by the MPICH compiler wrappers. Since
@@ -239,7 +241,7 @@ C programs that use Global Arrays should include files \emph{`global.h',
 The GA program should look like:
 \begin{itemize}
 \item When GA runs with MPI\end{itemize}
-\begin{lyxcode}
+\begin{verbatim}
 \textcolor{blue}{Fortran~}~~~~~~~~~~~~~~\textcolor{green}{C}
 
 \textcolor{blue}{call~mpi\_init(..)~}~~~\textcolor{green}{MPI\_Init(..)~}~~~!~start~MPI~
@@ -254,10 +256,10 @@ The GA program should look like:
 
 \textcolor{blue}{mpi\_finalize()}~~~~~~~\textcolor{green}{MPI\_Finalize()}~~!~tidy~up~MPI~~
 
-\textcolor{blue}{stop}~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~!~exit~program\end{lyxcode}
+\textcolor{blue}{stop}~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~!~exit~program\end{verbatim}
 \begin{itemize}
 \item When GA runs with TCGMSG or TCGMSG-MPI\end{itemize}
-\begin{lyxcode}
+\begin{verbatim}
 \textcolor{blue}{Fortran~C}
 
 \textcolor{blue}{call~pbeginf()~}~~~~~~~~\textcolor{green}{PBEGIN\_(..)~}~~~~!~start~TCGMSG~
@@ -273,11 +275,11 @@ The GA program should look like:
 \textcolor{blue}{call~pend()}~~~~~~~~~~~~\textcolor{green}{PEND\_()}~~~~~~~~~!~tidy~up~tcgmsg~
 
 \textcolor{blue}{stop~}~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~!~exit~program~
-\end{lyxcode}
+\end{verbatim}
 The \emph{ma\_init }call looks like :
-\begin{lyxcode}
+\begin{verbatim}
 status~=~ma\_init(type,~stack\_size,~heap\_size)
-\end{lyxcode}
+\end{verbatim}
 and it basically just goes to the OS and gets \emph{stack\_size+heap\_size}
 elements of size type. The amount of memory MA allocates need to be
 sufficient for storing global arrays on some platforms. Please refer
@@ -300,13 +302,13 @@ TARGET\_name) or in the GNUmakefile or on the command line when calling
 make. For example: 
 
 (for IBM/SP platform)
-\begin{lyxcode}
+\begin{verbatim}
 setenv~TARGET~LAPI~
-\end{lyxcode}
+\end{verbatim}
 (or) from the command line, 
-\begin{lyxcode}
+\begin{verbatim}
 gmake~TARGET=LAPI
-\end{lyxcode}
+\end{verbatim}
 Valid TARGET\_name for various supported platforms can be found in
 the above table. Valid TARGETs can also be listed by calling make
 in the top level distribution directory on UNIX family of systems
@@ -330,9 +332,9 @@ for intermediate/advanced users.
 -g, -O1)
 \end{itemize}
 For example,
-\begin{lyxcode}
+\begin{verbatim}
 gmake~FC=f90~CC=cc~FOPT=-O4~COPT=-g
-\end{lyxcode}
+\end{verbatim}
 Note that GA provides only Fortran-77 interfaces. To use and compile
 with a Fortran 90 compiler, it has to support a subset of Fortran-77. 
 
@@ -356,7 +358,7 @@ MPI library and include directories.
 
 \emph{Example}: using csh/tcsh (assume using MPICH installed in /usr/local
 on IBM workstation)
-\begin{lyxcode}
+\begin{verbatim}
 setenv~USE\_MPI~y~
 
 setenv~MPI\_LOC~/usr/local/mpich~
@@ -364,33 +366,33 @@ setenv~MPI\_LOC~/usr/local/mpich~
 setenv~MPI\_LIB~\$MPI\_LOC/lib/rs6000/ch\_shmem~
 
 setenv~MPI\_INCLUDE~\$MPI\_LOC/include
-\end{lyxcode}
+\end{verbatim}
 \item \textcolor{black}{\underbar{GA with TCGMSG}}: To build GA directly
 with TCGMSG, the user must define the environmental variable MSG\_COMMS=TCGMSG.
 Note: When MSG\_COMMS=TCGMSG, make sure to unset the environment variable
 USE\_MPI (e.g. unsetenv USE\_MPI).
 \end{enumerate}
 After chosing the configuration, to build the GA library, type 
-\begin{lyxcode}
+\begin{verbatim}
 make~
-\end{lyxcode}
+\end{verbatim}
 or 
-\begin{lyxcode}
+\begin{verbatim}
 gmake
-\end{lyxcode}
+\end{verbatim}
 If the build is successful, a test program test.x will be created
 in global/testing directory. Refer to the Section \textquotedbl{}Running
 GA programs\textquotedbl{} on how to run this test.
 
 To build an application based on GA located in g/global/testing, for
 example, the application's name is app.c (or app.F, app.f), type 
-\begin{lyxcode}
+\begin{verbatim}
 make~app.x~
-\end{lyxcode}
+\end{verbatim}
 or 
-\begin{lyxcode}
+\begin{verbatim}
 gmake~app.x
-\end{lyxcode}
+\end{verbatim}
 Please refer to compiler flags in file g/config/makefile.h to make
 sure that Fortran and C compiler flags are consistent with flags uses
 to compile your application. This may be critical when Fortran compiler
@@ -406,7 +408,7 @@ to define the environment variables USE\_SCALAPACK or USE\_SCALAPACK\_I8
 of ScaLAPACK \& Co. libraries in the env variable SCALAPACK.
 
 \emph{Example}: using csh/tcsh
-\begin{lyxcode}
+\begin{verbatim}
 setenv~USE\_SCALAPACK~y~(or)~setenv~USE\_SCALAPACK\_I8~y~
 
 setenv~SCALAPACK~'-L/msrc/proj/scalapack/LIB/rs6000~
@@ -414,7 +416,7 @@ setenv~SCALAPACK~'-L/msrc/proj/scalapack/LIB/rs6000~
 ~~~~~~~-lscalapack~-lpblas~-ltools~-lblacsF77cinit~-lblacs'~
 
 setenv~USE\_MPI~y
-\end{lyxcode}
+\end{verbatim}
 Since there are certain interdependencies between blacs and blacsF77cinit,
 some system might require specification of -lblacs twice to fix the
 unresolved external symbols from these libs.
@@ -424,13 +426,13 @@ unresolved external symbols from these libs.
 
 By default, GA C++ bindings are not built. GA++ is built only if GA\_C\_CORE
 is defined as follows: 
-\begin{lyxcode}
+\begin{verbatim}
 setenv~GA\_C\_CORE~y~
 
 cd~GA\_HOME~
 
 make~clean;~make~
-\end{lyxcode}
+\end{verbatim}
 (This will build GA with C core and C++ binding).
 
 
@@ -444,11 +446,11 @@ Fortran symols/libraries during the linking phase). NOTE: C and C++
 compilers should be from the same family. GA\_C\_CORE doesnot support
 mixing C and C++ compilers (e.g.using Intel compiler for C and GNU
 compiler for C++). 
-\begin{lyxcode}
+\begin{verbatim}
 make~FC=ifort~CC=icc~CXX=g++~(not~supported~if~GA\_C\_CORE~is~set)~
 
 make~FC=ifort~CC=icc~CXX=icpc~(Intel~compiler~family~-~supported)
-\end{lyxcode}
+\end{verbatim}
 
 \subsection{Windows NT }
 
@@ -463,24 +465,24 @@ enviroment). GA needs to know where find the MPI include files and
 libraries. To do this, select the Environment tab under the Control
 Panel, then set the variables to point to the location of MPI, for
 example for WMPI on disk D:
-\begin{lyxcode}
+\begin{verbatim}
 set~MPI\_INCLUDE~as~d:\textbackslash{}Wmpi\textbackslash{}Include~
 
 set~MPI\_LIB~as~d:\textbackslash{}Wmpi\textbackslash{}Console
-\end{lyxcode}
+\end{verbatim}
 Make sure that the dynamic link libraries required by the particular
 implementation of MPI are copied to the appropriate location for the
 system DLLs. For WMPI, copy VWMPI.dll to \textbackslash{}winnt.
 
 In the top directory do,
-\begin{lyxcode}
+\begin{verbatim}
 nmake
-\end{lyxcode}
+\end{verbatim}
 The GA test.exe program can be built in the g\textbackslash{}global\textbackslash{}testing
 directory:
-\begin{lyxcode}
+\begin{verbatim}
 nmake~test.exe
-\end{lyxcode}
+\end{verbatim}
 In addition, the HPVM package from UCSD offers the GA interface in
 the NT/Myrinet cluster environment.
 
@@ -500,9 +502,9 @@ source file}. You do not have to modify makefiles in g/global/testing
 at all. For example, if your program is contained in myfile.c or myfile.F
 and you place it in that directory, all you need to do to create an
 executable called myfile.x is to type: 
-\begin{lyxcode}
+\begin{verbatim}
 make~myfile.x
-\end{lyxcode}
+\end{verbatim}
 Windows nmake is not as powerful as GNU make - you would need to modify
 the NT makefile.
 
@@ -536,18 +538,18 @@ If the app.x is built based on MPI, run the program the same way as
 any other MPI programs. 
 
 \emph{Example}: to run on four processes on clusters, use 
-\begin{lyxcode}
+\begin{verbatim}
 mpirun~-np~4~app.x
-\end{lyxcode}
+\end{verbatim}
 \emph{Example}: If you are using MPICH (or MPICH-like Implementations),
 and mpirun requires a machinefile or hostfile, then run the GA program
 same as any other MPI programs. \textit{\textcolor{black}{The only
 change required is to make sure the hostnames are specified in a consecutive
 manner in the machinefile}}. Not doing this will prevent SMP optimizations
 and would lead to poor resource utilization.
-\begin{lyxcode}
+\begin{verbatim}
 mpirun~-np~4~-machinefile~machines.txt~app.x
-\end{lyxcode}
+\end{verbatim}
 \emph{Contents of machines.txt}: (Let us say we have two 2-way SMP
 nodes (host1 and host2, and correct formats for a 4-processor machinefile
 is shown in the table below).
@@ -585,15 +587,15 @@ the program on Unix workstations/servers, one should use the 'parallel'
 program (built in tcgmsg/ipcv4.0). After building the application,
 a file called 'app.x.p' would also be generated (If there is not such
 a file, make it: 
-\begin{lyxcode}
+\begin{verbatim}
 make~app.x.p
-\end{lyxcode}
+\end{verbatim}
 This file can be edited to specify how many processors and tasks to
 use, and how to load the executables. Make sure that 'parallel' is
 accessible (you might copy it into your 'bin' directory). To execute,
 type:
-\begin{lyxcode}
-parallel~app.x~\end{lyxcode}
+\begin{verbatim}
+parallel~app.x~\end{verbatim}
 \begin{enumerate}
 \item On MPPs, such as Cray XT3/XT4, or IMB SPs, use the appropriate system
 command to specify the number of processors, load and run the programs.
@@ -608,9 +610,9 @@ Example:
 only build your application based on MPI. Run the application program
 the same way as any other MPI programs. For, WMPI you need to create
 the .pg file. Example: \end{enumerate}
-\begin{lyxcode}
+\begin{verbatim}
 R:\textbackslash{}nt\textbackslash{}g\textbackslash{}global\textbackslash{}testing>~start~/b~test.exe
-\end{lyxcode}
+\end{verbatim}
 
 \section{Building Intel Trace Analyzer (VAMPIR) Instrumented Global Arrays}
 
@@ -636,7 +638,7 @@ the use of libraries within libraries.
 \item vampir\_end is defined to register leaving a user defined state.
 \end{itemize}
 The interfaces of these functions are defined below.
-\begin{lyxcode}
+\begin{verbatim}
 void~\textcolor{blue}{vampir\_symdef}~(int~id,~char~{*}state,~char~{*}activity,~
 
 ~~~~~~~~~~~~~~~~~~~~char~{*}file,~int~line);~
@@ -644,17 +646,17 @@ void~\textcolor{blue}{vampir\_symdef}~(int~id,~char~{*}state,~char~{*}activity,~
 void~\textcolor{blue}{vampir\_begin}~(int~id,~char~{*}file,~int~line);~
 
 void~\textcolor{blue}{vampir\_end}~(int~id,~char~{*}file,~int~line);
-\end{lyxcode}
+\end{verbatim}
 In addition to these functions two functions are defined to initialise
 and finalise MPI when needed. The use of MPI is required because Vampirtrace
 uses it internally. The functions are
-\begin{lyxcode}
+\begin{verbatim}
 void~\textcolor{blue}{vampir\_init}~(int~argc,~char~{*}{*}argv,~char~{*}file,~
 
 ~~~~~~~~~~~~~~~~~~int~line);~
 
 void~\textcolor{blue}{vampir\_finalize}~(char~{*}file,~int~line);
-\end{lyxcode}
+\end{verbatim}
 If the cpp flag -DMPI is provided then these two functions will turn
 into null functions. In that case the use of MPI within the GAs will
 ensure that Vampirtrace will be initialised properly.
@@ -687,7 +689,7 @@ e.g., \texttt{\textcolor{black}{setenv GA\_USE\_VAMPIR y}}
 
 to compile the GAs including all the Vampirtrace instrumentation.
 Further environment variables that are required are
-\begin{lyxcode}
+\begin{verbatim}
 LIBVT~:~The~name~of~the~library,~normally~-lVT~which~
 
 ~~~~~~~~~~~~~is~the~default.~
@@ -701,14 +703,14 @@ VT\_INCLUDE:~The~path~to~the~include~file~VT.h,~
 ~~~~~~~~~~~~-I<include-path>.~e.g.~setenv~VT\_INCLUDE
 
 ~~~~~~~~~~~~/usr/local/vampir/include
-\end{lyxcode}
+\end{verbatim}
 On some platforms it may be necessary to set LIBMPI to -lpmpi to load
 the MPI profile interfaces that vampirtrace needs.
 
 There are no defaults for VT\_PATH and VT\_INCLUDE. Beyond this point
 simply follow the GA make instructions.
 
-\noun{Note: }that libVT.a should be loaded before mpi or pmpi otherwise
+\emph{Note:} that libVT.a should be loaded before mpi or pmpi otherwise
 the vampirtracing will be ignored. 
 
 

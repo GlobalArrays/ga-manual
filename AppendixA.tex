@@ -1,21 +1,21 @@
 
 \subsection*{\label{sub:GA_INITIALIZE}GA\_INITIALIZE}
-\begin{lyxcode}
+\begin{verbatim}
 \textcolor{red}{void~GA\_Initialize()}
-\end{lyxcode}
+\end{verbatim}
 Allocate and initialize internal data structures in Global Arrays.
 
 This is a collective operation. 
 
 
 \subsection*{\label{sub:GA_INITIALIZE_LTD}GA\_INITIALIZE\_LTD}
-\begin{lyxcode}
+\begin{verbatim}
 \textcolor{red}{void~GA\_Initialize\_ltd(size\_t~limit)}
 
 
 
 limit~amount~of~memory~in~bytes~per~process~\textcolor{green}{{[}input{]}}
-\end{lyxcode}
+\end{verbatim}
 Allocate and initialize internal data structures and set limit for
 memory used in global arrays. The limit is per process: it is the
 amount of memory that the given processor can contribute to collective
@@ -30,7 +30,7 @@ This is a collective operation.
 
 
 \subsection*{\label{sub:GA_PGROUP_CREATE}GA\_PGROUP\_CREATE}
-\begin{lyxcode}
+\begin{verbatim}
 \textcolor{red}{int~GA\_Pgroup\_create(int~{*}list,~int~size)}
 
 
@@ -38,7 +38,7 @@ This is a collective operation.
 list{[}size{]}~list~of~processor~IDs~in~group~\textcolor{green}{{[}input{]}~}
 
 size~~~~~~~number~of~processors~in~group~~\textcolor{green}{{[}input{]}}
-\end{lyxcode}
+\end{verbatim}
 This command is used to create a processor group. At present, it must
 be invoked by all processors in the current default processor group.
 The list of processors use the indexing scheme of the default processor
@@ -50,13 +50,13 @@ This is a collective operation on the default processor group.
 
 
 \subsection*{\label{sub:GA_PGROUP_DESTROY}GA\_PGROUP\_DESTROY}
-\begin{lyxcode}
+\begin{verbatim}
 \textcolor{red}{int~GA\_Pgroup\_destroy(int~p\_handle)}
 
 
 
 p\_handle~processor~group~handle~\textcolor{green}{{[}input{]}}
-\end{lyxcode}
+\end{verbatim}
 This command is used to free up a processor group handle. It returns
 0 if the processor group handle was not previously active.
 
@@ -64,13 +64,13 @@ This is a collective operation on the default processor group.
 
 
 \subsection*{\label{sub:GA_PGROUP_SET_DEFAULT}GA\_PGROUP\_SET\_DEFAULT}
-\begin{lyxcode}
+\begin{verbatim}
 \textcolor{red}{void~GA\_Pgroup\_set\_default(int~p\_handle)}
 
 
 
 p\_handle~~~~~~processor~group~handle~~~~~~\textcolor{green}{{[}input{]}}
-\end{lyxcode}
+\end{verbatim}
 This function can be used to reset the default processor group on
 a collection of processors. All processors in the group referenced
 by p\_handle must make a call to this function. Any standard global
@@ -90,7 +90,7 @@ p\_handle.
 
 
 \subsection*{\label{sub:NGA_CREATE}NGA\_CREATE}
-\begin{lyxcode}
+\begin{verbatim}
 \textcolor{red}{int~NGA\_Create(int~type,~int~ndim,~int~dims{[}{]},~char~{*}array\_name,~int~chunk{[}{]})}
 
 
@@ -108,7 +108,7 @@ chunk{[}ndim{]}~~~~~-~array~of~chunks,~each~element~specifies~minimum~
 ~~~~~~~~~~~~~~~~~~size~that~given~dimensions~should~be~chunked~
 
 ~~~~~~~~~~~~~~~~~~up~into~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\textcolor{green}{{[}input{]}}
-\end{lyxcode}
+\end{verbatim}
 Creates an \emph{ndim}-dimensional array using the regular distribution
 model and returns integer handle representing the array.
 
@@ -131,7 +131,7 @@ This is a collective operation.
 
 
 \subsection*{\label{sub:NGA_CREATE_CONFIG}NGA\_CREATE\_CONFIG}
-\begin{lyxcode}
+\begin{verbatim}
 \textcolor{red}{int~NGA\_Create\_config(int~type,~int~ndim,~int~dims{[}{]},~}
 
 \textcolor{red}{char~{*}array\_name,~int~chunk{[}{]},~int~p\_handle)}
@@ -151,7 +151,7 @@ chunk{[}ndim{]}~~~~~-~array~of~chunks,~each~element~specifies~minimum~
 size~that~given~dimensions~should~be~chunked~up~into~~~~~~\textcolor{green}{{[}input{]}~}
 
 p\_handle~~~~~~~~-~processor~list~handle~~~~~~~~~~~~~~~~~~~\textcolor{green}{{[}input{]}}
-\end{lyxcode}
+\end{verbatim}
 Creates an ndim-dimensional array using the regular distribution model
 but with an explicitly specified processor list handle and returns
 an integer handle representing the array.
@@ -166,7 +166,7 @@ This is a collective operation.
 
 
 \subsection*{\label{sub:NGA_CREATE_GHOSTS}NGA\_CREATE\_GHOSTS}
-\begin{lyxcode}
+\begin{verbatim}
 \textcolor{red}{int~NGA\_Create\_ghosts(int~type,~int~ndim,~int~dims{[}{]},~int~width{[}{]},~}
 
 \textcolor{red}{char~{*}array\_name,~int~chunk{[}{]})}
@@ -186,7 +186,7 @@ width{[}ndim{]}~~-~array~of~ghost~cell~widths~~~~~~~~~~~~~~~\textcolor{green}{{[
 chunk{[}ndim{]}~~-~array~of~chunks,~each~element~specifies~minimum
 
 size~that~given~dimensions~should~be~chunked~up~into~~~\textcolor{green}{{}~{[}input{]}}
-\end{lyxcode}
+\end{verbatim}
 Creates an ndim-dimensional array with a layer of ghost cells around
 the visible data on each processor using the regular distribution
 model and returns an integer handle representing the array.
@@ -210,7 +210,7 @@ This is a collective operation.
 
 
 \subsection*{\label{sub:NGA_CREATE_GHOSTS_CONFIG}NGA\_CREATE\_GHOSTS\_CONFIG}
-\begin{lyxcode}
+\begin{verbatim}
 int~NGA\_Create\_ghosts\_config(int~type,~int~ndim,~int~dims{[}{]},~
 
 int~width{[}{]},~char~{*}array\_name,~int~chunk{[}{]},~int~p\_handle)
@@ -232,7 +232,7 @@ chunk{[}ndim{]}~-~array~of~chunks,~each~element~specifies~minimum~
 size~that~given~dimensions~should~be~chunked~up~into~~~~~{[}input{]}~
 
 p\_handle~~~~-~processor~list~handle
-\end{lyxcode}
+\end{verbatim}
 Creates an ndim-dimensional array with a layer of ghost cells around
 the visible data on each processor using the regular distribution
 model and an explicitly specified processor list and returns an integer
@@ -247,7 +247,7 @@ This is a collective operation.
 
 
 \subsection*{\label{sub:NGA_CREATE_IRREG}NGA\_CREATE\_IRREG}
-\begin{lyxcode}
+\begin{verbatim}
 int~NGA\_Create\_irreg(int~type,~int~ndim,~int~dims{[}{]},~char~{*}array\_name,~int~block{[}{]},~int~map{[}{]})
 
 
@@ -265,7 +265,7 @@ nblock{[}ndim{]}~-~no.~of~blocks~each~dimension~is~divided~into~{[}input{]}~
 map{[}s{]}~-~starting~index~for~for~each~block;~the~size~
 
 ~~~~~~~~~s~is~a~sum~all~elements~of~nblock~array~{[}input{]}
-\end{lyxcode}
+\end{verbatim}
 Creates an array by following the user-specified distribution and
 returns integer handle representing the array.
 
@@ -295,7 +295,7 @@ This is a collective operation.
 
 
 \subsection*{\label{sub:NGA_CREATE_IRREG_CONFIG}NGA\_CREATE\_IRREG\_CONFIG}
-\begin{lyxcode}
+\begin{verbatim}
 int~NGA\_Create\_irreg\_config(int~type,~int~ndim,~int~dims{[}{]},
 
 char~{*}array\_name,~int~block{[}{]},~int~map{[}{]},~int~p\_handle)
@@ -317,7 +317,7 @@ map{[}s{]}~~~~~~~-~starting~index~for~for~each~block;~the~size~
 ~~~~~~~~~~~~~~~s~is~a~sum~all~elements~of~nblock~array~~~~~~{[}input{]}~
 
 p\_handle~~~~~-~processor~list~handle
-\end{lyxcode}
+\end{verbatim}
 Creates an array by following the user-specified distribution and
 an explicitly specified processor list handle and returns an integer
 handle representing the array.
@@ -331,7 +331,7 @@ This is a collective operation.
 
 
 \subsection*{\label{sub:NGA_CREATE_GHOST_IRREG}NGA\_CREATE\_GHOST\_IRREG}
-\begin{lyxcode}
+\begin{verbatim}
 int~NGA\_Create\_ghost\_irreg(int~type,~int~ndim,~int~dims{[}{]},~
 
 width{[}{]},~char~{*}array\_name,~map{[}{]},~nblock{[}{]})
@@ -353,7 +353,7 @@ nblock{[}ndim{]}~-~no.~of~blocks~each~dimension~is~divided~into{[}input{]}~
 map{[}s{]}~~~~~~~-~starting~index~for~for~each~block;~the~size~s~
 
 ~~~~~~~~~~~~~~~is~a~sum~of~all~elements~of~nblock~array~~~~{[}input{]}
-\end{lyxcode}
+\end{verbatim}
 Creates an array with ghost cells by following the user-specified
 distribution and returns integer handle representing the array.
 
@@ -388,7 +388,7 @@ This is a collective operation.
 
 
 \subsection*{\label{sub:NGA_CREATE_GHOSTS_IRREG_CONFIG}NGA\_CREATE\_GHOSTS\_IRREG\_CONFIG}
-\begin{lyxcode}
+\begin{verbatim}
 int~NGA\_Create\_ghost\_irreg\_config(int~type,~int~ndim,~int~dims{[}{]},
 
 width{[}{]},~char~{*}array\_name,~map{[}{]},~nblock{[}{]},~int~p\_handle)
@@ -412,7 +412,7 @@ map{[}s{]}~~~~~~~-~starting~index~for~for~each~block;~the~size~s~
 ~~~~~~~~~~~~~~~is~a~sum~of~all~elements~of~nblock~array~~~~{[}input{]}~
 
 p\_handle~~~~~-~processor~list~handle~~~~~~~~~~~~~~~~~~~~~~~{[}input{]}
-\end{lyxcode}
+\end{verbatim}
 Creates an array with ghost cells by following the user-specified
 distribution and returns integer handle representing the array.
 
@@ -426,9 +426,9 @@ This is a collective operation.
 
 
 \subsection*{\label{sub:GA_CREATE_HANDLE}GA\_CREATE\_HANDLE}
-\begin{lyxcode}
+\begin{verbatim}
 int~GA\_Create\_handle()6
-\end{lyxcode}
+\end{verbatim}
 This function returns a global array handle that can then be used
 to create a new global array. This is part of a new API for creating
 global arrays that is designed to replace the old interface built
@@ -444,13 +444,13 @@ This is a collective operation.
 
 
 \subsection*{\label{sub:GA_SET_ARRAY_NAME}GA\_SET\_ARRAY\_NAME}
-\begin{lyxcode}
+\begin{verbatim}
 void~GA\_Set\_array\_name(int~g\_a,~char~{*}name)
 
 
 
 g\_a~{[}input{]}~name~-~array~name~{[}input{]}
-\end{lyxcode}
+\end{verbatim}
 This function can be used to assign a unique character string name
 to a global array handle that was obtained using the GA\_Create\_handle
 function.
@@ -459,7 +459,7 @@ This is a collective operation.
 
 
 \subsection*{\label{sub:GA_SET_DATA}GA\_SET\_DATA}
-\begin{lyxcode}
+\begin{verbatim}
 void~GA\_Set\_data(int~g\_a,~int~ndim,~int~dims{[}{]},~int~type)
 
 
@@ -469,7 +469,7 @@ g\_a~{[}input{]}~ndim~-~dimension~of~global~array~~{[}input{]}~
 dims{[}{]}~~~~~~~~~~~-~dimensions~of~global~array~{[}input{]}~
 
 type~~~~~~~~~~~~~-~data~type~of~global~array~~{[}input{]}
-\end{lyxcode}
+\end{verbatim}
 This function can be used to set the array dimension, the coordinate
 dimensions, and the data type assigned to a global array handle obtained
 using the GA\_Create\_handle function.
@@ -478,7 +478,7 @@ This is a collective operation.
 
 
 \subsection*{\label{sub:GA_SET_IRREG_DISTR}GA\_SET\_IRREG\_DISTR}
-\begin{lyxcode}
+\begin{verbatim}
 void~GA\_Set\_irreg\_distr(int~g\_a,~int~mapc{[}{]},~int~nblock{[}{]})
 
 
@@ -494,7 +494,7 @@ mapc{[}s{]}~~~~~~~-~starting~index~for~each~block;~
 nblock{[}ndim{]}~-~number~of~blocks~that~each~dimension~
 
 ~~~~~~~~~~~~~~~is~divided~into~~~~~~~~~~~~~~~~~{[}input{]}
-\end{lyxcode}
+\end{verbatim}
 This function can be used to partition the array data among the individual
 processors for a global array handle obtained using the GA\_Create\_handle
 function.
@@ -529,7 +529,7 @@ This is a collective operation.
 
 
 \subsection*{\label{sub:GA_SET_PGROUP}GA\_SET\_PGROUP}
-\begin{lyxcode}
+\begin{verbatim}
 void~GA\_Set\_pgroup(int~g\_a,~int~p\_handle)
 
 
@@ -537,7 +537,7 @@ void~GA\_Set\_pgroup(int~g\_a,~int~p\_handle)
 g\_a~~~~~~~~~~~~~~~~~~~~~~~~~~~~~{[}input{]}~
 
 p\_handle~processor~group~handle~{[}input{]}
-\end{lyxcode}
+\end{verbatim}
 This function can be used to set the processor configuration assigned
 to a global array handle that was obtained using the GA\_Create\_handlefunction.
 It can be used to create mirrored arrays by using the mirrored array
@@ -549,13 +549,13 @@ This is a collective operation.
 
 
 \subsection*{\label{sub:GA_SET_GHOSTS}GA\_SET\_GHOSTS}
-\begin{lyxcode}
+\begin{verbatim}
 void~GA\_Set\_ghosts(int~g\_a,~int~width{[}{]})
 
 
 
 g\_a~{[}input{]}~width{[}ndim{]}~-~array~of~ghost~cell~widths~{[}input{]}
-\end{lyxcode}
+\end{verbatim}
 This function can be used to set the ghost cell widths for a global
 array handle that was obtained using the GA\_Create\_handle function.
 The ghosts cells widths indicate how many ghost cells are used to
@@ -566,7 +566,7 @@ This is a collective operation.
 
 
 \subsection*{\label{sub:GA_SET_CHUNK}GA\_SET\_CHUNK}
-\begin{lyxcode}
+\begin{verbatim}
 void~GA\_Set\_chunk(int~g\_a,~int~chunk{[}{]})
 
 
@@ -574,7 +574,7 @@ void~GA\_Set\_chunk(int~g\_a,~int~chunk{[}{]})
 g\_a~~~~~~~~~~~~~~~~~~~~~~~~~~~~~{[}input{]}~
 
 chunk{[}{]}~-~array~of~chunk~widths~{[}input{]}
-\end{lyxcode}
+\end{verbatim}
 This function is used to set the chunk array for a global array handle
 that was obtained using the GA\_Create\_handle function. The chunk
 array is used to determine the minimum number of array elements assigned
@@ -584,7 +584,7 @@ This is a collective operation.
 
 
 \subsection*{\label{sub:GA_SET_BLOCK_CYCLIC}GA\_SET\_BLOCK\_CYCLIC}
-\begin{lyxcode}
+\begin{verbatim}
 void~GA\_Set\_block\_cyclic(int~g\_a,~int~dims{[}{]})
 
 
@@ -592,7 +592,7 @@ void~GA\_Set\_block\_cyclic(int~g\_a,~int~dims{[}{]})
 g\_a~~~~-~global~array~handle~~~~~~~~~~{[}input{]}~
 
 dims{[}{]}~-~array~of~block~dimensions~~~~{[}input{]}
-\end{lyxcode}
+\end{verbatim}
 This subroutine is used to create a global array with a simple block-cyclic
 data distribution. The array is broken up into blocks of size dims
 and each block is numbered sequentially using a column major indexing
@@ -613,7 +613,7 @@ This is a collective operation.
 
 
 \subsection*{\label{sub:GA_SET_BLOCK_CYCLIC_PROC_GRID}GA\_SET\_BLOCK\_CYCLIC\_PROC\_GRID}
-\begin{lyxcode}
+\begin{verbatim}
 void~GA\_Set\_block\_cyclic(int~g\_a,~int~dims{[}{]},~int~proc\_grid{[}{]})
 
 
@@ -623,7 +623,7 @@ g\_a~~~~~~~~~-~global~array~handle~~~~~~~{[}input{]}~
 dims{[}{]}~~~~~~-~array~of~block~dimensions~{[}input{]}~
 
 proc\_grid{[}{]}~-~processor~grid~dimensions~{[}input{]}
-\end{lyxcode}
+\end{verbatim}
 This subroutine is used to create a global array with a SCALAPACK-type
 block cyclic data distribution. The user specifies the dimensions
 of the processor grid in the array proc\_grid. The product of the
@@ -647,13 +647,13 @@ This is a collective operation.
 
 
 \subsection*{\label{sub:GA_ALLOCATE}GA\_ALLOCATE}
-\begin{lyxcode}
+\begin{verbatim}
 int~GA\_Allocate(int~g\_a)
 
 
 
 g\_a~~~~~~~~~~~~~~{[}input{]}
-\end{lyxcode}
+\end{verbatim}
 This function allocates the memory for the global array handle originally
 obtained using the GA\_Create\_handle function. At a minimum, the
 GA\_Set\_data function must be called before the memory is allocated.
@@ -664,9 +664,9 @@ This is a collective operation.
 
 
 \subsection*{\label{sub:GA_UPDATE_GHOSTS}GA\_UPDATE\_GHOSTS}
-\begin{lyxcode}
+\begin{verbatim}
 void~GA\_Update\_ghosts(int~g\_a)
-\end{lyxcode}
+\end{verbatim}
 This call updates the ghost cell regions on each processor with the
 corresponding neighbor data from other processors. The operation assumes
 that all data is wrapped around using periodic boundary data so that
@@ -679,7 +679,7 @@ operation.
 
 
 \subsection*{\label{sub:NGA_UPDATE_GHOST_DIR}NGA\_UPDATE\_GHOST\_DIR}
-\begin{lyxcode}
+\begin{verbatim}
 int~NGA\_Update\_ghost\_dir(int~g\_a,~int~dimension,~int~idir,~int~cflag)
 
 
@@ -691,7 +691,7 @@ dimension~-~array~dimension~that~is~to~be~updated~~~{[}input{]}~
 idir~~~~~~-~direction~of~update~(+/-~1)~~~~~~~~~~~~~{[}input{]}~
 
 cflag~~~~~-~flag~(0/1)~to~include~corners~in~update~{[}input{]}
-\end{lyxcode}
+\end{verbatim}
 This function can be used to update the ghost cells along individual
 directions. It is designed for algorithms that can overlap updates
 with computation. The variable dimension indicates which coordinate
@@ -702,7 +702,7 @@ be updated lies in the positive or negative direction, and cflag indicates
 whether or not the corners on the side being updated are to be included
 in the update. The following calls would be equivalent to a call to
 GA\_Update\_ghosts for a 2-dimensional system: 
-\begin{lyxcode}
+\begin{verbatim}
 status~=~NGA\_Update\_ghost\_dir(g\_a,0,-1,1);~
 
 status~=~NGA\_Update\_ghost\_dir(g\_a,0,1,1);~
@@ -710,7 +710,7 @@ status~=~NGA\_Update\_ghost\_dir(g\_a,0,1,1);~
 status~=~NGA\_Update\_ghost\_dir(g\_a,1,-1,0);~
 
 status~=~NGA\_Update\_ghost\_dir(g\_a,1,1,0);
-\end{lyxcode}
+\end{verbatim}
 The variable cflag is set equal to 1 (or non-zero) in the first two
 calls so that the corner ghost cells are update, it is set equal to
 0 in the second two calls to avoid redundant updates of the corners.
@@ -723,16 +723,16 @@ This is a collective operation.
 
 
 \subsection*{\label{sub:GA_HAS_GHOSTS}GA\_HAS\_GHOSTS}
-\begin{lyxcode}
+\begin{verbatim}
 int~GA\_Has\_ghosts(int~g\_a)
-\end{lyxcode}
+\end{verbatim}
 This function returns 1 if the global array has some dimensions for
 which the ghost cell width is greater than zero, it returns 0 otherwise.
 This is a collective operation. 
 
 
 \subsection*{\label{sub:NGA_ACCESS_GHOSTS}NGA\_ACCESS\_GHOSTS}
-\begin{lyxcode}
+\begin{verbatim}
 void~NGA\_Access\_ghosts(int~g\_a,~int~dims{[}{]},~void~{*}ptr,~int~ld{[}{]})
 
 
@@ -750,7 +750,7 @@ ptr~~~~~~~~-~returns~an~index~corresponding~to~the~origin~
 ld{[}ndim-1{]}~-~physical~dimenstions~of~the~local~array~patch,~
 
 ~~~~~~~~~~~~~including~ghost~cells~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~{[}output{]}
-\end{lyxcode}
+\end{verbatim}
 Provides access to the local patch of the global array. Returns leading
 dimension ld and and pointer for the data. This routine will provide
 access to the ghost cell data residing on each processor. Calls to
@@ -763,7 +763,7 @@ You can only access local data. This is a local operation.
 
 
 \subsection*{\label{sub:NGA_ACCESS_GHOST_ELEMENT}NGA\_ACCESS\_GHOST\_ELEMENT}
-\begin{lyxcode}
+\begin{verbatim}
 void~NGA\_Access\_ghost\_element(int~g\_a,~void~{*}ptr,~int~
 
 subscript{[}{]},~int~ld{[}{]})
@@ -783,7 +783,7 @@ subscript{[}{]}~{[}output{]}~subscript{[}ndim{]}~-~array~of~integers~that~index~
 ld{[}ndim-1{]}~-~array~of~strides~for~local~data~patch.~These~include~
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ghost~cell~widths.~~~{[}output{]}
-\end{lyxcode}
+\end{verbatim}
 This function can be used to return a pointer to any data element
 in the locally held portion of the global array and can be used to
 directly access ghost cell data. The array subscript refers to the
@@ -792,19 +792,19 @@ local index of the element relative to the origin of the local patch
 
 
 \subsection*{\label{sub:GA_TOTAL_BLOCKS}GA\_TOTAL\_BLOCKS}
-\begin{lyxcode}
+\begin{verbatim}
 int~GA\_Total\_blocks(int~g\_a)
 
 
 
 g\_a~~~~~~~~~~~~~~~~~~{[}input{]}
-\end{lyxcode}
+\end{verbatim}
 This function returns the total number of blocks contained in a global
 array with a block-cyclic data distribution. This is a local operation. 
 
 
 \subsection*{\label{sub:GA_GET_BLOCK_INFO}GA\_GET\_BLOCK\_INFO}
-\begin{lyxcode}
+\begin{verbatim}
 void~GA\_Get\_block\_info(int~g\_a,~int~num\_blocks{[}{]},~int~block\_dims{[}{]})
 
 
@@ -814,7 +814,7 @@ g\_a~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~{[}input{]}~
 num\_blocks{[}ndim{]}~-~number~of~blocks~along~each~axis~{[}output{]}~
 
 block\_dims{[}ndim{]}~-~dimensions~of~block~~~~~~~~~~~~~~{[}output{]}
-\end{lyxcode}
+\end{verbatim}
 This subroutine returns information about the block-cyclic distribution
 associated with global array g\_a. The number of blocks along each
 of the array axes are returned in the array num\_blocks and the dimensions
@@ -824,7 +824,7 @@ block\_dims. This is a local function.
 
 
 \subsection*{\label{sub:GA_DUPLICATE}GA\_DUPLICATE}
-\begin{lyxcode}
+\begin{verbatim}
 int~GA\_Duplicate(int~g\_a,~char{*}~array\_name)
 
 
@@ -832,7 +832,7 @@ int~GA\_Duplicate(int~g\_a,~char{*}~array\_name)
 array\_name~-~a~character~string~~~~~~~~~~~~~~~~~{[}input{]}~
 
 g\_a~~~~~~~~-~integer~handle~for~reference~array~{[}input{]}
-\end{lyxcode}
+\end{verbatim}
 Creates a new array by applying all the properties of another existing
 array. It returns array handle.
 
@@ -849,18 +849,18 @@ This is a collective operation.
 
 
 \subsection*{\label{sub:GA_TERMINATE}GA\_TERMINATE}
-\begin{lyxcode}
+\begin{verbatim}
 void~GA\_Terminate()
-\end{lyxcode}
+\end{verbatim}
 Delete all active arrays and destroy internal data structures.
 
 This is a collective operation. 
 
 
 \subsection*{\label{sub:GA_SYNC}GA\_SYNC}
-\begin{lyxcode}
+\begin{verbatim}
 void~GA\_Sync()
-\end{lyxcode}
+\end{verbatim}
 Synchronize processes (a barrier) and ensure that all GA operations
 completed.
 
@@ -868,7 +868,7 @@ This is a collective operation.
 
 
 \subsection*{GA\_MASK\_SYNC}
-\begin{lyxcode}
+\begin{verbatim}
 void~GA\_Mask\_sync(int~first,int~last)
 
 
@@ -876,7 +876,7 @@ void~GA\_Mask\_sync(int~first,int~last)
 first~-~mask~(0/1)~for~prior~internal~synchronization~{[}input{]}~
 
 last~~-~mask~(0/1)~for~post~internal~synchronization~~{[}input{]}
-\end{lyxcode}
+\end{verbatim}
 This subroutine can be used to remove synchronization calls from around
 collective operations. Setting the parameter first = .false. removes
 the synchronization prior to the collective operation, setting last
@@ -886,20 +886,20 @@ before each collective operation. This is a collective operation.
 
 
 \subsection*{\label{sub:GA_ZERO}GA\_ZERO}
-\begin{lyxcode}
+\begin{verbatim}
 void~GA\_Zero(int~g\_a)
 
 
 
 g\_a~-~array~handle~{[}input{]}
-\end{lyxcode}
+\end{verbatim}
 Sets value of all elements in the array to zero.
 
 This is a collective operation. 
 
 
 \subsection*{\label{sub:GA_FILL}GA\_FILL}
-\begin{lyxcode}
+\begin{verbatim}
 void~GA\_Fill(int~g\_a,~void~{*}value)
 
 
@@ -909,14 +909,14 @@ g\_a~-~array~handle~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~{[}input{]}~
 value~-~pointer~to~the~value~of~appropriate~type~
 
 ~~~~~~~~(double/DoubleComplex/long)~that~matches~array~type~{[}input{]}
-\end{lyxcode}
+\end{verbatim}
 Assign a single value to all elements in the array.
 
 This is a collective operation. 
 
 
 \subsection*{\label{sub:GA_DOT}GA\_DOT}
-\begin{lyxcode}
+\begin{verbatim}
 \textcolor{red}{int~GA\_Idot(int~g\_a,~int~g\_b)~}
 
 \textcolor{red}{long~GA\_Ldot(int~g\_a,~int~g\_b)~}
@@ -930,7 +930,7 @@ This is a collective operation.
 
 
 g\_a,~g\_b~-~array~handles~{[}input{]}
-\end{lyxcode}
+\end{verbatim}
 Computes the element-wise dot product of the two arrays which must
 be of the same types and same number of elements.
 
@@ -940,7 +940,7 @@ This is a collective operation.
 
 
 \subsection*{\label{sub:GA_SCALE}GA\_SCALE}
-\begin{lyxcode}
+\begin{verbatim}
 void~GA\_Scale(int~g\_a,~void~{*}value)
 
 
@@ -950,7 +950,7 @@ g\_a~-~array~handle~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~{[}input{]}~
 value~-~pointer~to~the~value~of~appropriate~type~
 
 ~~~~~~~~(double/DoubleComplex/long)~that~matches~array~type~{[}input{]}
-\end{lyxcode}
+\end{verbatim}
 Scales an array by the constant s. Note that the library is unable
 to detect errors when the pointed value is of different type than
 the array.
@@ -959,7 +959,7 @@ This is a collective operation.
 
 
 \subsection*{\label{sub:GA_ADD}GA\_ADD}
-\begin{lyxcode}
+\begin{verbatim}
 void~GA\_Add(void~{*}alpha,~int~g\_a,~void{*}~beta,~int~g\_b,~int~g\_c)
 
 
@@ -969,7 +969,7 @@ g\_a,~g\_b,~g\_c~~~~~~~~~~~~~-~array~handles~~~~~~~~~~~~{[}input{]}~
 double/complex/int~{*}alpha~-~scale~factor~~~~~~~~~~~~~{[}input{]}
 
 double/complex/int~{*}beta~~-~scale~factor~~~~~~~~~~~~~{[}input{]}
-\end{lyxcode}
+\end{verbatim}
 The arrays (which must be the same shape and identically aligned)
 are added together element-wise
 
@@ -981,13 +981,13 @@ This is a collective operation.
 
 
 \subsection*{\label{sub:GA_COPY}GA\_COPY}
-\begin{lyxcode}
+\begin{verbatim}
 void~GA\_Copy(int~g\_a,~int~g\_b)
 
 
 
 g\_a,~g\_b~-~array~handles~~~~~~~~~{[}input{]}
-\end{lyxcode}
+\end{verbatim}
 Copies elements in array represented by g\_a into the array represented
 by g\_b. The arrays must be the same type, shape, and identically
 aligned.
@@ -996,20 +996,20 @@ This is a collective operation.
 
 
 \subsection*{\label{sub:GA_SET_MEMORY_LIMIT}GA\_SET\_MEMORY\_LIMIT}
-\begin{lyxcode}
+\begin{verbatim}
 void~GA\_Set\_memory\_limit(size\_t~limit)
 
 
 
 limit~-~the~amount~of~memory~in~bytes~per~process~{[}input{]}
-\end{lyxcode}
+\end{verbatim}
 Sets the amount of memory to be used (in bytes) per process
 
 This is a local operation.
 
 
 \subsection*{\label{sub:GA_GET}GA\_GET}
-\begin{lyxcode}
+\begin{verbatim}
 void~NGA\_Get(int~g\_a,~int~lo{[}{]},~int~hi{[}{]},~void{*}~buf,~int~ld{[}{]})
 
 
@@ -1027,7 +1027,7 @@ buf~-~pointer~to~the~local~buffer~array~where~the~data~goes~~~~~{[}output{]}
 ld{[}ndim-1{]}~-~array~specifying~leading~dimensions/strides/extents~
 
 ~~~~~~~~~~~~~for~buffer~array~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~{[}input{]}
-\end{lyxcode}
+\end{verbatim}
 Copies data from global array section to the local array buffer. The
 local array is assumed to be have the same number of dimensions as
 the global array. Any detected inconsitencies/errors in the input
@@ -1043,7 +1043,7 @@ This is a one-sided operation.
 
 
 \subsection*{\label{sub:GA_PERIODIC_GET}GA\_PERIODIC\_GET}
-\begin{lyxcode}
+\begin{verbatim}
 void~NGA\_Periodic\_get(int~g\_a,~int~lo{[}{]},~int~hi{[}{]},~void{*}~buf,~int~ld{[}{]})
 
 
@@ -1061,13 +1061,13 @@ buf~-~pointer~to~the~local~buffer~array~where~the~data~goes~~~~~{[}output{]}
 ld{[}ndim-1{]}~-~array~specifying~leading~dimensions/strides/extents~
 
 ~~~~~~~~~~~~~for~buffer~array~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~{[}input{]}
-\end{lyxcode}
+\end{verbatim}
 Same as nga\_get except the indices can extend beyond the array boundary/dimensions
 in which case the library wraps them around. This is a one-sided operation. 
 
 
 \subsection*{\label{sub:GA_STRIDED_GET}GA\_STRIDED\_GET}
-\begin{lyxcode}
+\begin{verbatim}
 void~NGA\_Strided\_get(int~g\_a,~int~lo{[}{]},~int~hi{[}{]},~int~skip{[}{]},~
 
 void{*}~buf,~int~ld{[}{]})
@@ -1089,14 +1089,14 @@ buf~-~pointer~to~the~local~buffer~array~where~the~data~goes~~~~~{[}output{]}
 ld{[}ndim-1{]}~-~array~specifying~leading~dimensions/strides/extents~
 
 ~~~~~~~~~~~~~for~buffer~array~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~{[}input{]}
-\end{lyxcode}
+\end{verbatim}
 This operation is the same as NGA\_Get, except that the values corresponding
 to dimension n in buf correspond to every skip{[}n{]} values of the
 global array g\_a. This is a one-sided operation. 
 
 
 \subsection*{\label{sub:GA_PUT}GA\_PUT}
-\begin{lyxcode}
+\begin{verbatim}
 void~NGA\_Put(int~g\_a,~int~lo{[}{]},~int~hi{[}{]},~void{*}~buf,~int~ld{[}{]})
 
 
@@ -1114,7 +1114,7 @@ buf~~~~~~~~-~pointer~to~the~local~buffer~array~where~the~data~is~{[}input{]}~
 ld{[}ndim-1{]}~-~array~specifying~leading~dimensions/strides/extents~
 
 ~~~~~~~~~~~~~for~buffer~array~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~{[}input{]}
-\end{lyxcode}
+\end{verbatim}
 Copies data from local array buffer to the global array section .
 The local array is assumed to be have the same number of dimensions
 as the global array. Any detected inconsitencies/errors in input arguments
@@ -1124,7 +1124,7 @@ This is a one-sided operation.
 
 
 \subsection*{\label{sub:GA_PERIODIC_PUT}GA\_PERIODIC\_PUT}
-\begin{lyxcode}
+\begin{verbatim}
 void~NGA\_Periodic\_put(int~g\_a,~int~lo{[}{]},~int~hi{[}{]},~void{*}~buf,~int~ld{[}{]})
 
 
@@ -1142,13 +1142,13 @@ buf~~~~~~~~-~pointer~to~the~local~buffer~array~where~the~data~is~{[}input{]}~
 ld{[}ndim-1{]}~-~array~specifying~leading~dimensions/strides/extents
 
 ~~~~~~~~~~~~~for~buffer~array~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~{[}input{]}
-\end{lyxcode}
+\end{verbatim}
 Same as nga\_put except the indices can extend beyond the array boundary/dimensions
 in which case the library wraps them around. This is a one-sided operation. 
 
 
 \subsection*{\label{sub:GA_STRIDED_PUT}GA\_STRIDED\_PUT}
-\begin{lyxcode}
+\begin{verbatim}
 void~NGA\_Strided\_put(int~g\_a,~int~lo{[}{]},~int~hi{[}{]},~int~skip{[}{]},
 
 void{*}~buf,~int~ld{[}{]})
@@ -1170,14 +1170,14 @@ buf~~~~~~~~-~pointer~to~the~local~buffer~array~where~the~data~goes~{[}input{]}~
 ld{[}ndim-1{]}~-~array~specifying~leading~dimensions/strides/extents~
 
 ~~~~~~~~~~~~~for~buffer~array~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~{[}input{]}
-\end{lyxcode}
+\end{verbatim}
 This operation is the same as NGA\_Put, except that the values corresponding
 to dimension n in buf are copied to every skip{[}n{]} values of the
 global array g\_a. This is a one-sided operation. 
 
 
 \subsection*{\label{sub:GA_ACC}GA\_ACC}
-\begin{lyxcode}
+\begin{verbatim}
 void~NGA\_Acc(int~g\_a,~int~lo{[}{]},~int~hi{[}{]},~void{*}~buf,~int~ld{[}{]},~
 
 void{*}~alpha)
@@ -1199,7 +1199,7 @@ ld{[}ndim-1{]}~-~array~specifying~leading~dimensions/strides/extents~
 ~~~~~~~~~~~~~for~buffer~array~~~~~~~~~~~~~~~~~~~~~~~~~~~~~{[}input{]}
 
 double/DoubleComplex/long~{*}alpha~scale~factor~~~~~~~~~~~~~{[}input{]}
-\end{lyxcode}
+\end{verbatim}
 Combines data from local array buffer with data in the global array
 section. The local array is assumed to be have the same number of
 dimensions as the global array.
@@ -1210,7 +1210,7 @@ This is a one-sided and atomic operation.
 
 
 \subsection*{\label{sub:GA_PERIODIC_ACC}GA\_PERIODIC\_ACC}
-\begin{lyxcode}
+\begin{verbatim}
 void~NGA\_Periodic\_acc(int~g\_a,~int~lo{[}{]},~int~hi{[}{]},~void{*}~buf,
 
 int~ld{[}{]},~void{*}~alpha)
@@ -1232,14 +1232,14 @@ ld{[}ndim-1{]}~-~array~specifying~leading~dimensions/strides/extents~
 ~~~~~~~~~~~~~for~buffer~array~{[}input{]}~
 
 double/DoubleComplex/long~{*}alpha~scale~factor~~~~~~~~~~~~{[}input{]}
-\end{lyxcode}
+\end{verbatim}
 Same as nga\_acc except the indices can extend beyond the array boundary/dimensions
 in which case the library wraps them around. This is a one-sided and
 atomic operation. 
 
 
 \subsection*{\label{sub:GA_STRIDED_ACC}GA\_STRIDED\_ACC}
-\begin{lyxcode}
+\begin{verbatim}
 void~NGA\_Strided\_acc(int~g\_a,~int~lo{[}{]},~int~hi{[}{]},~int~skip{[}{]},~
 
 void{*}~buf,~int~ld{[}{]})
@@ -1263,14 +1263,14 @@ ld{[}ndim-1{]}~-~array~specifying~leading~dimensions/strides/extents~
 ~~~~~~~~~~~~~for~buffer~array~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~{[}input{]}~
 
 double/DoublComplex/long~{*}alpha~scale~factor~~~~~~~~~~~~~~~~~~~~{[}input{]}
-\end{lyxcode}
+\end{verbatim}
 This operation is the same as NGA\_Acc, except that the values corresponding
 to dimension n in buf are accumulated to every skip{[}n{]} values
 of the global array g\_a. This is a one-sided operation. 
 
 
 \subsection*{\label{sub:GA_DISTRIBUTION}GA\_DISTRIBUTION}
-\begin{lyxcode}
+\begin{verbatim}
 void~NGA\_Distribution(int~g\_a,~int~iproc,~int~lo{[}{]},~int~hi{[}{]})
 
 
@@ -1282,20 +1282,20 @@ ndim~-~number~of~dimensions~of~the~global~array~
 lo{[}ndim{]}~-~array~of~starting~indices~for~array~section~{[}input{]}
 
 hi{[}ndim{]}~-~array~of~ending~indices~for~array~section~~~{[}input{]}
-\end{lyxcode}
+\end{verbatim}
 If no array elements are owned by process iproc, the range is returned
 as lo{[} {]}=-1 and hi{[} {]}= -2 for all dimensions. This operation
 is local. 
 
 
 \subsection*{\label{sub:GA_COMPARE_DISTR}GA\_COMPARE\_DISTR}
-\begin{lyxcode}
+\begin{verbatim}
 int~GA\_Compare\_distr(int~g\_a,~int~g\_b)~
 
 
 
 g\_a,~g\_b~-~array~handles~~~~~{[}input{]}
-\end{lyxcode}
+\end{verbatim}
 Compares distributions of two global arrays. Returns 0 if distributions
 are identical and 1 when they are not.
 
@@ -1303,7 +1303,7 @@ This is a collective operation.
 
 
 \subsection*{\label{sub:GA_ACCESS}GA\_ACCESS}
-\begin{lyxcode}
+\begin{verbatim}
 void~NGA\_Access(int~g\_a,~int~lo{[}{]},~int~hi{[}{]},~void~{*}ptr,~int~ld{[}{]})
 
 
@@ -1319,7 +1319,7 @@ hi{[}ndim{]}~-~~~array~of~ending~indices~for~array~section~~~{[}input{]}
 ptr~-~~~~~~~~points~to~location~of~first~element~in~patch{[}output{]}~
 
 ld{[}ndim-1{]}~-~leading~dimensions~for~the~pacth~elements~~~{[}output{]}
-\end{lyxcode}
+\end{verbatim}
 Provides access to the specified patch of a global array. Returns
 array of leading dimensions ld and a pointer to the first element
 in the patch. This routine allows to access directly, in place elements
@@ -1336,7 +1336,7 @@ issues of mutual exclusion. This operation is local.
 
 
 \subsection*{\label{sub:GA_ACCESS_BLOCK_SEGMENT}GA\_ACCESS\_BLOCK\_SEGMENT}
-\begin{lyxcode}
+\begin{verbatim}
 void~NGA\_Access\_block\_segment(int~g\_a,~int~proc,~void~{*}ptr,~int~len)
 
 
@@ -1348,7 +1348,7 @@ proc~-~processor~ID~~~~~~~~~~~~~~~~~{[}input{]}~
 ptr~~-~pointer~to~locally~held~data~{[}output{]}~
 
 len~~-~length~of~data~on~processor~~{[}output{]}
-\end{lyxcode}
+\end{verbatim}
 This function can be used to gain access to the all the locally held
 data on a particular processor that is associated with a block-cyclic
 distributed array. Once the index has been returned, local data can
@@ -1364,7 +1364,7 @@ This is a local operation.
 
 
 \subsection*{\label{sub:GA_ACCESS_BLOCK}GA\_ACCESS\_BLOCK}
-\begin{lyxcode}
+\begin{verbatim}
 void~NGA\_Access\_block(int~g\_a,~int~idx,~int~index,~int~ld{[}{]})
 
 
@@ -1378,7 +1378,7 @@ idx~~~~~~~~~-~block~index~~~~~~~~~~~~~~~~~~~{[}input{]}~
 index~~~~~~~-~pointer~to~locally~held~block~{[}output{]}~
 
 ld{[}ndim-1{]}~~-~array~of~leading~dimensions~~~{[}output{]}
-\end{lyxcode}
+\end{verbatim}
 This function can be used to gain direct access to the data represented
 by a single block in a global array with a block-cyclic data distribution.
 The index idx is the index of the block in the array assuming that
@@ -1394,7 +1394,7 @@ This is a local operation.
 
 
 \subsection*{\label{sub:GA_ACCESS_BLOCK_GRID}GA\_ACCESS\_BLOCK\_GRID}
-\begin{lyxcode}
+\begin{verbatim}
 void~NGA\_Access\_block\_grid(int~g\_a,~int~subscript{[}{]},~void~{*}ptr,~int~ld{[}{]})
 
 
@@ -1408,7 +1408,7 @@ subscript{[}ndim{]}~-~subscript~of~block~in~array~~{[}input{]}~
 ptr~~~~~~~~~~~~~-~pointer~to~locally~held~bloc~{[}output{]}~
 
 ld{[}ndim-1{]}~~~~~~-~array~of~leading~dimensions~~{[}output{]}
-\end{lyxcode}
+\end{verbatim}
 This function can be used to gain direct access to the data represented
 by a single block in a global array with a SCALAPACK block-cyclic
 data distribution that is based on an underlying processor grid. The
@@ -1424,7 +1424,7 @@ This is a local operation.
 
 
 \subsection*{\label{sub:GA_RELEASE}GA\_RELEASE}
-\begin{lyxcode}
+\begin{verbatim}
 void~NGA\_Release(int~g\_a,~int~lo{[}{]},~int~hi{[}{]})
 
 
@@ -1436,11 +1436,11 @@ ndim~~~~~-~number~of~dimensions~of~the~global~array~
 lo{[}ndim{]}~-~array~of~starting~indices~for~array~section~{[}input{]}
 
 hi{[}ndim{]}~-~array~of~ending~indices~for~array~section~~~{[}input{]}
-\end{lyxcode}
+\end{verbatim}
 Releases access to a global array when the data was read only.
 
 Your code should look like:
-\begin{lyxcode}
+\begin{verbatim}
 NGA\_Distribution(g\_a,~myproc,~lo,hi);~
 
 NGA\_Access(g\_a,~lo,~hi,~\&ptr,~ld);~
@@ -1452,13 +1452,13 @@ NGA\_Access(g\_a,~lo,~hi,~\&ptr,~ld);~
 
 
 GA\_Release(g\_a,~lo,~hi);
-\end{lyxcode}
+\end{verbatim}
 NOTE: see restrictions specified for ga\_access This operation is
 local. 
 
 
 \subsection*{\label{sub:GA_RELEASE_UPDATE}GA\_RELEASE\_UPDATE}
-\begin{lyxcode}
+\begin{verbatim}
 void~NGA\_Release\_update(int~g\_a,~int~lo{[}{]},~int~hi{[}{]})
 
 
@@ -1470,14 +1470,14 @@ ndim~~~~~-~number~of~dimensions~of~the~global~array
 lo{[}ndim{]}~-~array~of~starting~indices~for~array~section~{[}input{]}
 
 hi{[}ndim{]}~-~array~of~ending~indices~for~array~section~~~{[}input{]}
-\end{lyxcode}
+\end{verbatim}
 Releases access to the data. It must be used if the data was accessed
 for writing. NOTE: see restrictions specified for ga\_access. This
 operation is local.
 
 
 \subsection*{\label{sub:GA_RELEASE_BLOCK}GA\_RELEASE\_BLOCK}
-\begin{lyxcode}
+\begin{verbatim}
 void~NGA\_Release\_block(int~g\_a,~int~index)
 
 
@@ -1485,7 +1485,7 @@ void~NGA\_Release\_block(int~g\_a,~int~index)
 g\_a~~~-~array~handle~{[}input{]}
 
 index~-~block~index~~{[}input{]}
-\end{lyxcode}
+\end{verbatim}
 Releases access to the block of data specified by the integer index
 when data was accessed as read only. This is only applicable to block-cyclic
 data distributions created using the simple block-cyclic distribution.
@@ -1493,7 +1493,7 @@ This is a local operation.
 
 
 \subsection*{\label{sub:GA_RELEASE_UPDATE_BLOCK}GA\_RELEASE\_UPDATE\_BLOCK}
-\begin{lyxcode}
+\begin{verbatim}
 void~NGA\_Release\_update\_block(int~g\_a,~int~index)
 
 
@@ -1501,7 +1501,7 @@ void~NGA\_Release\_update\_block(int~g\_a,~int~index)
 g\_a~~~-~array~handle~{[}input{]}~
 
 index~-~block~index~~{[}input{]}
-\end{lyxcode}
+\end{verbatim}
 Releases access to the block of data specified by the integer index
 when data was accessed in read-write mode. This is only applicable
 to block-cyclic data distributions created using the simple block-cyclic
@@ -1509,7 +1509,7 @@ distribution. This is a local operation.
 
 
 \subsection*{\label{sub:GA_RELEASE_BLOCK_GRID}GA\_RELEASE\_BLOCK\_GRID}
-\begin{lyxcode}
+\begin{verbatim}
 void~NGA\_Release\_block\_grid(int~g\_a,~int~subscript{[}{]})
 
 
@@ -1519,7 +1519,7 @@ g\_a~~~~~~~~~~~~~-~array~handle~~~~~~~~~~~~~~~~~~~~~~~{[}input{]}~
 ndim~~~~~~~~~~~~-~number~of~dimensions~of~the~global~array~
 
 subscript{[}ndim{]}~-~indices~of~block~in~array~~~~~~~~~~{[}input{]}
-\end{lyxcode}
+\end{verbatim}
 Releases access to the block of data specified by the subscript array
 when data was accessed as read only. This is only applicable to block-cyclic
 data distributions created using the SCALAPACK data distribution.
@@ -1527,7 +1527,7 @@ This is a local operation.
 
 
 \subsection*{\label{sub:GA_RELEASE_UPDATE_BLOCK_GRID}GA\_RELEASE\_UPDATE\_BLOCK\_GRID}
-\begin{lyxcode}
+\begin{verbatim}
 void~NGA\_Release\_update\_block\_grid(int~g\_a,~int~subscript{[}{]})
 
 
@@ -1537,7 +1537,7 @@ g\_a~~~~~~~~~~~~~-~array~handle~~~~~~~~~~~~~~~~~~~~~~~{[}input{]}
 ndim~~~~~~~~~~~~-~number~of~dimensions~of~the~global~array
 
 subscript{[}ndim{]}~-~indices~of~block~in~array~~~~~~~~~~{[}input{]}
-\end{lyxcode}
+\end{verbatim}
 Releases access to the block of data specified by the subscript array
 when data was accessed in read-write mode. This is only applicable
 to block-cyclic data distributions created using the SCALAPACK data
@@ -1545,7 +1545,7 @@ distribution. This is a local operation.
 
 
 \subsection*{\label{sub:GA_RELEASE_BLOCK_SEGMENT}GA\_RELEASE\_BLOCK\_SEGMENT}
-\begin{lyxcode}
+\begin{verbatim}
 void~NGA\_Release\_block\_segment(int~g\_a,~int~iproc)
 
 
@@ -1553,13 +1553,13 @@ void~NGA\_Release\_block\_segment(int~g\_a,~int~iproc)
 g\_a~~~-~array~handle~{[}input{]}
 
 iproc~-~processor~ID~{[}input{]}
-\end{lyxcode}
+\end{verbatim}
 Releases access to the block of locally held data for a block-cyclic
 array, when data was accessed as read-only. This is a local operation. 
 
 
 \subsection*{\label{sub:GA_RELEASE_UPDATE_BLOCK_SEGMENT}GA\_RELEASE\_UPDATE\_BLOCK\_SEGMENT}
-\begin{lyxcode}
+\begin{verbatim}
 void~NGA\_Release\_block\_segment(int~g\_a,~int~iproc)
 
 
@@ -1567,13 +1567,13 @@ void~NGA\_Release\_block\_segment(int~g\_a,~int~iproc)
 g\_a~-~~~array~handle~{[}input{]}~
 
 iproc~-~processor~ID~{[}input{]}
-\end{lyxcode}
+\end{verbatim}
 Releases access to the block of locally held data for a block-cyclic
 array, when data was accessed as read-only. This is a local operation. 
 
 
 \subsection*{\label{sub:GA_RELEASE_GHOST_ELEMENT}GA\_RELEASE\_GHOST\_ELEMENT}
-\begin{lyxcode}
+\begin{verbatim}
 void~NGA\_Release\_ghost\_element(int~g\_a,~int~subscript{[}{]})
 
 
@@ -1581,13 +1581,13 @@ void~NGA\_Release\_ghost\_element(int~g\_a,~int~subscript{[}{]})
 g\_a~-~array~handle~{[}input{]}~
 
 subscript{[}ndim{]}~-~element~subscript~{[}input{]}
-\end{lyxcode}
+\end{verbatim}
 Releases access to the locally held data for an array with ghost elements,
 when data was accessed as read-only. This is a local operation. 
 
 
 \subsection*{\label{sub:GA_RELEASE_UPDATE_GHOST_ELEMENT}GA\_RELEASE\_UPDATE\_GHOST\_ELEMENT}
-\begin{lyxcode}
+\begin{verbatim}
 void~NGA\_Release\_update\_ghost\_element(int~g\_a,~int~subscript{[}{]})
 
 
@@ -1595,38 +1595,38 @@ void~NGA\_Release\_update\_ghost\_element(int~g\_a,~int~subscript{[}{]})
 g\_a~~~~~~~~~~~~~-~array~handle~~~~~~{[}input{]}
 
 subscript{[}ndim{]}~-~element~subscript~{[}input{]}
-\end{lyxcode}
+\end{verbatim}
 Releases access to the locally held data for an array with ghost elements,
 when data was accessed in read-write mode. This is a local operation. 
 
 
 \subsection*{\label{sub:GA_RELEASE_GHOSTS}GA\_RELEASE\_GHOSTS}
-\begin{lyxcode}
+\begin{verbatim}
 void~NGA\_Release\_ghosts(int~g\_a)
 
 
 
 g\_a~-~array~handle~{[}input{]}
-\end{lyxcode}
+\end{verbatim}
 Releases access to the locally held block of data containing ghost
 elements, when data was accessed as read-only. This is a local operation. 
 
 
 \subsection*{\label{sub:GA_RELEASE_UPDATE_GHOSTS}GA\_RELEASE\_UPDATE\_GHOSTS}
-\begin{lyxcode}
+\begin{verbatim}
 void~NGA\_Release\_update\_ghosts(int~g\_a)
 
 
 
 g\_a~-~array~handle~{[}input{]}
-\end{lyxcode}
+\end{verbatim}
 Releases access to the locally held block of data containing ghost
 elements, when data was accessed in read-write mode. This is a local
 operation. 
 
 
 \subsection*{\label{sub:GA_READ_INC}GA\_READ\_INC}
-\begin{lyxcode}
+\begin{verbatim}
 long~NGA\_Read\_inc(int~g\_a,~int~subscript{[}{]},~long~inc)
 
 
@@ -1638,7 +1638,7 @@ ndim~-~number~of~dimensions~of~the~global~array~
 subscript{[}ndim{]}~-~subscript~array~for~the~referenced~
 
 ~~~~~~~~~~~~~~~~~~element~~~~~~~~~~~~~~~~~~~~~~~~~~{[}input{]}
-\end{lyxcode}
+\end{verbatim}
 Atomically read and increment an element in an integer array.
 
 {*}BEGIN CRITICAL SECTION{*} old\_value = a(subscript) a(subscript)
@@ -1648,7 +1648,7 @@ This is a one-sided and atomic operation.
 
 
 \subsection*{\label{sub:GA_SCATTER}GA\_SCATTER}
-\begin{lyxcode}
+\begin{verbatim}
 void~NGA\_Scatter(int~g\_a,~void~{*}v,~int{*}~subsArray{[}{]},~int~n)
 
 
@@ -1662,7 +1662,7 @@ v{[}n{]}~~~~~~~~~~~~~~~-~array~containing~values~~~~~~~~~~~~~~{[}input{]}~
 ndim~~~~~~~~~~~~~~~-~number~of~array~dimensions
 
 subsArray{[}n{]}{[}ndim{]}~-~array~of~subscripts~for~each~element~{[}input{]}
-\end{lyxcode}
+\end{verbatim}
 Scatters array elements into a global array. The contents of the input
 arrays (v,subscrArray) are preserved, but their contents might be
 (consistently) shuffled on return.
@@ -1674,7 +1674,7 @@ This is a one-sided operation.
 
 
 \subsection*{\label{sub:GA_GATHER}GA\_GATHER}
-\begin{lyxcode}
+\begin{verbatim}
 void~NGA\_Gather(int~g\_a,~void~{*}v,~int{*}~subsArray{[}{]},~int~n)
 
 
@@ -1688,22 +1688,22 @@ v{[}n{]}~~~~~~~~~~~~~~~-~array~containing~values~~~~~~~~~~~~~~{[}input{]}
 ndim~~~~~~~~~~~~~~~-~number~of~array~dimensions~
 
 subsArray{[}n{]}{[}ndim{]}~-~array~of~subscripts~for~each~element~{[}input{]}
-\end{lyxcode}
+\end{verbatim}
 Gathers array elements from a global array into a local array. The
 contents of the input arrays (v, subscrArray) are preserved, but their
 contents might be (consistently) shuffled on return.
-\begin{lyxcode}
+\begin{verbatim}
 for(k=0;~k<=~n;~k++)\{
 
 ~~~~~~~~v{[}k{]}~=~a{[}subsArray{[}k{]}{[}0{]}{]}{[}subsArray{[}k{]}{[}1{]}{]}{[}subsArray{[}k{]}{[}2{]}{]}...;~
 
 \}
-\end{lyxcode}
+\end{verbatim}
 This is a one-sided operation. 
 
 
 \subsection*{\label{sub:GA_SCATTER_ACC}GA\_SCATTER\_ACC}
-\begin{lyxcode}
+\begin{verbatim}
 void~NGA\_Scatter\_acc(int~g\_a,~void~{*}v,~int{*}~subsArray{[}{]},
 
 int~n,~void~{*}alpha)
@@ -1721,30 +1721,30 @@ ndim~-~number~of~array~dimensions~
 subsArray{[}n{]}{[}ndim{]}~-~array~of~subscripts~for~each~element~{[}input{]}
 
 alpha~-~multiplicative~factor~{[}input{]}
-\end{lyxcode}
+\end{verbatim}
 Scatters array elements from a local array into a global array. Adds
 values from the local array to existing values in the global array
 after multiplying by alpha. The contents of the input arrays (v, subscrArray)
 are preserved, but their contents might be (consistently) shuffled
 on return.
-\begin{lyxcode}
+\begin{verbatim}
 for(k=0;~k<=~n;~k++)\{
 
 ~~~~~~v{[}k{]}~=~a{[}subsArray{[}k{]}{[}0{]}{]}{[}subsArray{[}k{]}{[}1{]}{]}{[}subsArray{[}k{]}{[}2{]}{]}...;~
 
 \}
-\end{lyxcode}
+\end{verbatim}
 This is a one-sided operation.
 
 
 \subsection*{\label{sub:GA_ERROR}GA\_ERROR}
-\begin{lyxcode}
+\begin{verbatim}
 void~GA\_Error(char~{*}message,~int~code)
 
 
 
 message~-~string~to~print~{[}input{]}~code~-~code~to~print~{[}input{]}
-\end{lyxcode}
+\end{verbatim}
 To be called in case of an error. Print an error message and an integer
 value that represents error code. Releases some system resources.
 This is the required way of aborting the program execution. This operation
@@ -1752,7 +1752,7 @@ is local.
 
 
 \subsection*{\label{sub:GA_LOCATE}GA\_LOCATE}
-\begin{lyxcode}
+\begin{verbatim}
 int~NGA\_Locate(int~g\_a,~int~subscript{[}{]})
 
 
@@ -1760,14 +1760,14 @@ int~NGA\_Locate(int~g\_a,~int~subscript{[}{]})
 g\_a~array~handle~~~~~~~~~~~~~~~~~~{[}input{]}~
 
 subscript{[}ndim{]}~element~subscript~{[}output{]}
-\end{lyxcode}
+\end{verbatim}
 Return in owner the GA compute process id that 'owns' the data. If
 any element of subscript{[}{]} is out of bounds \textquotedbl{}-1\textquotedbl{}
 is returned. This operation is local.
 
 
 \subsection*{\label{sub:GA_LOCATE_REGION}GA\_LOCATE\_REGION}
-\begin{lyxcode}
+\begin{verbatim}
 int~NGA\_Locate\_region(int~g\_a,~int~lo{[}{]},~int~hi{[}{]},~int~map{[}{]},~
 
 int~procs{[}{]})
@@ -1785,76 +1785,76 @@ hi{[}ndim{]}~-~array~of~ending~indices~for~array~section~{[}input{]}~
 map{[}{]}{[}2{*}ndim{]}~-~array~with~mapping~information~{[}output{]}
 
 procs{[}nproc{]}~-~list~of~processes~that~own~a~part~of~array~section{[}output{]}
-\end{lyxcode}
+\end{verbatim}
 Return the list of the GA processes id that 'own' the data. Parts
 of the specified patch might be actually 'owned' by several processes.
 If lo/hi are out of bounds \textquotedbl{}0\textquotedbl{} is returned,
 otherwise return value is equal to the number of processes that hold
 the data .
-\begin{lyxcode}
+\begin{verbatim}
 map{[}i{]}{[}0:ndim-1{]}~~~~~~-~lo{[}i{]}~
 
 map{[}i{]}{[}ndim:2{*}ndim-1{]}~-~hi{[}i{]}
 
 procs{[}i{]}~~~~~~~~~~~~~~-~processor~id~that~owns~data~in~patch~lo{[}i{]}:hi{[}i{]}
-\end{lyxcode}
+\end{verbatim}
 This operation is local. 
 
 
 \subsection*{\label{sub:GA_INQUIRE}GA\_INQUIRE}
-\begin{lyxcode}
+\begin{verbatim}
 void~NGA\_Inquire(int~g\_a,~int~{*}type,~int~{*}ndim,~int~dims{[}{]})
 
 
 
 g\_a~-~array~handle~{[}input{]}~type~-~data~type~{[}output{]}~ndim~-~number~of~dimensions~{[}output{]}~dims~-~array~of~dimensions~{[}output{]}
-\end{lyxcode}
+\end{verbatim}
 Returns data type and dimensions of the array. This operation is local. 
 
 
 \subsection*{\label{sub:GA_INQUIRE_MEMORY}GA\_INQUIRE\_MEMORY}
-\begin{lyxcode}
+\begin{verbatim}
 size\_t~GA\_Inquire\_memory()
-\end{lyxcode}
+\end{verbatim}
 Returns amount of memory (in bytes) used in the allocated global arrays
 on the calling processor. This operation is local. 
 
 
 \subsection*{\label{sub:GA_INQUIRE_NAME}GA\_INQUIRE\_NAME}
-\begin{lyxcode}
+\begin{verbatim}
 char{*}~GA\_Inquire\_name(int~g\_a)
 
 g\_a~-~array~handle~{[}input{]}
-\end{lyxcode}
+\end{verbatim}
 Returns the name of an array represented by the handle g\_a. This
 operation is local. 
 
 
 \subsection*{\label{sub:GA_NDIM}GA\_NDIM}
-\begin{lyxcode}
+\begin{verbatim}
 int~GA\_Ndim(int~g\_a)
 
 g\_a~-~array~handle~{[}input{]}
-\end{lyxcode}
+\end{verbatim}
 Returns the number of dimensions in array represented by the handle
 g\_a. This operation is local. 
 
 
 \subsection*{\label{sub:GA_NBLOCK}GA\_NBLOCK}
-\begin{lyxcode}
+\begin{verbatim}
 void~GA\_Nblock(int~g\_a,~int~nblock{[}{]})
 
 g\_a~-~array~handle~{[}input{]}~nblock{[}ndim{]}~-~number~of~partitions~for~each~dimension~{[}output{]}
-\end{lyxcode}
+\end{verbatim}
 Given a distribution of an array represented by the handle g\_a, returns
 the number of partitions of each array dimension. This operation is
 local. 
 
 
 \subsection*{\label{sub:GA_MEMORY_AVAIL}GA\_MEMORY\_AVAIL}
-\begin{lyxcode}
+\begin{verbatim}
 size\_t~GA\_Memory\_avail()
-\end{lyxcode}
+\end{verbatim}
 Returns amount of memory (in bytes) left for allocation of new global
 arrays on the calling processor.
 
@@ -1869,9 +1869,9 @@ determined. This operation is local.
 
 
 \subsection*{\label{sub:GA_USES_MA}GA\_USES\_MA}
-\begin{lyxcode}
+\begin{verbatim}
 int~GA\_Uses\_ma()
-\end{lyxcode}
+\end{verbatim}
 Returns \textquotedbl{}1\textquotedbl{} if memory in global arrays
 comes from the Memory Allocator (MA). \textquotedbl{}0\textquotedbl{}means
 that memory comes from another source, for example System V shared
@@ -1879,9 +1879,9 @@ memory is used. This operation is local.
 
 
 \subsection*{\label{sub:GA_MEMORY_LIMITED}GA\_MEMORY\_LIMITED}
-\begin{lyxcode}
+\begin{verbatim}
 int~GA\_Memory\_limited()
-\end{lyxcode}
+\end{verbatim}
 Indicates if limit is set on memory usage in Global Arrays on the
 calling processor. \textquotedbl{}1\textquotedbl{} means \textquotedbl{}yes\textquotedbl{},
 \textquotedbl{}0\textquotedbl{} means \textquotedbl{}no\textquotedbl{}.
@@ -1889,11 +1889,11 @@ This operation is local.
 
 
 \subsection*{\label{sub:GA_PROC_TOPOLOGY}GA\_PROC\_TOPOLOGY}
-\begin{lyxcode}
+\begin{verbatim}
 void~NGA\_Proc\_topology(int~g\_a,~int~proc,~int~coordinates{[}{]})
 
 g\_a~array~handle~{[}input{]}~ndim~number~of~array~dimensions~proc~process~id~{[}input{]}~coordinates{[}ndim{]}~coordinates~in~processor~grid~{[}output{]}
-\end{lyxcode}
+\end{verbatim}
 Based on the distribution of an array associated with handle g\_a,
 determines coordinates of the specified processor in the virtual processor
 grid corresponding to the distribution of array g\_a. The numbering
@@ -1904,20 +1904,20 @@ This operation is local.
 
 
 \subsection*{\label{sub:GA_PRINT_FILE}GA\_PRINT\_FILE}
-\begin{lyxcode}
+\begin{verbatim}
 void~GA\_Print\_file(FILE~{*}file,~int~g\_a)~file~-~file~pointer~{[}input{]}~g\_a~-~array~handle~{[}input{]}
-\end{lyxcode}
+\end{verbatim}
 Prints an entire array to a file.
 
 This is a collective operation. 
 
 
 \subsection*{\label{sub:GA_PRINT_PATCH}GA\_PRINT\_PATCH}
-\begin{lyxcode}
+\begin{verbatim}
 void~NGA\_Print\_patch(int~g\_a,~int~lo{[}{]},int~hi{[}{]},int~pretty)
 
 g\_a~-~array~handle~{[}input{]}~lo{[}{]},hi{[}{]}~-~coordinates~of~the~patch~{[}input{]}~int~pretty~-~formatting~flag~{[}input{]}
-\end{lyxcode}
+\end{verbatim}
 Prints a patch of g\_a array to the standard output. If pretty has
 the value 0 then output is printed in a dense fashion. If pretty has
 the value 1 then output is formatted and rows/columns labeled.
@@ -1926,20 +1926,20 @@ This is a collective operation.
 
 
 \subsection*{\label{sub:GA_PRINT}GA\_PRINT}
-\begin{lyxcode}
+\begin{verbatim}
 void~GA\_Print(int~g\_a)
 
 g\_a~-~array~handle~{[}input{]}
-\end{lyxcode}
+\end{verbatim}
 Prints an entire array to the standard output.
 
 This is a collective operation. 
 
 
 \subsection*{\label{sub:GA_PRINT_STATS}GA\_PRINT\_STATS}
-\begin{lyxcode}
+\begin{verbatim}
 void~GA\_Print\_stats()
-\end{lyxcode}
+\end{verbatim}
 This non-collective (MIMD) operation prints information about:
 
 {*} number of calls to the GA create/duplicate, destroy, get, put,
@@ -1953,50 +1953,50 @@ This operation is local.
 
 
 \subsection*{\label{sub:GA_PRINT_DISTRIBUTION}GA\_PRINT\_DISTRIBUTION}
-\begin{lyxcode}
+\begin{verbatim}
 void~GA\_Print\_distribution(int~g\_a)
 
 g\_a~-~array~handle~{[}input{]}
-\end{lyxcode}
+\end{verbatim}
 Prints the array distribution.
 
 This is a collective operation. 
 
 
 \subsection*{\label{sub:GA_CHECK_HANDLE}GA\_CHECK\_HANDLE}
-\begin{lyxcode}
+\begin{verbatim}
 void~GA\_Check\_handle(int~g\_a,~char{*}~string)
 
 g\_a~-~array~handle~{[}input{]}~string~-~message~string~{[}input{]}
-\end{lyxcode}
+\end{verbatim}
 Check that the global array handle g\_a is valid ... if not call ga\_error
 with the string provided and some more info. This operation is local. 
 
 
 \subsection*{\label{sub:GA_INIT_FENCE}GA\_INIT\_FENCE}
-\begin{lyxcode}
+\begin{verbatim}
 void~GA\_Init\_fence()
-\end{lyxcode}
+\end{verbatim}
 Initializes tracing of completion status of data movement operations.
 This operation is local. 
 
 
 \subsection*{\label{sub:GA_FENCE}GA\_FENCE}
-\begin{lyxcode}
+\begin{verbatim}
 void~GA\_Fence()
-\end{lyxcode}
+\end{verbatim}
 Blocks the calling process until all the data transfers corresponding
 to GA operations called after ga\_init\_fence complete. For example,
 since ga\_put might return before the data reaches the final destination,
 ga\_init\_fence and ga\_fence allow process to wait until the data
 tranfer is fully completed:
-\begin{lyxcode}
+\begin{verbatim}
 ga\_init\_fence();~
 
 ga\_put(g\_a,~...);~
 
 ga\_fence();
-\end{lyxcode}
+\end{verbatim}
 ga\_fence must be called after ga\_init\_fence. A barrier, ga\_sync,
 assures completion of all data transfers and implicitly cancels all
 outstanding ga\_init\_fence calls. ga\_init\_fence and ga\_fence must
@@ -2005,7 +2005,7 @@ of corresponding ga\_init\_fence calls. ga\_init\_fence/ga\_fence
 pairs can be nested.
 
 ga\_fence works for multiple GA operations. For example:
-\begin{lyxcode}
+\begin{verbatim}
 ga\_init\_fence();~
 
 ga\_put(g\_a,~...);
@@ -2015,19 +2015,19 @@ ga\_scatter(g\_a,~...);~
 ga\_put(g\_b,~...);~
 
 ga\_fence();
-\end{lyxcode}
+\end{verbatim}
 The calling process will be blocked until data movements initiated
 by two calls to ga\_put and one ga\_scatter complete. 
 
 
 \subsection*{\label{sub:GA_CREATE_MUTEXES}GA\_CREATE\_MUTEXES}
-\begin{lyxcode}
+\begin{verbatim}
 int~GA\_Create\_mutexes(int~number)
 
 
 
 number~-~number~of~mutexes~in~mutex~array~{[}input{]}
-\end{lyxcode}
+\end{verbatim}
 Creates a set containing the number of mutexes. Returns 1 if the opereation
 succeeded or 0 when failed. Mutex is a simple synchronization object
 used to protect Critical Sections. Only one set of mutexes can exist
@@ -2040,9 +2040,9 @@ This is a collective operation.
 
 
 \subsection*{GA\_DESTROY\_MUTEXES}
-\begin{lyxcode}
+\begin{verbatim}
 int~GA\_Destroy\_mutexes()
-\end{lyxcode}
+\end{verbatim}
 Destroys the set of mutexes created with ga\_create\_mutexes. Returns
 1 if the operation succeeded or 0 when failed.
 
@@ -2050,33 +2050,33 @@ This is a collective operation.
 
 
 \subsection*{GA\_LOCK}
-\begin{lyxcode}
+\begin{verbatim}
 void~GA\_Lock(int~mutex)
 
 
 
 mutex~-~mutex~object~id~{[}input{]}
-\end{lyxcode}
+\end{verbatim}
 Locks a mutex object identified by the mutex number. It is a fatal
 error for a process to attempt to lock a mutex which was already locked
 by this process. 
 
 
 \subsection*{GA\_UNLOCK}
-\begin{lyxcode}
+\begin{verbatim}
 void~GA\_Unlock(int~mutex)
 
 
 
 mutex~-~mutex~object~id~{[}input{]}
-\end{lyxcode}
+\end{verbatim}
 Unlocks a mutex object identified by the mutex number. It is a fatal
 error for a process to attempt to unlock a mutex which has not been
 locked by this process. 
 
 
 \subsection*{GA\_NODEID}
-\begin{lyxcode}
+\begin{verbatim}
 int~GA\_Nodeid()
 
 
@@ -2084,13 +2084,13 @@ int~GA\_Nodeid()
 Returns~the~GA~process~id~(0,~...,~ga\_Nnodes()-1)~of~the~requesting~compute~process.~This~operation~is~local.~GA\_NNODES
 
 int~GA\_Nnodes()
-\end{lyxcode}
+\end{verbatim}
 Returns the number of the GA compute (user) processes. This operation
 is local. 
 
 
 \subsection*{GA\_GEMM}
-\begin{lyxcode}
+\begin{verbatim}
 \textcolor{red}{void~GA\_Dgemm(char~ta,~char~tb,~int~m,~int~n,~int~k,~double~alpha,~int~g\_a,~int~g\_b,~double~beta,~int~g\_c~)~}
 
 \textcolor{red}{void~GA\_Sgemm(char~ta,~char~tb,~int~m,~int~n,~int~k,~float~alpha,~int~g\_a,~int~g\_b,~float~beta,~int~g\_c~)~}
@@ -2112,15 +2112,15 @@ n~-~number~of~columns~of~op(B)~and~of~matrix~C~{[}input{]}
 k~-~number~of~columns~of~op(A)~and~rows~of~matrix~op(B)~{[}input{]}
 
 alpha,~beta~-~scale~factors~{[}input{]}
-\end{lyxcode}
+\end{verbatim}
 Performs one of the matrix-matrix operations:
-\begin{lyxcode}
+\begin{verbatim}
 C~:=~alpha{*}op(~A~){*}op(~B~)~+~beta{*}C,
-\end{lyxcode}
+\end{verbatim}
 where op( X ) is one of
-\begin{lyxcode}
+\begin{verbatim}
 op(~X~)~=~X~or~op(~X~)~=~X',
-\end{lyxcode}
+\end{verbatim}
 alpha and beta are scalars, and A, B and C are matrices, with op(
 A ) an m by k matrix, op( B ) a k by n matrix and C an m by n matrix.
 
@@ -2135,7 +2135,7 @@ This is a collective operation.
 
 
 \subsection*{GA\_COPY\_PATCH}
-\begin{lyxcode}
+\begin{verbatim}
 void~NGA\_Copy\_patch(char~trans,~int~g\_a,~int~alo{[}{]},~int~ahi{[}{]},~
 
 int~g\_b,~int~blo{[}{]},~int~bhi{[}{]})~
@@ -2149,7 +2149,7 @@ g\_a,~g\_b~-~array~handles~{[}input{]}
 alo{[}{]},~ahi{[}{]}~-~g\_a~patch~coordinates~{[}input{]}
 
 blo{[}{]},~bhi{[}{]}~-~g\_b~patch~coordinates~{[}input{]}
-\end{lyxcode}
+\end{verbatim}
 Copies elements in a patch of one array into another one. The patches
 of arrays may be of different shapes but must have the same number
 of elements. Patches must be nonoverlapping (if g\_a=g\_b).
@@ -2162,11 +2162,11 @@ This is a collective operation.
 
 
 \subsection*{GA\_DOT\_PATCH}
-\begin{lyxcode}
+\begin{verbatim}
 double~NGA\_Ddot\_patch(int~g\_a,~char~ta,~int~alo{[}{]},~int~ahi{[}{]},~int~g\_b,~char~tb,~int~blo{[}{]},~int~bhi{[}{]})~long~NGA\_Idot\_patch(int~g\_a,~char~ta,~int~alo{[}{]},~int~ahi{[}{]},~int~g\_b,~char~tb,~int~blo{[}{]},~int~bhi{[}{]})~DoubleComplex~NGA\_Zdot\_patch(int~g\_a,~char~ta,~int~alo{[}{]},~int~ahi{[}{]},~int~g\_b,~char~tb,~int~blo{[}{]},~int~bhi{[}{]})~
 
 g\_a,~g\_b~-~array~handles~{[}input{]}~alo{[}{]},~ahi{[}{]}~-~g\_a~patch~coordinates~{[}input{]}~blo{[}{]},~bhi{[}{]}~-~g\_b~patch~coordinates~{[}input{]}~ta,~tb~-~transpose~flags~{[}input{]}
-\end{lyxcode}
+\end{verbatim}
 Computes the element-wise dot product of the two (possibly transposed)
 patches which must be of the same type and have the same number of
 elements.

@@ -1,3 +1,5 @@
+\chapter{Collective Array Operations}
+
 Global Arrays provide functions for collective array operations, targeting
 both whole arrays and patches (portions of global arrays). Collective
 operations require all the processes to make the call. In the underlying
@@ -27,35 +29,35 @@ copy the contents of one array/patch to another.
 These functions apply to the entire array.
 
 The function
-\begin{lyxcode}
+\begin{verbatim}
 \textcolor{blue}{Fortran}~subroutine~\href{http://www.emsl.pnl.gov/docs/global/ga_ops.html\#ga_zero}{ga\_{}zero}(g\_a)~
 
 \textcolor{blue}{C}~~~~~~~void~\href{http://www.emsl.pnl.gov/docs/global/c_nga_ops.html\#ga_zero}{GA\_{}Zero}(int~g\_a)~
 
 \textcolor{blue}{C++}~~~~~void~GA::GlobalArray::zero()
-\end{lyxcode}
+\end{verbatim}
 sets all the elements in the array to zero.
 
 To assign a single value to all the elements in an array, use the
 function
-\begin{lyxcode}
+\begin{verbatim}
 \textcolor{blue}{Fortran}~subroutine~\href{http://www.emsl.pnl.gov/docs/global/ga_ops.html\#ga_fill}{ga\_{}fill}(g\_a,~val)~
 
 \textcolor{blue}{C}~~~~~~~void~\href{http://www.emsl.pnl.gov/docs/global/c_nga_ops.html\#ga_fill}{GA\_{}Fill}(int~g\_a,~void~{*}val)~
 
 \textcolor{blue}{C++}~~~~~void~GA::GlobalArray::fill(void~{*}val)
-\end{lyxcode}
+\end{verbatim}
 It sets all the elements in the array to the value \emph{val}. The
 \emph{val} must have the same data type as that of the array.
 
 The function
-\begin{lyxcode}
+\begin{verbatim}
 \textcolor{blue}{Fortran}~subroutine~\href{http://www.emsl.pnl.gov/docs/global/ga_ops.html\#ga_scale}{ga\_{}scale}(g\_a,~val)~
 
 \textcolor{blue}{C}~~~~~~~void~\href{http://www.emsl.pnl.gov/docs/global/c_nga_ops.html\#ga_scale}{GA\_{}scale}(int~g\_a,~void~{*}val)~
 
 \textcolor{blue}{C++}~~~~~void~GA::GlobalArray::scale(void~{*}val)
-\end{lyxcode}
+\end{verbatim}
 scales all the elements in the array by factor \emph{val}. Again the
 val must be the same data type as that of the array itself.
 
@@ -64,7 +66,7 @@ values or change all the elements together. The following functions
 are for copying data between two arrays.
 
 The function
-\begin{lyxcode}
+\begin{verbatim}
 \textcolor{blue}{Fortran}~subroutine~\href{http://www.emsl.pnl.gov/docs/global/ga_ops.html\#ga_copy}{ga\_{}copy}(g\_a,~g\_b)~
 
 \textcolor{blue}{C}~~~~~~~void~\href{http://www.emsl.pnl.gov/docs/global/c_nga_ops.html\#ga_copy}{GA\_{}copy}(int~g\_a,~int~g\_b)~
@@ -72,14 +74,14 @@ The function
 \textcolor{blue}{C++}~~~~~void~GA::GlobalArray::copy
 
 ~~~~~~~~~~~~~(const~GA::GlobalArray~{*}~g\_a)
-\end{lyxcode}
+\end{verbatim}
 copies the contents of one array to another. The arrays must be of
 the same data type and have the same number of elements.
 
 For global arrays containing ghost cells, the ghost cell data can
 be filled in with the corresponding data from neighboring processors
 using the command
-\begin{lyxcode}
+\begin{verbatim}
 \textcolor{blue}{n-d~Fortran}~subroutine~\href{http://www.emsl.pnl.gov/docs/global/ga_ops.html\#ga_copy}{ga\_{}copy}(g\_a,~g\_b)~
 
 \textcolor{blue}{C~}~~~~~~~~~~void~\href{http://www.emsl.pnl.gov/docs/global/c_nga_ops.html\#ga_copy}{GA\_{}copy}(int~g\_a,~int~g\_b)~
@@ -95,7 +97,7 @@ using the command
 \textcolor{blue}{C}~~~~~~~~~~~void~\href{http://www.emsl.pnl.gov/docs/global/c_nga_ops.html\#ga_update_ghosts}{ga\_{}update\_{}ghosts}(int~g\_a)~
 
 \textcolor{blue}{C++}~~~~~~~~~void~GA::GlobalArray::updateGhosts()~
-\end{lyxcode}
+\end{verbatim}
 This operation updates the ghost cell data by assuming periodic, or
 wrap-around, boundary conditions similar to those described for the\texttt{
 nga\_periodic\_get} operations described above. The wrap-around conditions
@@ -113,7 +115,7 @@ dimension.
 \includegraphics[width=10cm]{ghost015}\tabularnewline
 \hline
 \end{tabular}
-\begin{lyxcode}
+\begin{verbatim}
 \textcolor{blue}{n-d~Fortran}~logical~function~\href{http://www.emsl.pnl.gov/docs/global/ga_ops.html\#ga_update_ghost_dir}{nga\_{}update\_{}ghosts\_{}dir}(g\_a,~
 
 ~~~~~~~~~~~~~~~~~~~~~~~~dimension,~idir,~flag)~
@@ -125,7 +127,7 @@ dimension.
 \textcolor{blue}{C++}~~~~~~~~~int~GA::GlobalArray::updateGhostsDir
 
 ~~~~~~~~~~~~~~~~~~~~~~~(int~dimension,~int~idir,~int~cflag)~
-\end{lyxcode}
+\end{verbatim}
 This function can be used to update the ghost cells along individual
 directions.
 
@@ -138,7 +140,7 @@ the positive or negative direction, and cflag indicates whether or
 not the corners on the side being updated are to be included in the
 update. The following calls would be equivalent to a call to \texttt{GA\_Update\_ghosts}
 for a 2-dimensional system:
-\begin{lyxcode}
+\begin{verbatim}
 status~=~NGA\_Update\_ghost\_dir(g\_a,0,-1,1);~
 
 status~=~NGA\_Update\_ghost\_dir(g\_a,0,1,1);~
@@ -146,7 +148,7 @@ status~=~NGA\_Update\_ghost\_dir(g\_a,0,1,1);~
 status~=~NGA\_Update\_ghost\_dir(g\_a,1,-1,0);~
 
 status~=~NGA\_Update\_ghost\_dir(g\_a,1,1,0);
-\end{lyxcode}
+\end{verbatim}
 The variable \emph{cflag} is set equal to 1 (or non-zero) in the first
 two calls so that the corner ghost cells are update, it is set equal
 to 0 in the second two calls to avoid redundant updates of the corners.
@@ -174,20 +176,20 @@ those dealing with two dimensional patches start with the \textquotedbl{}\texttt
 prefix.
 
 The function
-\begin{lyxcode}
+\begin{verbatim}
 \textcolor{blue}{Fortran}~subroutine~\href{http://www.emsl.pnl.gov/docs/global/ga_ops.html\#ga_zero_patch}{nga\_{}zero\_{}patch}nga\_zero\_patch(g\_a,~alo,~ahi)~
 
 \textcolor{blue}{C}~~~~~~~void~\href{http://www.emsl.pnl.gov/docs/global/c_nga_ops.html\#ga_zero_patch}{NGA\_{}Zero\_{}patch}(int~g\_a,~int~lo{[}{]}~int~hi{[}{]})~
 
 \textcolor{blue}{C++}~~~~~void~GA::GlobalArray::zeroPatch(int~lo{[}{]}~int~hi{[}{]})
-\end{lyxcode}
+\end{verbatim}
 is similar to \emph{ga\_zero}, except that instead of applying to
 entire array, it sets only the region defined by \emph{lo} and \emph{hi}
 to zero.
 
 One can assign a single value to all the elements in a patch with
 the function:
-\begin{lyxcode}
+\begin{verbatim}
 \textcolor{green}{n-D}\textcolor{blue}{Fortran}~subroutine~\href{http://www.emsl.pnl.gov/docs/global/ga_ops.html\#ga_fill_patch}{nga\_{}fill\_{}patch}(g\_a,~lo,~hi,~val)~
 
 \textcolor{green}{2-D}\textcolor{blue}{Fortran}~subroutine~\href{http://www.emsl.pnl.gov/docs/global/ga_ops.html\#ga_fill_patch}{ga\_{}fill\_{}patch}(g\_a,~ilo,~ihi,~
@@ -201,12 +203,12 @@ the function:
 \textcolor{blue}{C++}~~~~~~~~void~GA::GlobalArray::fillPatch(int~lo{[}{]}~
 
 ~~~~~~~~~~~~~~~~~~~int~hi{[}{]},~void~{*}val)
-\end{lyxcode}
+\end{verbatim}
 The\texttt{ lo} and \texttt{hi} defines the patch and the \texttt{val}
 is the value to set.
 
 The function
-\begin{lyxcode}
+\begin{verbatim}
 \textcolor{green}{n-D}\textcolor{blue}{Fortran}~subroutine~\href{http://www.emsl.pnl.gov/docs/global/ga_ops.html\#ga_scale_patch}{nga\_{}scale\_{}patch}(g\_a,~lo,~hi,~val)~
 
 \textcolor{green}{2-D}\textcolor{blue}{Fortran}~subroutine~\href{http://www.emsl.pnl.gov/docs/global/ga_ops.html\#ga_scale_patch}{ga\_{}scale\_{}patch}(g\_a,~ilo,~ihi,~jlo,~
@@ -220,13 +222,13 @@ The function
 \textcolor{blue}{C++}~~~~~~~~void~GA::GlobalArray::scalePatch(int~lo{[}{]}~
 
 ~~~~~~~~~~~~~~~~~~int~hi{[}{]},~void~{*}val)
-\end{lyxcode}
+\end{verbatim}
 scales the patch defined by \texttt{lo }and \texttt{hi} by the factor
 \texttt{val}.
 
 The copy patch operation is one of the fundamental and frequently
 used functions. The function
-\begin{lyxcode}
+\begin{verbatim}
 \textcolor{green}{n-D}\textcolor{blue}{Fortran}~subroutine~\href{http://www.emsl.pnl.gov/docs/global/ga_ops.html\#ga_copy_patch}{nga\_{}copy\_{}patch}(trans,~g\_a,~alo,~
 
 ~~~~~~~~~~~~~~~~~~~~~~ahi,~g\_b,~blo,~bhi)~
@@ -248,7 +250,7 @@ used functions. The function
 ~~~~~~~~~~~~~~~~~~~~~~const~GA::GlobalArray{*}~g\_a,~int~alo{[}{]},~
 
 ~~~~~~~~~~~~~~~~~~~~~~int~ahi{[}{]},~int~blo{[}{]},~int~bhi{[}{]})
-\end{lyxcode}
+\end{verbatim}
 copies one patch defined by \texttt{alo} and \texttt{ahi} in one global
 array \texttt{g\_ato} another patch defined by \texttt{blo} and \texttt{bhi}
 in another global array \texttt{g\_b}. The current implementation
@@ -261,17 +263,17 @@ by specifying trans.
 \emph{Example}: Assume that there two 8x6 Global Arrays, \texttt{g\_a}
 and \texttt{g\_b},distributed on three processes. The operation of
 \texttt{nag\_copy\_patch}(Fortran notation), from
-\begin{lyxcode}
+\begin{verbatim}
 g\_a:~alo~=~\{2,~2\},~ahi~=~\{4,~5\}
-\end{lyxcode}
+\end{verbatim}
 to
-\begin{lyxcode}
+\begin{verbatim}
 g\_b:~blo~=~\{3,~4\},~bhi~=~\{6,~6\}
-\end{lyxcode}
+\end{verbatim}
 and
-\begin{lyxcode}
+\begin{verbatim}
 trans~=~0
-\end{lyxcode}
+\end{verbatim}
 involves reshaping. It is illustrated in the following figure. 
 
 \begin{tabular}{|c|}
@@ -307,7 +309,7 @@ array and the other for the patches.
 \subsection{Whole Arrays }
 
 The function
-\begin{lyxcode}
+\begin{verbatim}
 \textcolor{blue}{Fortran}~subroutine~\href{http://www.emsl.pnl.gov/docs/global/ga_ops.html\#ga_add}{ga\_{}add}(alpha,~g\_a,~beta,~g\_b,~g\_c)~
 
 \textcolor{blue}{C}~~~~~~~void~\href{http://www.emsl.pnl.gov/docs/global/c_nga_ops.html\#ga_add}{GA\_{}Add}(void~{*}alpha,~int~g\_a,~
@@ -319,7 +321,7 @@ The function
 ~~~~~~~~const~GA::GlobalArray{*}~g\_a,~
 
 ~~~~~~~~void~{*}beta,~const~GA::GlobalArray{*}~g\_b)
-\end{lyxcode}
+\end{verbatim}
 adds two arrays, \texttt{g\_a} and \texttt{g\_b}, and saves the results
 to \texttt{g\_c}. The two source arrays can be scaled by certain factors.
 This operation requires the two source arrays have the same number
@@ -332,7 +334,7 @@ are different in distributions or shapes.
 
 Matrix multiplication operates on two matrices, therefore the array
 must be two dimensional. The function
-\begin{lyxcode}
+\begin{verbatim}
 \textcolor{blue}{Fortran}~subroutine~\href{http://www.emsl.pnl.gov/docs/global/ga_ops.html\#ga_dgemm}{ga\_{}dgemm}(transa,~transb,~m,~n,~k,~
 
 ~~~~~~~~~~~~~~alpha,~g\_a,~g\_b,~beta,~g\_c~)~
@@ -350,7 +352,7 @@ must be two dimensional. The function
 ~~~~~~~~~~~~~~const~GA::GlobalArray{*}~g\_a,~const~GA::GlobalArray{*}~
 
 ~~~~~~~~~~~~~~g\_b,~double~beta)
-\end{lyxcode}
+\end{verbatim}
 Performs one of the matrix-matrix operations:
 
 \emph{C := alpha{*}op( A ){*}op( B ) + beta{*}C,}
@@ -372,7 +374,7 @@ the matrix multiplication as follows:
 \emph{ta = 'T'} or \emph{'t', op( A ) = A'}.
 
 The function
-\begin{lyxcode}
+\begin{verbatim}
 Fortran~integer~function~ga\_idot(g\_a,~g\_b)~
 
 ~~~~~~~~double~precision~function~\href{http://www.emsl.pnl.gov/docs/global/ga_ops.html\#ga_ddot}{ga\_{}ddot}(g\_a,~g\_b)
@@ -396,7 +398,7 @@ C++~~~~~long~GA::GlobalArray::idot
 ~~~~~~~~DoubleComplex~GA::GlobalArray::zdot
 
 ~~~~~~~~~~~~~~~~~(const~GA::GlobalArray{*}~g\_a)
-\end{lyxcode}
+\end{verbatim}
 computes the element-wise dot product of two arrays. It is available
 as three separate functions, corresponding to \emph{integer}, \emph{double
 precision} and \emph{double complex} data types.
@@ -405,18 +407,18 @@ The following functions apply to the 2-dimensional whole arrays only.
 There are no corresponding functions for patch operations.
 
 The function
-\begin{lyxcode}
+\begin{verbatim}
 \textcolor{blue}{Fortran}~subroutine~\href{http://www.emsl.pnl.gov/docs/global/ga_ops.html\#ga_symmetrize}{ga\_{}symmetrize}(g\_a)~
 
 \textcolor{blue}{C}~~~~~~~void~\href{http://www.emsl.pnl.gov/docs/global/c_nga_ops.html\#ga_symmetrize}{GA\_{}Symmetrize}(int~g\_a)~
 
 \textcolor{blue}{C++}~~~~~void~GA::GlobalArray::symmetrize()
-\end{lyxcode}
+\end{verbatim}
 symmetrizes matrix A represented with handle \texttt{g\_a}:\emph{A
 = .5 {*} (A+A')}.
 
 The function
-\begin{lyxcode}
+\begin{verbatim}
 \textcolor{blue}{Fortran}~subroutine~\href{http://www.emsl.pnl.gov/docs/global/ga_ops.html\#ga_transpose}{ga\_{}transpose}(g\_a,~g\_b)~
 
 \textcolor{blue}{C}~~~~~~~void~\href{http://www.emsl.pnl.gov/docs/global/c_nga_ops.html\#ga_transpose}{GA\_{}Transpose}(int~g\_a,~int~g\_b)~
@@ -424,14 +426,14 @@ The function
 \textcolor{blue}{C++}~~~~~void~GA::GlobalArray::transpose
 
 ~~~~~~~~~~~~~(const~GA::GlobalArray{*}~g\_a)
-\end{lyxcode}
+\end{verbatim}
 transposes a matrix: B = A'.
 
 
 \subsection{Patches }
 
 The functions
-\begin{lyxcode}
+\begin{verbatim}
 \textcolor{green}{n-D}\textcolor{blue}{Fortran}~subroutine~\href{http://www.emsl.pnl.gov/docs/global/ga_ops.html\#ga_add_patch}{nga\_{}add\_{}patch}(alpha,~g\_a,~
 
 ~~~~~~~~~~~~~~~~~~~~~~alo,~ahi,~beta,~g\_b,~blo,~
@@ -463,7 +465,7 @@ The functions
 ~~~~~~~~~~~~~~~~~~~~~~const~GA::GlobalArray{*}~g\_b,~int~blo{[}{]},~
 
 ~~~~~~~~~~~~~~~~~~~~~~int~bhi{[}{]},~int~clo{[}{]},~int~chi{[}{]})~
-\end{lyxcode}
+\end{verbatim}
 add element-wise two patches and save the results into another patch.
 Even though it supports the addition of two patches with different
 distributions or different shapes (the number of elements must be
@@ -479,7 +481,7 @@ The matrix multiplication is the only operation on array patches that
 is restricted to the two dimensional domain, because of its nature.
 It works for\emph{ double} and \emph{double complex} data types. The
 prototype is
-\begin{lyxcode}
+\begin{verbatim}
 \textcolor{blue}{Fortran}~subroutine~\href{http://www.emsl.pnl.gov/docs/global/ga_ops.html\#ga_matmul_patch}{ga\_{}matmul\_{}patch}(transa,~transb,~
 
 ~~~~~~~~~~~~~~~~~~~alpha,~beta,~g\_a,~ailo,~aihi,~
@@ -513,13 +515,13 @@ prototype is
 ~~~~~~~~~~~~~~~~~~~int~bjlo,~int~bjhi,~int~cilo,~int~cihi,~
 
 ~~~~~~~~~~~~~~~~~~~int~cjlo,~int~cjhi)
-\end{lyxcode}
+\end{verbatim}
 It performs
-\begin{lyxcode}
+\begin{verbatim}
 C{[}cilo:cihi,cjlo:cjhi{]}~:=~alpha{*}~AA{[}ailo:aihi,ajlo:ajhi{]}~{*}
 
 ~~~~~BB{[}bilo:bihi,bjlo:bjhi{]}~)~+~beta{*}C{[}cilo:cihi,cjlo:cjhi{]}
-\end{lyxcode}
+\end{verbatim}
 where \emph{AA = op(A), BB = op(B),} and \emph{op( X )} is one of
 
 \emph{op( X ) = X or op( X ) = X',}
@@ -530,7 +532,7 @@ The dot operation computes the element-wise dot product of two (possibly
 transposed) patches. It is implemented as three separate functions,
 corresponding to integer, double precision and double complex data
 types. They are
-\begin{lyxcode}
+\begin{verbatim}
 \textcolor{green}{n-D}\textcolor{blue}{Fortran}~integer~function~nga\_idot\_patch(g\_a,~ta,~
 
 ~~~~~~~~~~~~~~~~~alo,~ahi,~g\_b,~tb,~blo,~bhi)~
@@ -598,7 +600,7 @@ types. They are
 ~~~~~~~~~~~~~~~~~(const~GA::GlobalArray{*}~g\_a,~char{*}~ta,~int~alo{[}{]},~
 
 ~~~~~~~~~~~~~~~~~int~ahi{[}{]},~char{*}~tb,~int~blo{[}{]},~int~bhi{[}{]})
-\end{lyxcode}
+\end{verbatim}
 The patches should be of the same data types and have the same number
 of elements. Like the array addition, if the source patches have different
 distributions/shapes, or it requires transpose, the operation would
@@ -612,15 +614,15 @@ These operations work on individual array elements rather than arrays
 as matrices in the sense of linear algebra operations. For example
 multiplication of elements stored in arrays is a completely different
 operation than matrix multiplication.
-\begin{lyxcode}
+\begin{verbatim}
 \textcolor{blue}{Fortran}~subroutine~\href{http://www.emsl.pnl.gov/docs/global/ga_ops.html\#ga_abs_value}{ga\_{}abs\_{}value}(g\_a)~
 
 \textcolor{blue}{C}~~~~~~void~\href{http://www.emsl.pnl.gov/docs/global/c_nga_ops.html\#ga_abs_value}{GA\_{}Abs\_{}value}(int~g\_a)
 
 \textcolor{blue}{C++}~~~~void~GA::GlobalArray::absValue(int~g\_a)
-\end{lyxcode}
+\end{verbatim}
 Take element-wise absolute value of the array. 
-\begin{lyxcode}
+\begin{verbatim}
 \textcolor{blue}{Fortran}~subroutine~\href{http://www.emsl.pnl.gov/docs/global/ga_ops.html\#ga_abs_value_patch}{ga\_{}abs\_{}value\_{}patch}(g\_a,~lo,~hi)~
 
 \textcolor{blue}{C}~~~~~~~void~\href{http://www.emsl.pnl.gov/docs/global/c_nga_ops.html\#ga_abs_value_patch}{GA\_{}Abs\_{}value\_{}patch}(int~g\_a,~int~lo{[}{]},~int~hi{[}{]})~
@@ -628,17 +630,17 @@ Take element-wise absolute value of the array.
 \textcolor{blue}{C++}~~~~~void~GA::GlobalArray::absValuePatch
 
 ~~~~~~~~~~~~~(int~lo{[}{]},~int~hi{[}{]})
-\end{lyxcode}
+\end{verbatim}
 Take element-wise absolute value of the patch.
-\begin{lyxcode}
+\begin{verbatim}
 \textcolor{blue}{Fortran}~subroutine~\href{http://www.emsl.pnl.gov/docs/global/ga_ops.html\#ga_add_constant}{ga\_{}add\_{}constant}(g\_a,~alpha)~
 
 \textcolor{blue}{C}~~~~~~~void~\href{http://www.emsl.pnl.gov/docs/global/c_nga_ops.html\#ga_add_constant}{GA\_{}Add\_{}constant}(int~g\_a,~void{*}~alpha)~
 
 \textcolor{blue}{C++}~~~~~void~GA::GlobalArray::addConstant(void{*}~alpha)
-\end{lyxcode}
+\end{verbatim}
 Add the contant pointed by alpha to each element of the array. 
-\begin{lyxcode}
+\begin{verbatim}
 \textcolor{blue}{Fortran}~subroutine~\href{http://www.emsl.pnl.gov/docs/global/ga_ops.html\#ga_add_constant_patch}{ga\_{}add\_{}constant\_{}patch}(g\_a,~lo,~hi,~alpha)~
 
 \textcolor{blue}{C}~~~~~~~void~\href{http://www.emsl.pnl.gov/docs/global/c_nga_ops.html\#ga_add_constant_patch}{GA\_{}Add\_{}constant\_{}patch}(int~g\_a,~int~lo{[}{]},~
@@ -646,25 +648,25 @@ Add the contant pointed by alpha to each element of the array.
 ~~~~~~~~~~~~~int~hi{[}{]},~void{*}alpha)~
 
 \textcolor{blue}{C++}~~~~~void~GA::GlobalArray::addConstantPatch(void{*}~alpha)
-\end{lyxcode}
+\end{verbatim}
 Add the contant pointed by alpha to each element of the patch. 
-\begin{lyxcode}
+\begin{verbatim}
 \textcolor{blue}{Fortran~}subroutine~\href{http://www.emsl.pnl.gov/docs/global/ga_ops.html\#ga_recip}{ga\_{}recip}(g\_a)
 
 \textcolor{blue}{C}~~~~~~~void~\href{http://www.emsl.pnl.gov/docs/global/c_nga_ops.html\#ga_recip}{GA\_{}Recip}(int~g\_a)
 
 \textcolor{blue}{C++}~~~~~void~GA::GlobalArray::recip()
-\end{lyxcode}
+\end{verbatim}
 Take element-wise reciprocal of the array.
-\begin{lyxcode}
+\begin{verbatim}
 \textcolor{blue}{Fortran}~subroutine~\href{http://www.emsl.pnl.gov/docs/global/ga_ops.html\#ga_recip_patch}{ga\_{}recip\_{}patch}(g\_a,~lo,~hi)~
 
 \textcolor{blue}{C}~~~~~~~void~\href{http://www.emsl.pnl.gov/docs/global/c_nga_ops.html\#ga_recip_patch}{GA\_{}Recip\_{}patch}(int~g\_a,~int~lo{[}{]},~int~hi{[}{]})
 
 \textcolor{blue}{C++~}~~~~void~GA::GlobalArray::recipPatch(int~lo{[}{]},~int~hi{[}{]})
-\end{lyxcode}
+\end{verbatim}
 Take element-wise reciprocal of the patch.
-\begin{lyxcode}
+\begin{verbatim}
 \textcolor{blue}{Fortran}~subroutine~\href{http://www.emsl.pnl.gov/docs/global/ga_ops.html\#ga_elem_multiply}{ga\_{}elem\_{}multiply}(g\_a,~g\_b,~g\_c)
 
 \textcolor{blue}{C}~~~~~~~void~\href{http://www.emsl.pnl.gov/docs/global/c_nga_ops.html\#ga_elem_multiply}{GA\_{}Elem\_{}multiply}(int~g\_a,~int~g\_b,~int~g\_c)~
@@ -674,7 +676,7 @@ Take element-wise reciprocal of the patch.
 ~~~~~~~~~~~~~~~~~GA::GlobalArray~{*}~g\_a,~
 
 ~~~~~~~~~~~~~~~~~const~GA::GlobalArray~{*}~g\_b)
-\end{lyxcode}
+\end{verbatim}
 Computes the element-wise product of the two arrays which must be
 of the same types and same number of elements. For two-dimensional
 arrays,
@@ -682,7 +684,7 @@ arrays,
 c(i, j) = a(i,j){*}b(i,j)
 
 The result (c) may replace one of the input arrays (a/b). 
-\begin{lyxcode}
+\begin{verbatim}
 \textcolor{blue}{Fortra}n~subroutine~\href{http://www.emsl.pnl.gov/docs/global/ga_ops.html\#ga_elem_multiply_patch}{ga\_{}elem\_{}multiply\_{}\_{}patch}(g\_a,~alo,~
 
 ~~~~~~~~~~~~~~~ahi,~g\_b,~blo,~bhi,~g\_c,~clo,chi)~
@@ -700,7 +702,7 @@ The result (c) may replace one of the input arrays (a/b).
 ~~~~~~~~~~~~~~~int~ahi{[}{]},~const~GA::GlobalArray~{*}~g\_b,~
 
 ~~~~~~~~~~~~~~~int~blo{[}{]},~int~bhi{[}{]},~int~clo{[}{]},~int~chi{[}{]})
-\end{lyxcode}
+\end{verbatim}
 Computes the element-wise product of the two patches which must be
 of the same types and same number of elements. For two-dimensional
 arrays,
@@ -708,7 +710,7 @@ arrays,
 c(i, j) = a(i,j){*}b(i,j)
 
 The result (c) may replace one of the input arrays (a/b).
-\begin{lyxcode}
+\begin{verbatim}
 \textcolor{blue}{Fortran}~subroutine~\href{http://www.emsl.pnl.gov/docs/global/ga_ops.html\#ga_elem_divide}{ga\_{}elem\_{}divide}(g\_a,~g\_b,~g\_c)~
 
 \textcolor{blue}{C}~~~~~~~void~\href{http://www.emsl.pnl.gov/docs/global/c_nga_ops.html\#ga_elem_divide}{GA\_{}Elem\_{}divide}(Integer~g\_a,~Integer~
@@ -718,7 +720,7 @@ The result (c) may replace one of the input arrays (a/b).
 \textcolor{blue}{C++}~~~~~void~GA::GlobalArray::elemDivide(const~GA::GlobalArray~{*}~
 
 ~~~~~~~~~~~~~~~~~~~~~~~g\_a,~const~GA::GlobalArray~{*}~g\_b)
-\end{lyxcode}
+\end{verbatim}
 Computes the element-wise quotient of the two arrays which must be
 of the same types and same number of elements. For two-dimensional
 arrays,
@@ -728,7 +730,7 @@ c(i, j) = a(i,j)/b(i,j)
 The result (c) may replace one of the input arrays (a/b). If one of
 the elements of array g\_b is zero, the quotient for the element of
 g\_c will be set to GA\_NEGATIVE\_INFINITY. 
-\begin{lyxcode}
+\begin{verbatim}
 \textcolor{blue}{Fortran}~subroutine~\href{http://www.emsl.pnl.gov/docs/global/ga_ops.html\#ga_elem_divide_patch}{ga\_{}elem\_{}divide\_{}\_{}patch}(g\_a,~alo,~
 
 ~~~~~~~~~~~~~~~~~~~ahi,~g\_b,~blo,~bhi,~g\_c,~clo,~chi)~
@@ -746,7 +748,7 @@ g\_c will be set to GA\_NEGATIVE\_INFINITY.
 ~~~~~~~~~~~~~~~~~~~int~ahi{[}{]},~const~GA::GlobalArray~{*}~g\_b,~
 
 ~~~~~~~~~~~~~~~~~~~int~blo{[}{]},~int~bhi{[}{]},~int~clo{[}{]},~int~chi{[}{]})
-\end{lyxcode}
+\end{verbatim}
 Computes the element-wise quotient of the two patches which must be
 of the same types and same number of elements. For two-dimensional
 arrays,
@@ -754,7 +756,7 @@ arrays,
 c(i, j) = a(i,j)/b(i,j)
 
 The result (c) may replace one of the input arrays (a/b). 
-\begin{lyxcode}
+\begin{verbatim}
 \textcolor{blue}{Fortran}~subroutine~\href{http://www.emsl.pnl.gov/docs/global/ga_ops.html\#ga_elem_maximum}{ga\_{}elem\_{}maximum}(g\_a,~g\_b,~g\_c)~
 
 \textcolor{blue}{C}~~~~~~~void~\href{http://www.emsl.pnl.gov/docs/global/c_nga_ops.html\#ga_elem_maximum}{GA\_{}Elem\_{}maximum}(Integer~g\_a,~Integer~g\_b,~
@@ -764,7 +766,7 @@ The result (c) may replace one of the input arrays (a/b).
 \textcolor{blue}{C++}~~~~~void~GA::GlobalArray::elemMaximum(const~GA::GlobalArray~
 
 ~~~~~~~~~~~~~~~~~~~{*}~g\_a,~const~GA::GlobalArray~{*}~g\_b)
-\end{lyxcode}
+\end{verbatim}
 Computes the element-wise maximum of the two arrays which must be
 of the same types and same number of elements. For two dimensional
 arrays,
@@ -772,7 +774,7 @@ arrays,
 c(i, j) = max\{a(i,j), b(i,j)\}
 
 The result (c) may replace one of the input arrays (a/b). 
-\begin{lyxcode}
+\begin{verbatim}
 \textcolor{blue}{Fortran}~subroutine~\href{http://www.emsl.pnl.gov/docs/global/ga_ops.html\#ga_elem_maximum_patch}{ga\_{}elem\_{}maximum\_{}\_{}patch}(g\_a,~alo,
 
 ~~~~~~~~~~~~~~~~~~~ahi,~g\_b,~blo,~bhi,~g\_c,~clo,~chi)~
@@ -790,7 +792,7 @@ The result (c) may replace one of the input arrays (a/b).
 ~~~~~~~~~~~~~~~~~~~const~GA::GlobalArray~{*}~g\_b,~int~blo{[}{]},~
 
 ~~~~~~~~~~~~~~~~~~~int~bhi{[}{]},~int~clo{[}{]},~int~chi{[}{]})
-\end{lyxcode}
+\end{verbatim}
 Computes the element-wise maximum of the two patches which must be
 of the same types and same number of elements. For two-dimensional
 of noncomplex arrays,
@@ -801,7 +803,7 @@ If the data type is complex, then c(i, j).real = max\{ |a(i,j)|, |b(i,j)|\}
 while c(i,j).image = 0.
 
 The result (c) may replace one of the input arrays (a/b). 
-\begin{lyxcode}
+\begin{verbatim}
 \textcolor{blue}{Fortran}~subroutine~\href{http://www.emsl.pnl.gov/docs/global/ga_ops.html\#ga_elem_minimum}{ga\_{}elem\_{}minimum}(g\_a,~g\_b,~g\_c)~
 
 \textcolor{blue}{C}~~~~~~~void~\href{http://www.emsl.pnl.gov/docs/global/c_nga_ops.html\#ga_elem_minimum}{GA\_{}Elem\_{}minimum}(Integer~g\_a,~Integer~g\_b,~Integer~g\_c);
@@ -809,7 +811,7 @@ The result (c) may replace one of the input arrays (a/b).
 \textcolor{blue}{C++~}~~~~void~GA::GlobalArray::elemMinimum(const~GA::GlobalArray~{*}
 
 ~~~~~~~~~~~~~~~~~g\_a,~const~GA::GlobalArray~{*}~g\_b)
-\end{lyxcode}
+\end{verbatim}
 Computes the element-wise minimum of the two arrays which must be
 of the same types and same number of elements. For two dimensional
 arrays,
@@ -817,7 +819,7 @@ arrays,
 c(i, j) = min\{a(i,j), b(i,j)\}
 
 The result (c) may replace one of the input arrays (a/b). 
-\begin{lyxcode}
+\begin{verbatim}
 \textcolor{blue}{Fortran}~subroutine~\href{http://www.emsl.pnl.gov/docs/global/ga_ops.html\#ga_elem_minimum_patch}{ga\_{}elem\_{}minimum\_{}\_{}patch}(g\_a,~alo,~ahi,
 
 ~~~~~~~~~~~~~~~~~~~g\_b,~blo,~bhi,~g\_c,~clo,~chi)~
@@ -835,7 +837,7 @@ The result (c) may replace one of the input arrays (a/b).
 ~~~~~~~~~~~~~~~~~~~int~ahi{[}{]},~const~GA::GlobalArray~{*}~g\_b,~
 
 ~~~~~~~~~~~~~~~~~~~int~blo{[}{]},~int~bhi{[}{]},~int~clo{[}{]},~int~chi{[}{]})
-\end{lyxcode}
+\end{verbatim}
 Computes the element-wise minimum of the two patches which must be
 of the same types and same number of elements. For two-dimensional
 of noncomplex arrays,
@@ -847,15 +849,15 @@ If the data type is complex, then
 c(i, j).real = min\{ |a(i,j)|, |b(i,j)|\} while c(i,j).image = 0.
 
 The result (c) may replace one of the input arrays (a/b). 
-\begin{lyxcode}
+\begin{verbatim}
 \textcolor{blue}{Fortran}~subroutine~\href{http://www.emsl.pnl.gov/docs/global/ga_ops.html\#ga_shift_diagonal}{ga\_{}shift\_{}diagonal}(g\_a,~c)~
 
 \textcolor{blue}{C}~~~~~~~void~\href{http://www.emsl.pnl.gov/docs/global/c_nga_ops.html\#ga_shift_diagonal}{GA\_{}Shift\_{}diagonal}(int~g\_a,~void~{*}c)~
 
 \textcolor{blue}{C++}~~~~~void~GA::GlobalArray::shiftDiagonal(void~{*}c)
-\end{lyxcode}
+\end{verbatim}
 Adds this constant to the diagonal elements of the matrix.
-\begin{lyxcode}
+\begin{verbatim}
 \textcolor{blue}{Fortran}~subroutine~\href{http://www.emsl.pnl.gov/docs/global/ga_ops.html\#ga_set_diagonal}{ga\_{}set\_{}diagonal}(g\_a,~g\_v)~
 
 \textcolor{blue}{C}~~~~~~~void~\href{http://www.emsl.pnl.gov/docs/global/c_nga_ops.html\#ga_set_diagonal}{GA\_{}Set\_{}diagonal}(int~g\_a,~int~g\_v)
@@ -863,18 +865,18 @@ Adds this constant to the diagonal elements of the matrix.
 \textcolor{blue}{C++}~~~~~void~GA::GlobalArray::setDiagonal~
 
 ~~~~~~~~~~~~~(const~GA::GlobalArray~{*}~g\_v)
-\end{lyxcode}
+\end{verbatim}
 Sets the diagonal elements of this matrix g\_a with the elements of
 the vector g\_v.
-\begin{lyxcode}
+\begin{verbatim}
 Fortran~subroutine~\href{http://www.emsl.pnl.gov/docs/global/ga_ops.html\#ga_zero_diagonal}{ga\_{}zero\_{}diagonal}(~g\_a)~
 
 C~~~~~~~void~\href{http://www.emsl.pnl.gov/docs/global/c_nga_ops.html\#ga_zero_diagonal}{GA\_{}Zero\_{}diagonal}(int~g\_a)~
 
 C++~~~~~void~GA::GlobalArray::zeroDiagonal()
-\end{lyxcode}
+\end{verbatim}
 Sets the diagonal elements of this matrix g\_a with zeros. 
-\begin{lyxcode}
+\begin{verbatim}
 \textcolor{blue}{Fortran}~subroutine~\href{http://www.emsl.pnl.gov/docs/global/ga_ops.html\#ga_add_diagonal}{ga\_{}add\_{}diagonal}(g\_a,~g\_v)~
 
 \textcolor{blue}{C}~~~~~~~void~\href{http://www.emsl.pnl.gov/docs/global/c_nga_ops.html\#ga_add_diagonal}{GA\_{}Add\_{}diagonal}(int~g\_a,~int~g\_v)
@@ -882,10 +884,10 @@ Sets the diagonal elements of this matrix g\_a with zeros.
 \textcolor{blue}{C++}~~~~~void~GA::GlobalArray::addDiagonal(const~
 
 ~~~~~~~~~~~~~~~~~~~~GA::GlobalArray~{*}~g\_v)
-\end{lyxcode}
+\end{verbatim}
 Adds the elements of the vector g\_v to the diagonal of this matrix
 g\_a. 
-\begin{lyxcode}
+\begin{verbatim}
 \textcolor{blue}{Fortran}~subroutine~\href{http://www.emsl.pnl.gov/docs/global/ga_ops.html\#ga_get_diag}{ga\_{}get\_{}diag}(g\_a,~g\_v)~
 
 \textcolor{blue}{C}~~~~~~~void~\href{http://www.emsl.pnl.gov/docs/global/c_nga_ops.html\#ga_get_diag}{GA\_{}Get\_{}diag}(int~g\_a,~int~g\_v)
@@ -893,10 +895,10 @@ g\_a.
 \textcolor{blue}{C++~}~~~~void~GA::GlobalArray::getDiagonal
 
 ~~~~~~~~~~~~~~~~~~~~(const~GA::GlobalArray~{*}~g\_v)
-\end{lyxcode}
+\end{verbatim}
 Inserts the diagonal elements of this matrix g\_a into the vector
 g\_v. 
-\begin{lyxcode}
+\begin{verbatim}
 \textcolor{blue}{Fortran}~subroutine~\href{http://www.emsl.pnl.gov/docs/global/ga_ops.html\#ga_scale_rows}{ga\_{}scale\_{}rows}(~g\_a,~g\_v)
 
 \textcolor{blue}{C}~~~~~~~void~\href{http://www.emsl.pnl.gov/docs/global/c_nga_ops.html\#ga_scale_rows}{GA\_{}Scale\_{}rows}(int~g\_a,~int~g\_v)~
@@ -904,9 +906,9 @@ g\_v.
 \textcolor{blue}{C++}~~~~~void~GA::GlobalArray::scaleRows
 
 ~~~~~~~~~~~~~~~~~~~~(const~GA::GlobalArray~{*}~g\_v)
-\end{lyxcode}
+\end{verbatim}
 Scales the rows of this matrix g\_a using the vector g\_v. 
-\begin{lyxcode}
+\begin{verbatim}
 \textcolor{blue}{Fortran}~subroutine~\href{http://www.emsl.pnl.gov/docs/global/ga_ops.html\#ga_scale_cols}{ga\_{}scale\_{}cols}(g\_a,~g\_v)~
 
 \textcolor{blue}{C}~~~~~~~void~\href{http://www.emsl.pnl.gov/docs/global/c_nga_ops.html\#ga_scale_cols}{GA\_{}Scale\_{}cols}(int~g\_a,~int~g\_v)~
@@ -914,25 +916,25 @@ Scales the rows of this matrix g\_a using the vector g\_v.
 \textcolor{blue}{C++}~~~~~void~GA::GlobalArray::scaleCols
 
 ~~~~~~~~~~~~~~~~~~~~(const~GA::GlobalArray~{*}~g\_v)
-\end{lyxcode}
+\end{verbatim}
 Scales the columns of this matrix g\_a using the vector g\_v. 
-\begin{lyxcode}
+\begin{verbatim}
 \textcolor{blue}{Fortran}~subroutine~\href{http://www.emsl.pnl.gov/docs/global/ga_ops.html\#ga_norm1}{ga\_{}norm1}(g\_a,~nm)
 
 \textcolor{blue}{C}~~~~~~~void~\href{http://www.emsl.pnl.gov/docs/global/c_nga_ops.html\#ga_norm1}{GA\_{}Norm1}(int~g\_a,~double~{*}nm)
 
 \textcolor{blue}{C++}~~~~~void~GA::GlobalArray::norm1(double~{*}nm)
-\end{lyxcode}
+\end{verbatim}
 Computes the 1-norm of the matrix or vector g\_a. 
-\begin{lyxcode}
+\begin{verbatim}
 \textcolor{blue}{Fortran}~subroutine~\href{http://www.emsl.pnl.gov/docs/global/ga_ops.html\#ga_norm_infinity}{ga\_{}norm\_{}infinity}(g\_a,~nm)~
 
 \textcolor{blue}{C}~~~~~~~void~\href{http://www.emsl.pnl.gov/docs/global/c_nga_ops.html\#ga_norm_infinity}{GA\_{}Norm\_{}infinity}(int~g\_a,~double~{*}nm)~
 
 \textcolor{blue}{C++}~~~~~void~GA::GlobalArray::normInfinity(double~{*}nm)
-\end{lyxcode}
+\end{verbatim}
 Computes the 1-norm of the matrix or vector g\_a. 
-\begin{lyxcode}
+\begin{verbatim}
 \textcolor{blue}{Fortran}~subroutine~\href{http://www.emsl.pnl.gov/docs/global/ga_ops.html\#ga_median}{ga\_{}median}(~g\_a,~g\_b,~g\_c,~g\_m)
 
 \textcolor{blue}{C}~~~~~~~void~\href{http://www.emsl.pnl.gov/docs/global/c_nga_ops.html\#ga_median}{GA\_{}Median}(int~g\_a,~int~g\_b,~int~g\_c,~int~g\_m)
@@ -942,11 +944,11 @@ Computes the 1-norm of the matrix or vector g\_a.
 ~~~~~~~~~~~~~~~~~~~~{*}~g\_a,~const~GA::GlobalArray~
 
 ~~~~~~~~~~~~~~~~~~~~{*}~g\_b,~const~GA::GlobalArray~{*}~g\_c)
-\end{lyxcode}
+\end{verbatim}
 Computes the componentwise Median of three arrays \texttt{g\_a}, \texttt{g\_b},
 and \texttt{g\_c}, and stores the result in this array \texttt{g\_m}.
 The result (m) may replace one of the input arrays (a/b/c). 
-\begin{lyxcode}
+\begin{verbatim}
 \textcolor{blue}{Fortran}~subroutine~\href{http://www.emsl.pnl.gov/docs/global/ga_ops.html\#ga_median_patch}{ga\_{}median\_{}patch}(g\_a,~alo,~ahi,~g\_b,~
 
 ~~~~~~~~~~~~~~~~~~~~blo,~bhi,~g\_c,~clo,~chi,~g\_m,mlo,~mhi)~
@@ -968,11 +970,11 @@ The result (m) may replace one of the input arrays (a/b/c).
 ~~~~~~~~~~~~~~~~~~~~const~GA::GlobalArray~{*}~g\_c,~int~clo{[}{]},~
 
 ~~~~~~~~~~~~~~~~~~~~int~chi{[}{]},~int~mlo{[}{]},int~mhi{[}{]})
-\end{lyxcode}
+\end{verbatim}
 Computes the componentwise Median of three patches g\_a, g\_b, and
 g\_c, and stores the result in this patch g\_m. The result (m) may
 replace one of the input patches (a/b/c). 
-\begin{lyxcode}
+\begin{verbatim}
 \textcolor{blue}{Fortran}~subroutine~\href{http://www.emsl.pnl.gov/docs/global/ga_ops.html\#ga_step_max}{ga\_{}step\_{}max}(g\_a,~g\_b,~step)~
 
 \textcolor{blue}{C}~~~~~~~void~\href{http://www.emsl.pnl.gov/docs/global/c_nga_ops.html\#ga_step_max}{GA\_{}Step\_{}max}(int~g\_a,~int~g\_b,~double~{*}step)~
@@ -980,10 +982,10 @@ replace one of the input patches (a/b/c).
 \textcolor{blue}{C++~}~~~~void~GA::GlobalArray::stepMax(const~
 
 ~~~~~~~~~~~~~~~~~~~~GA::GlobalArray~{*}g\_a,~double~{*}step)
-\end{lyxcode}
+\end{verbatim}
 Calculates the largest multiple of a vector g\_b that can be added
 to this vector g\_a while keeping each element of this vector nonnegative. 
-\begin{lyxcode}
+\begin{verbatim}
 \textcolor{blue}{Fortran}~subroutine~\href{http://www.emsl.pnl.gov/docs/global/ga_ops.html\#ga_step_max2}{ga\_{}step\_{}max2}(~g\_xx,~g\_vv,~g\_xxll,~g\_xxuu,~step2)~
 
 \textcolor{blue}{C}~~~~~~~void~\href{http://www.emsl.pnl.gov/docs/global/c_nga_ops.html\#ga_step_max2}{GA\_{}Step\_{}max2}(int~g\_xx,~int~g\_vv,~int~g\_xxll,
@@ -995,10 +997,10 @@ to this vector g\_a while keeping each element of this vector nonnegative.
 ~~~~~~~~~~~~~~~~~~~~~const~GA::GlobalArray~{*}g\_xxll,~
 
 ~~~~~~~~~~~~~~~~~~~~~const~GA::GlobalArray~{*}g\_xxuu,~double~{*}step2)
-\end{lyxcode}
+\end{verbatim}
 Calculates the largest step size that should be used in a projected
 bound line search. 
-\begin{lyxcode}
+\begin{verbatim}
 \textcolor{blue}{Fortran}~subroutine~\href{http://www.emsl.pnl.gov/docs/global/ga_ops.html\#ga_step_max_patch}{ga\_{}step\_{}max\_{}patch}(g\_a,~alo,~ahi,~g\_b,~blo,
 
 ~~~~~~~~~~~~~~~~~~~~~bhi,~step)~
@@ -1012,10 +1014,10 @@ bound line search.
 ~~~~~~~~~~~~~~~~~~~~~int~{*}ahi,~const~GA::GlobalArray~{*}~
 
 ~~~~~~~~~~~~~~~~~~~~~g\_b,~int~{*}blo,~int~{*}bhi,~double~{*}step)
-\end{lyxcode}
+\end{verbatim}
 Calculates the largest multiple of a vector g\_b that can be added
 to this vector g\_a while keeping each element of this vector nonnegative. 
-\begin{lyxcode}
+\begin{verbatim}
 \textcolor{blue}{Fortran}~subroutine~\href{http://www.emsl.pnl.gov/docs/global/ga_ops.html\#ga_step_max2_patch}{ga\_{}step\_{}max2\_{}patch}(~g\_xx,~xxlo,~xxhi,~
 
 ~~~~~~~~~~~~~~~~~~~~~g\_vv,vvlo,~vvhi,~g\_xxll,~xxlllo,~xxllhi,~
@@ -1045,7 +1047,7 @@ to this vector g\_a while keeping each element of this vector nonnegative.
 ~~~~~~~~~~~~~~~~~~~~~const~GA::GlobalArray~{*}~g\_xxuu,~int~{*}xxuulo,~
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~int~{*}xxuuhi,~double~{*}step2)
-\end{lyxcode}
+\end{verbatim}
 Calculates the largest step size that should be used in a projected
 bound line search. 
 
@@ -1066,13 +1068,13 @@ memory computers. Global Arrays uses this library to solve systems
 of linear equations and also to invert matrices.
 
 The function
-\begin{lyxcode}
+\begin{verbatim}
 \textcolor{blue}{Fortran}~integer~function~\href{http://www.emsl.pnl.gov/docs/global/ga_ops.html\#ga_solve}{ga\_{}solve}(g\_a,~g\_b)
 
 \textcolor{blue}{C}~~~~~~~int~\href{http://www.emsl.pnl.gov/docs/global/c_nga_ops.html\#ga_solve}{GA\_{}Solve}(int~g\_a,~int~g\_b)~
 
 \textcolor{blue}{C++}~~~~~int~GA::GlobalArray::solve(const~GA::GlobalArray~{*}~g\_a)
-\end{lyxcode}
+\end{verbatim}
 solves a system of linear equations \emph{A {*} X = B}. It first will
 call the Cholesky factorization routine and, if successful, will solve
 the system with the Cholesky solver. If Cholesky is not able to factorizeA,
@@ -1081,20 +1083,20 @@ system with forward/backward substitution. On exit \emph{B} will contain
 the solution \emph{X}.
 
 The function
-\begin{lyxcode}
+\begin{verbatim}
 \textcolor{blue}{Fortran}~integer~function~\href{http://www.emsl.pnl.gov/docs/global/ga_ops.html\#ga_llt_solve}{ga\_{}llt\_{}solve}(g\_a,~g\_b)
 
 \textcolor{blue}{C}~~~~~~~int~\href{http://www.emsl.pnl.gov/docs/global/c_nga_ops.html\#ga_llt_solve}{GA\_{}Llt\_{}solve}(int~g\_a,~int~g\_b)
 
 \textcolor{blue}{C++}~~~~~int~GA::GlobalArray::lltSolve(const~GA::GlobalArray~{*}~g\_a)
-\end{lyxcode}
+\end{verbatim}
 also solves a system of linear equations \emph{A {*} X = B}, using
 the Cholesky factorization of an \emph{NxN} double precision symmetric
 positive definite matrix \emph{A} (handle \texttt{g\_a}). On successful
 exit \emph{B} will contain the solution \emph{X}.
 
 The function
-\begin{lyxcode}
+\begin{verbatim}
 \textcolor{blue}{Fortran}~subroutine~\href{http://www.emsl.pnl.gov/docs/global/ga_ops.html\#ga_lu_solve}{ga\_{}lu\_{}solve}(trans,~g\_a,~g\_b)~
 
 \textcolor{blue}{C}~~~~~~~void~\href{http://www.emsl.pnl.gov/docs/global/c_nga_ops.html\#ga_lu_solve}{GA\_{}Lu\_{}solve}(char~trans,~int~g\_a,~int~g\_b)~
@@ -1102,7 +1104,7 @@ The function
 \textcolor{blue}{C++}~~~~~void~GA::GlobalArray::luSolve(char~trans,~const~
 
 ~~~~~~~~~~~~~~~~~GA::GlobalArray~{*}~g\_a)
-\end{lyxcode}
+\end{verbatim}
 solves the system of linear equations\emph{ op(A)X = B} based on the
 LU factorization. \emph{op(A) = A or A'} depending on the parameter
 \texttt{trans}. Matrix\emph{ A} is a general real matrix. Matrix \emph{B}
@@ -1111,13 +1113,13 @@ with the handle \texttt{g\_b} is overwritten by the solution matrix
 \emph{X}.
 
 The function
-\begin{lyxcode}
+\begin{verbatim}
 \textcolor{blue}{Fortran}~integer~function~\href{http://www.emsl.pnl.gov/docs/global/ga_ops.html\#ga_spd_invert}{ga\_{}spd\_{}invert}(g\_a)~
 
 \textcolor{blue}{C}~~~~~~~int~\href{http://www.emsl.pnl.gov/docs/global/c_nga_ops.html\#ga_spd_invert}{GA\_{}Spd\_{}invert}(int~g\_a)~
 
 \textcolor{blue}{C++}~~~~~int~GA::GlobalArray::spdInvert()
-\end{lyxcode}
+\end{verbatim}
 computes the inverse of a double precision matrix using the Cholesky
 factorization of a \emph{NxN }double precision symmetric positive
 definite matrix \emph{A} stored in the global array represented by
@@ -1134,7 +1136,7 @@ send a message to \href{mailto:fanngi@ornl.gov}{fanngi@ornl.gov}.
 Global Arrays use this library to solve eigenvalue problems.
 
 The function
-\begin{lyxcode}
+\begin{verbatim}
 \textcolor{blue}{Fortran}~subroutine~\href{http://www.emsl.pnl.gov/docs/global/ga_ops.html\#ga_diag}{ga\_{}diag}(ga\_diag(g\_a,~g\_s,~g\_v,~eval)~
 
 \textcolor{blue}{C}~~~~~~~void~\href{http://www.emsl.pnl.gov/docs/global/c_nga_ops.html\#ga_diag}{GA\_{}Diag}(int~g\_a,~int~g\_s,~int~g\_v,~void~{*}eval)
@@ -1142,13 +1144,13 @@ The function
 \textcolor{blue}{C++}~~~~~void~GA::GlobalArray::diag~(const~GA::GlobalArray{*}g\_s,~
 
 ~~~~~~~~~~~~~~~~~~~const~GA::GlobalArray{*}~g\_v,~void~{*}eval)
-\end{lyxcode}
+\end{verbatim}
 solves the generalized eigenvalue problem returning all eigenvectors
 and values in ascending order. The input matrices are not overwritten
 or destroyed.
 
 The function
-\begin{lyxcode}
+\begin{verbatim}
 \textcolor{blue}{Fortran}~subroutine~\href{http://www.emsl.pnl.gov/docs/global/ga_ops.html\#ga_diag_reuse}{ga\_{}diag\_{}reuse}~(control,~g\_a,~g\_s,~g\_v,~eval)~
 
 \textcolor{blue}{C}~~~~~~~void~\href{http://www.emsl.pnl.gov/docs/global/c_nga_ops.html\#ga_diag_reuse}{GA\_{}Diag\_{}reuse}~(int~control,~int~g\_a,~int~g\_s,
@@ -1160,13 +1162,13 @@ The function
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~GA::GlobalArray{*}~g\_s,~~~~~
 
 ~~~~~~~~~~~~~~~~~~~const~GA::GlobalArray{*}g\_v,~void~{*}eval)
-\end{lyxcode}
+\end{verbatim}
 solves the generalized eigen-value problem returning all eigenvectors
 and values in ascending order. Recommended for REPEATED calls if \texttt{g\_s}
 is unchanged.
 
 The function
-\begin{lyxcode}
+\begin{verbatim}
 \textcolor{blue}{Fortran}~subroutine~\href{http://www.emsl.pnl.gov/docs/global/ga_ops.html\#ga_diag_std}{ga\_{}diag\_{}std}(g\_a,~g\_v,~eval)~
 
 \textcolor{blue}{C}~~~~~~~void~\href{http://www.emsl.pnl.gov/docs/global/c_nga_ops.html\#ga_diag_std}{GA\_{}Diag\_{}std}(int~g\_a,~int~g\_v,~void~{*}eval)
@@ -1174,7 +1176,7 @@ The function
 \textcolor{blue}{C++}~~~~~void~GA::GlobalArray::diagStd(~const~GA::GlobalArray{*}~
 
 ~~~~~~~~~~~~~~~~~~~g\_v,~void~{*}eval)
-\end{lyxcode}
+\end{verbatim}
 solves the standard (non-generalized) eigenvalue problem returning
 all eigenvectors and values in the ascending order. The input matrix
 is neither overwritten nor destroyed. 
@@ -1223,7 +1225,7 @@ library offers a call for the user to eliminate the redundant synchronization
 points based on his/her knowledge of the application.
 
 The function
-\begin{lyxcode}
+\begin{verbatim}
 \textcolor{blue}{Fortran}~subroutine~\href{http://www.emsl.pnl.gov/docs/global/ga_ops.html\#ga_mask_sync}{ga\_{}mask\_{}sync}(prior\_sync\_mask,post\_sync\_mask)
 
 \textcolor{blue}{C}~~~~~~~void~\href{http://www.emsl.pnl.gov/docs/global/c_nga_ops.html\#ga_mask_sync}{GA\_{}Mask\_{}sync}(int~prior\_sync\_mask,int~post\_sync\_mask)
@@ -1231,7 +1233,7 @@ The function
 \textcolor{blue}{C++}~~~~~void~GA::GlobalArray::maskSync(int~prior\_sync\_mask,
 
 ~~~~~~~~~~~~~~~~~int~post\_sync\_mask)
-\end{lyxcode}
+\end{verbatim}
 This operation should be used with a lot of care and only when the
 application code has been debugged and the user wishes to tune its
 performance. Making a call to this function with prior\_sync\_mask

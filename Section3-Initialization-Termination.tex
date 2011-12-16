@@ -1,3 +1,5 @@
+\chapter{\label{sec:Initialization-and-Termination}Initialization and Termination}
+
 For historical reasons (the 2-dimensional interface was developed
 first), many operations have two interfaces, one for two dimensional
 arrays and the other for arbitrary dimensional (one- to seven- dimensional,
@@ -152,33 +154,33 @@ before MA. It is possible to initialize GA after MA but it is not
 recommended: GA must first be initialized to determine if it needs
 shared or MA memory for storing distributed array data. There are
 two alternative functions to initialize GA:
-\begin{lyxcode}
+\begin{verbatim}
 \textcolor{blue}{Fortran}~subroutine~GA\_initialize\href{http://www.emsl.pnl.gov/docs/global/ga_ops.html\#ga_initialize}{GA\_{}initialize}()~
 
 \textcolor{blue}{C}~~~~~~~void~\href{http://www.emsl.pnl.gov/docs/global/c_nga_ops.html\#ga_initialize}{GA\_{}Initialize}()~
 
 \textcolor{blue}{C++}~~~~~void~GA::Initialize(int~argc,~char~{*}{*}argv)
-\end{lyxcode}
+\end{verbatim}
 and
-\begin{lyxcode}
+\begin{verbatim}
 \textcolor{blue}{Fortran}~~subroutine~\href{http://www.emsl.pnl.gov/docs/global/ga_ops.html\#ga_initialize_ltd}{GA\_{}Initialize\_{}ltd}(limit)~~
 
 \textcolor{blue}{C}~~~~~~~~void~\href{http://www.emsl.pnl.gov/docs/global/c_nga_ops.html\#ga_initialize_ltd}{GA\_{}Initialize\_{}ltd}(size\_t~limit)~
 
 \textcolor{blue}{C++~}~~~~~void~GA::Initialize(int~argc,~char~{*}{*}argv,~size\_t~limit)
-\end{lyxcode}
+\end{verbatim}
 The first interface allows GA to consume as much memory as the application
 needs to allocate new arrays. The latter call allows the programmer
 to establish and enforce a limit within GA on the memory usage.
 
 \emph{Note}: In GA++, there is an additional functionality as follows: 
-\begin{lyxcode}
+\begin{verbatim}
 \textcolor{blue}{C++}~~~~~~void~GA::Initialize(int~argc,~char~{*}argv{[}{]},~
 
 ~~~~~~~~~unsigned~long~heapSize,~unsigned~long~stackSize,
 
 ~~~~~~~~~int~type,~size\_t~limit=0)~
-\end{lyxcode}
+\end{verbatim}
 
 \subsection{Limiting Memory Usage by Global Arrays }
 
@@ -194,18 +196,18 @@ simply fail (return false). There are two ways to set the limit:
 \begin{enumerate}
 \item at initialization time by calling ga\_initialize\_ltd, or 
 \item after initialization by calling the function\end{enumerate}
-\begin{lyxcode}
+\begin{verbatim}
 \textcolor{blue}{Fortran}~~~subroutine~\href{http://www.emsl.pnl.gov/docs/global/ga_ops.html\#ga_set_memory_limit}{ga\_{}set\_{}memory\_{}limit}(limit)~
 
 \textcolor{blue}{C}~~~~~~~~~void~\href{http://www.emsl.pnl.gov/docs/global/c_nga_ops.html\#ga_set_memory_limit}{GA\_{}Set\_{}memory\_{}limit}(size\_t~limit)~
 
 \textcolor{blue}{C++}~~~~~~~void~GA::GAServices::setMemoryLimit(size\_t~limit)
-\end{lyxcode}
+\end{verbatim}
 It is encouraged that the user choose the first option, even though
 the user can intialize the GA normally and set the memory limit later.
 
 \emph{Example}: Initialization of MA and setting GA memory limits
-\begin{lyxcode}
+\begin{verbatim}
 call~ga\_initialize()~
 
 if~(ga\_uses\_ma())~then
@@ -221,7 +223,7 @@ call~ga\_set\_memory\_limit(ma\_sizeof(MT\_DBL,global,MT\_BYTE))~
 endif~
 
 if(.not.~status)~...~!we~got~an~error~condition~here
-\end{lyxcode}
+\end{verbatim}
 In this example, depending on the value returned from ga\_uses\_ma(),
 we either increase the heap size argument by the amount of memory
 for global arrays or set the limit explicitly through ga\_set\_memory\_limit().
@@ -234,23 +236,23 @@ is capped by the value \emph{stack+heap+global}.
 \section{Termination }
 
 The normal way to terminate a GA program is to call the function
-\begin{lyxcode}
+\begin{verbatim}
 \textcolor{blue}{Fortran}~~~subroutine~\href{http://www.emsl.pnl.gov/docs/global/ga_ops.html\#ga_terminate}{ga\_{}terminate}()~
 
 \textcolor{blue}{C~}~~~~~~~~void~\href{http://www.emsl.pnl.gov/docs/global/c_nga_ops.html\#ga_initialize}{GA\_{}Terminate}()~
 
 \textcolor{blue}{C++}~~~~~~~void~GA::Terminate()
-\end{lyxcode}
+\end{verbatim}
 The programmer can also abort a running program for example as part
 of handling a programmatically detected error condition by calling
 the function
-\begin{lyxcode}
+\begin{verbatim}
 \textcolor{blue}{Fortran}~~~subroutine~\href{http://www.emsl.pnl.gov/docs/global/ga_ops.html\#ga_error}{ga\_{}error}(message,~code)
 
 \textcolor{blue}{C}~~~~~~~~~void~\href{http://www.emsl.pnl.gov/docs/global/c_nga_ops.html\#ga_error}{GA\_{}Error}(char~{*}message,~int~code)
 
 \textcolor{blue}{C++}~~~~~~~void~GA::GAServices::error(char~{*}message,~int~code)
-\end{lyxcode}
+\end{verbatim}
 
 \section{Creating Arrays - I }
 
@@ -258,7 +260,7 @@ There are three ways to create new arrays:
 \begin{enumerate}
 \item From scratch, for regular distribution, using
 
-\begin{lyxcode}
+\begin{verbatim}
 \textcolor{green}{n-d}~\textcolor{blue}{Fortran}~logical~function~\href{http://www.emsl.pnl.gov/docs/global/ga_ops.html\#ga_create}{nga\_{}create}(type,~ndim,~
 
 ~~~~~~~~~~~~~~~~~~~~~~~~dims,~array\_name,~chunk,~g\_a)~
@@ -276,9 +278,9 @@ There are three ways to create new arrays:
 ~~~~~~~~~~~~~~~~~~~~~~~~int~ndim,~int~dims{[}{]},~char~{*}array\_name,~
 
 ~~~~~~~~~~~~~~~~~~~~~~~~int~chunk{[}{]})
-\end{lyxcode}
+\end{verbatim}
 or for regular distribution, using
-\begin{lyxcode}
+\begin{verbatim}
 \textcolor{green}{n-d}~\textcolor{blue}{Fortran}~logical~function~\href{http://www.emsl.pnl.gov/docs/global/ga_ops.html\#ga_create_irreg}{nga\_{}create\_{}irreg}(type,~ndim,~dims,
 
 ~~~~~~~~~~~~~~~~~~~~~~~array\_name,~map,~nblock,~g\_a)~
@@ -294,10 +296,10 @@ C++~~~~~~~~~GA::GlobalArray{*}~GA::GAServices::createGA(int~type,~
 ~~~~~~~~~~~~~~~~~~~~~~~int~ndim,~int~dims{[}{]},~char~{*}array\_name,~
 
 ~~~~~~~~~~~~~~~~~~~~~~~int~map{[}{]},~int~block{[}{]})
-\end{lyxcode}
+\end{verbatim}
 \item Based on a template (an existing array) with the function
 
-\begin{lyxcode}
+\begin{verbatim}
 \textcolor{blue}{Fortran}~logical~function~\href{http://www.emsl.pnl.gov/docs/global/ga_ops.html\#ga_duplicate}{ga\_{}duplicate}(g\_a,~g\_b,~array\_name)~
 
 \textcolor{blue}{C}~~~~~~~int~\href{http://www.emsl.pnl.gov/docs/global/c_nga_ops.html\#ga_duplicate}{GA\_{}Duplicate}(int~g\_a,~char~{*}array\_name)~
@@ -309,7 +311,7 @@ C++~~~~~~~~~GA::GlobalArray{*}~GA::GAServices::createGA(int~type,~
 \textcolor{blue}{C++}~~~~~GA::GlobalArray{*}~GA::GAServices::createGA(int~g\_a,~char
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~{*}array\_name)
-\end{lyxcode}
+\end{verbatim}
 \item Refer to the \textquotedbl{}Creating Arrays - II\textquotedbl{} section.
 \end{enumerate}
 In this case, the new array inherits all the properties such as distribution,
@@ -377,7 +379,7 @@ can be updated with data from neighboring processors by a call to
 a single GA function. To create global arrays with these extra data
 elements, referred to in the following as ghost cells, the user needs
 to call either the functions:
-\begin{lyxcode}
+\begin{verbatim}
 \textcolor{blue}{n-d}~Fortran~logical~function~\href{http://www.emsl.pnl.gov/docs/global/ga_ops.html\#ga_create_ghosts}{nga\_{}create\_{}ghosts}(type,~dims,~width,
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~array\_name,~chunk,~g\_a)
@@ -409,7 +411,7 @@ to call either the functions:
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~int~map{[}{]},~int~block{[}{]})~
 
 
-\end{lyxcode}
+\end{verbatim}
 These two functions are almost identical to the \texttt{nga\_create}
 and \texttt{nga\_create\_irreg} functions described above. The only
 difference is the parameter array width. This is used to control the
@@ -487,46 +489,46 @@ on the array handle and memory is allocated for the array. The array
 can now be used in exactly the same way as arrays created using the
 traditional ga\_create\_XXX calls. The calls for obtaining a new global
 array handle are
-\begin{lyxcode}
+\begin{verbatim}
 \textcolor{blue}{n-d~Fortran}~integer~function~\href{http://www.emsl.pnl.gov/docs/global/ga_ops.html\#NGA_CREATE_HANDLE}{ga\_{}create\_{}handle}()~
 
 \textcolor{blue}{C}~~~~~~~~~~~int~\href{http://www.emsl.pnl.gov/docs/global/c_nga_ops.html\#GA_CREATE_HANDLE}{GA\_{}Create\_{}handle}()
-\end{lyxcode}
+\end{verbatim}
 Properties of the global arrays can be set using the ga\_set\_XXX
 calls. Note that the only required call is to ga\_set\_data. The others
 are all optional.
-\begin{lyxcode}
+\begin{verbatim}
 \textcolor{blue}{n-d~Fortran}~subroutine~\href{http://www.emsl.pnl.gov/docs/global/ga_ops.html\#NGA_SET_DATA}{ga\_{}set\_{}data}(g\_a,~ndim,~dims,~type)~
 
 \textcolor{blue}{C}~~~~~~~~~~~void~\href{http://www.emsl.pnl.gov/docs/global/c_nga_ops.html\#GA_SET_DATA}{GA\_{}Set\_{}data}(int~g\_a,~int~ndim,~int~{*}dims,~int~type)
-\end{lyxcode}
+\end{verbatim}
 The argument \emph{g\_a} is the global array handle, \emph{ndim} is
 the dimension of the array, \emph{dims} is an array of \emph{ndim}
 numbers containing the dimensions of the array, and \emph{type} is
 the data type as defined in either the macdecls.h or mafdecls.h files.
 Other options that can be set using these subroutines are:
-\begin{lyxcode}
+\begin{verbatim}
 \textcolor{blue}{n-d~Fortran}~subroutine~\href{http://www.emsl.pnl.gov/docs/global/ga_ops.html\#NGA_SET_ARRAY_NAME}{ga\_{}set\_{}array\_{}name}(g\_a,~array\_name)~
 
 \textcolor{blue}{C}~~~~~~~~~~~void~\href{http://www.emsl.pnl.gov/docs/global/c_nga_ops.html\#GA_SET_ARRAY_NAME}{GA\_{}Set\_{}array\_{}name}(int~g\_a,~char~{*}array\_name)
-\end{lyxcode}
+\end{verbatim}
 This subroutine assigns a character string as an array name to the
 global array.
-\begin{lyxcode}
+\begin{verbatim}
 \textcolor{blue}{n-d~Fortran}~subroutine~\href{http://www.emsl.pnl.gov/docs/global/ga_ops.html\#NGA_SET_CHUNK}{ga\_{}set\_{}chunk}(g\_a,~chunk)~
 
 C~~~~~~~~~~~void~\href{http://www.emsl.pnl.gov/docs/global/c_nga_ops.html\#GA_SET_CHUNK}{GA\_{}Set\_{}chunk}(int~g\_a,~int~{*}chunk)
-\end{lyxcode}
+\end{verbatim}
 The chunk array contains the minimum size dimensions that should be
 allocated to a single processor. If the minimum size is set to -1
 for some of the dimensions, then the minimum size allocation is left
 to the GA toolkit. The default setting of the chunk array is -1 along
 all dimensions.
-\begin{lyxcode}
+\begin{verbatim}
 \textcolor{blue}{n-d~Fortran}~subroutine~\href{http://www.emsl.pnl.gov/docs/global/ga_ops.html\#NGA_SET_IRREG_DISTR}{ga\_{}set\_{}irreg\_{}distr}(g\_a,~map,~block)~
 
 \textcolor{blue}{C}~~~~~~~~~~~void~\href{http://www.emsl.pnl.gov/docs/global/c_nga_ops.html\#GA_SET_IRREG_DISTR}{GA\_{}Set\_{}irreg\_{}distr}(int~g\_a,~int~{*}map,~int~{*}block)
-\end{lyxcode}
+\end{verbatim}
 The ga\_set\_irreg\_distr subroutine can be used to specify the distribution
 of data among processors. The block array contains the processor grid
 used to lay out the global array and the map array contains a list
@@ -537,18 +539,18 @@ axis in the processor grid. Similarly, if the second value in the
 block array is N, then the values in the map array from M+1 to M+N
 are the first indices of the each data block along the second axis
 and so on through the D dimensions of the global array.
-\begin{lyxcode}
+\begin{verbatim}
 \textcolor{blue}{n-d~Fortran}~subroutine~\href{http://www.emsl.pnl.gov/docs/global/ga_ops.html\#NGA_SET_GHOSTS}{ga\_{}set\_{}ghosts}(g\_a,~width)~
 
 \textcolor{blue}{C}~~~~~~~~~~~void~\href{http://www.emsl.pnl.gov/docs/global/c_nga_ops.html\#GA_SET_GHOSTS}{GA\_{}Set\_{}ghosts}(int~g\_a,~int~{*}width)
-\end{lyxcode}
+\end{verbatim}
 This call can be used to set the ghost cell width along each of the
 array dimensions.
-\begin{lyxcode}
+\begin{verbatim}
 \textcolor{blue}{n-d~Fortran}~subroutine~\href{http://www.emsl.pnl.gov/docs/global/ga_ops.html\#GA_SET_PGROUP}{ga\_{}set\_{}pgroup}(g\_a,~p\_group)~
 
 \textcolor{blue}{C}~~~~~~~~~~~void~\href{http://www.emsl.pnl.gov/docs/global/c_nga_ops.html\#GA_SET_PGROUP}{ga\_{}set\_{}pgroup}(int~g\_a,~int~p\_group)
-\end{lyxcode}
+\end{verbatim}
 This call assigns a processor group to the global array. If no processor
 group is assigned to the global array, it is assumed that the global
 array is created on the default processor group.
@@ -556,11 +558,11 @@ array is created on the default processor group.
 After all the array properties have been set, memory for the global
 array is allocated by a call to ga\_allocate. After this call, the
 global array is ready for use inside the parallel application.
-\begin{lyxcode}
+\begin{verbatim}
 \textcolor{blue}{n-d~Fortran}~logical~function~\href{http://www.emsl.pnl.gov/docs/global/ga_ops.html\#GA_ALLOCATE}{ga\_{}allocate}(g\_a)~
 
 \textcolor{blue}{C}~~~~~~~~~~~int~\href{http://www.emsl.pnl.gov/docs/global/c_nga_ops.html\#GA_ALLOCATE}{GA\_{}Allocate}(int~g\_a)
-\end{lyxcode}
+\end{verbatim}
 This function returns a logical variable that is true if the global
 array was successfully allocated and false otherwise. 
 
@@ -568,13 +570,13 @@ array was successfully allocated and false otherwise.
 \section{Destroying Arrays }
 
 Global arrays can be destroyed by calling the function
-\begin{lyxcode}
+\begin{verbatim}
 \textcolor{blue}{Fortran}~logical~\href{http://www.emsl.pnl.gov/docs/global/ga_ops.html\#ga_destroy}{ga\_{}destroy}(g\_a)~
 
 \textcolor{blue}{C}~~~~~~~void~\href{http://www.emsl.pnl.gov/docs/global/c_nga_ops.html\#ga_destroy}{GA\_{}Destroy}(int~g\_a)~
 
 \textcolor{blue}{C++}~~~~~void~GA::GlobalArray::destroy()
-\end{lyxcode}
+\end{verbatim}
 that takes as its argument a handle representing a valid global array.
 It is a fatal error to call ga\_destroy with a handle pointing to
 an invalid array.

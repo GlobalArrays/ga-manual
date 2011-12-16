@@ -1,3 +1,5 @@
+\chapter{Introduction}
+
 \section{Overview}
 
 The Global Arrays (GA) toolkit provides a shared memory style programming
@@ -39,7 +41,7 @@ secondary storage and allows transfer of data to/from global arrays.
 \section{Basic Functionality}
 
 The basic shared memory operations supported include \emph{get}, \emph{put},
-\emph{scatter} and \emph{gather}. They are complemented by \noun{atomic}
+\emph{scatter} and \emph{gather}. They are complemented by \emph{atomic}
 \emph{read-and-increment}, \emph{accumulate} (reduction operation that combines
 data in local memory with data in the shared memory location), and \emph{lock}
 operations. However, these operations can only be used to access data in global
@@ -98,7 +100,7 @@ offers a set of operations for management of its data structures, one-sided
 data transfer operations, and supportive operations for data locality control
 and queries. The GA shared memory consistency model is a result of a compromise
 between the ease of use and a portable performance. The load and store
-operations are guaranteed to be \noun{ordered} with respect to each other only
+operations are guaranteed to be \emph{ordered} with respect to each other only
 if they target overlapping memory locations. The store operations (\emph{put,
 scatter}) and \emph{accumulate} complete locally before returning i.e., the
 data in the user local buffer has been copied out but not necessarily completed

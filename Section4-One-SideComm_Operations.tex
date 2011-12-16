@@ -1,3 +1,5 @@
+\chapter{One-sided Communication Operations}
+
 Global Arrays provide one-sided, noncollective communication operations
 that allow to access data in global arrays without cooperation with
 the process or processes that hold the referenced data. These processes
@@ -36,7 +38,7 @@ in shared memory.
 
 Put copies data from the local array to the global array section,
 which is
-\begin{lyxcode}
+\begin{verbatim}
 \textcolor{green}{n-D}~\textcolor{blue}{Fortran}~subroutine~\href{http://www.emsl.pnl.gov/docs/global/ga_ops.html\#ga_put}{nga\_{}put}(g\_a,~lo,~hi,~buf,~ld)~
 
 \textcolor{green}{2-D}~\textcolor{blue}{Fortran}~subroutine~\href{http://www.emsl.pnl.gov/docs/global/ga_ops.html\#ga_put}{ga\_{}put}(g\_a,~ilo,~ihi,~jlo,~jhi,~buf,~ld)~
@@ -48,24 +50,24 @@ which is
 \textcolor{blue}{C++}~~~~~~~~~void~GA::GlobalArray::put(int~lo{[}{]},~int~hi{[}{]},~
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~void~{*}buf,~int~ld{[}{]})
-\end{lyxcode}
-All the arguments are provided in one call: \texttt{lo} and \texttt{\noun{hi}}
-specify where the data should go in the global array; \texttt{\noun{ld}}
-specifies the stride information of the local array \texttt{\noun{buf}}.
+\end{verbatim}
+All the arguments are provided in one call: \texttt{lo} and \texttt{\emph{hi}}
+specify where the data should go in the global array; \texttt{\emph{ld}}
+specifies the stride information of the local array \texttt{\emph{buf}}.
 The local array should have the same number of dimensions as the global
 array; however, it is really required to present the n-dimensional
 view of the local memory buffer, that by itself might be one-dimensional.
 
 The operation is transparent to the user, which means the user doesn't
-have to worry about where the region defined by \texttt{\noun{lo}}
-and \texttt{\noun{hi}} is located. It can be in the memory of one
+have to worry about where the region defined by \texttt{\emph{lo}}
+and \texttt{\emph{hi}} is located. It can be in the memory of one
 or many remote processes, owned by the local process, or even mixed
 (part of it belongs to remote processes and part of it belongs to
 a local process).
 
 \emph{Get} is the reverse operation of \emph{put}. It copies data
 from a global array section to the local array. It is
-\begin{lyxcode}
+\begin{verbatim}
 \textcolor{green}{n-D}~\textcolor{blue}{Fortran}~subroutine~\href{http://www.emsl.pnl.gov/docs/global/ga_ops.html\#ga_get}{nga\_{}get}(g\_a,~lo,~hi,~buf,~ld)~
 
 \textcolor{green}{2-D}~\textcolor{blue}{Fortran}~subroutine~\href{http://www.emsl.pnl.gov/docs/global/ga_ops.html\#ga_get}{ga\_{}get}(g\_a,~ilo,~ihi,~jlo,~jhi,~buf,~ld)~
@@ -77,18 +79,18 @@ from a global array section to the local array. It is
 \textcolor{blue}{C++}~~~~~~~~~void~GA::GlobalArray::get(int~lo{[}{]},~int~hi{[}{]},~
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~void~{*}buf,~int~ld{[}{]})
-\end{lyxcode}
-Similar to \emph{put}, \texttt{\noun{lo}} and \texttt{\noun{hi}} specify
-where the data should come from in the global array, and \texttt{\noun{ld}}
-specifies the stride information of the local array \texttt{\noun{buf}}.
+\end{verbatim}
+Similar to \emph{put}, \texttt{\emph{lo}} and \texttt{\emph{hi}} specify
+where the data should come from in the global array, and \texttt{\emph{ld}}
+specifies the stride information of the local array \texttt{\emph{buf}}.
 The local array is assumed to have the same number of dimensions as
 the global array. Users don't need to worry about where the region
-defined by \texttt{\noun{lo}} and \texttt{\noun{hi}} is physically
+defined by \texttt{\emph{lo}} and \texttt{\emph{hi}} is physically
 located.
 
 \textit{\underbar{Example}}\textit{\emph{\underbar{:}}}
 
-For a \texttt{\noun{ga\_get}} operation transferring data from the
+For a \texttt{\emph{ga\_get}} operation transferring data from the
 (11:15,1:5) section of a 2-dimensional 15 x10 global array into a
 local buffer 5 x10 array we have: (In Fortran notation)
 
@@ -106,7 +108,7 @@ local buffer 5 x10 array we have: (In Fortran notation)
 It is often useful in a put operation to combine the data moved to
 the target process with the data that resides at that process, rather
 then replacing the data there. \emph{Accumulate} and \emph{read\_inc}
-perform an \noun{atomic} remote update to a patch (a section of the
+perform an \emph{atomic} remote update to a patch (a section of the
 global array) in the global array and an element in the global array,
 respectively. They don't need the cooperation of the process(es) who
 owns the data. Since the operations are atomic, the same portion of
@@ -116,7 +118,7 @@ of the updates.
 
 \emph{Accumulate} combines the data from the local array with data
 in the global array section, which is
-\begin{lyxcode}
+\begin{verbatim}
 \textcolor{green}{n-D}~\textcolor{blue}{Fortran}~subroutine~\href{http://www.emsl.pnl.gov/docs/global/ga_ops.html\#ga_acc}{nga\_{}acc}(g\_a,~lo,~hi,~buf,~ld,~alpha)~
 
 \textcolor{green}{2-D}~\textcolor{blue}{Fortran}~subroutine~\href{http://www.emsl.pnl.gov/docs/global/ga_ops.html\#ga_acc}{ga\_{}acc}(g\_a,~ilo,~ihi,~jlo,~jhi,~buf,~
@@ -132,7 +134,7 @@ in the global array section, which is
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~void~{*}buf,~int~ld{[}{]},~v
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~oid~{*}alpha)
-\end{lyxcode}
+\end{verbatim}
 The local array is assumed to have the same number of dimensions as
 the global array. Users don't need to worry about where the region
 defined by lo and hi is physically located. The function performs
@@ -142,7 +144,7 @@ buf}
 
 Read\_inc remotely updates a particular element in the global array,
 which is
-\begin{lyxcode}
+\begin{verbatim}
 \textcolor{green}{n-D}~\textcolor{blue}{Fortran}~subroutine~\href{http://www.emsl.pnl.gov/docs/global/ga_ops.html\#ga_read_inc}{nga\_{}read\_{}inc}(g\_a,~subscript,~inc)~
 
 \textcolor{green}{2-D}~\textcolor{blue}{Fortran}~subroutine~\href{http://www.emsl.pnl.gov/docs/global/ga_ops.html\#ga_read_inc}{ga\_{}read\_{}inc}(g\_a,~i,~j,~inc)~
@@ -150,7 +152,7 @@ which is
 \textcolor{blue}{C}~~~~~~~~~~~long~\href{http://www.emsl.pnl.gov/docs/global/c_nga_ops.html\#ga_read_inc}{NGA\_{}Read\_{}inc}(int~g\_a,~int~subscript{[}{]},~long~inc)~
 
 \textcolor{blue}{C++}~~~~~~~~~long~GA::GlobalArray::readInc(int~subscript{[}{]},~long~inc)
-\end{lyxcode}
+\end{verbatim}
 This function applies to integer arrays only. It atomically reads
 and increments an element in an integer array. It performs
 
@@ -167,7 +169,7 @@ need the cooperation of the process(es) who own the referenced elements
 in the global array.
 
 Scatter puts array elements into a global array, which is
-\begin{lyxcode}
+\begin{verbatim}
 \textcolor{green}{n-D}~\textcolor{blue}{Fortran}~subroutine~\href{http://www.emsl.pnl.gov/docs/global/ga_ops.html\#ga_scatter}{nga\_{}scatter}(g\_a,~v,~subsarray,~n)~
 
 \textcolor{green}{2-D}~\textcolor{blue}{Fortran}~subroutine~\href{http://www.emsl.pnl.gov/docs/global/ga_ops.html\#ga_scatter}{ga\_{}scatter}(g\_a,~v,~i,~j,~n)~
@@ -179,19 +181,19 @@ Scatter puts array elements into a global array, which is
 \textcolor{blue}{C++~}~~~~~~~~void~GA::GlobalArray::scatter(void~{*}v,~
 
 ~~~~~~~~~~~~~~~~~~~~~~~int~{*}subsarray{[}{]},~int~n)
-\end{lyxcode}
+\end{verbatim}
 It performs (in C notation)
-\begin{lyxcode}
+\begin{verbatim}
 for(k=0;~k<=~n;~k++)~\{
 
 a{[}subsArray{[}k{]}{[}0{]}{]}{[}subsArray{[}k{]}{[}1{]}{]}{[}subsArray{[}k{]}{[}2{]}{]}...~=~v{[}k{]};~
 
 \}
-\end{lyxcode}
+\end{verbatim}
 \emph{Example}:
 
 Scatter the 5 elements into a 10x10 global array
-\begin{lyxcode}
+\begin{verbatim}
 Element~1~v{[}0{]}~=~5~subsArray{[}0{]}{[}0{]}~=~2~
 
 ~~~~~~~~~~~~~~~~~~~subsArray{[}0{]}{[}1{]}~=~3~
@@ -211,7 +213,7 @@ Element~4~v{[}3{]}~=~7~subsArray{[}3{]}{[}0{]}~=~3~
 Element~5~v{[}4{]}~=~2~subsArray{[}4{]}{[}0{]}~=~6~
 
 ~~~~~~~~~~~~~~~~~~~subsArray{[}4{]}{[}1{]}~=~3
-\end{lyxcode}
+\end{verbatim}
 After the scatter operation, the five elements would be scattered
 into the global array as shown in the following figure. 
 
@@ -219,7 +221,7 @@ into the global array as shown in the following figure.
 
 \emph{Gather} is the reverse operation of scatter. It gets the array
 elements from a global array into a local array.
-\begin{lyxcode}
+\begin{verbatim}
 \textcolor{green}{n-D}~\textcolor{blue}{Fortran}~subroutine~\href{http://www.emsl.pnl.gov/docs/global/ga_ops.html\#ga_gather}{nga\_{}gather}(g\_a,~v,~subsarray,~n)~
 
 \textcolor{green}{2-D}~\textcolor{blue}{Fortran}~subroutine~\href{http://www.emsl.pnl.gov/docs/global/ga_ops.html\#ga_gather}{ga\_{}gather}ga\_gather(g\_a,~v,~i,~j,~n)~
@@ -231,15 +233,15 @@ elements from a global array into a local array.
 \textcolor{blue}{C++}~~~~~~~~~void~GA::GlobalArray::gather(void~{*}v,~int~
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~{*}subsarray{[}{]},~int~n)
-\end{lyxcode}
+\end{verbatim}
 It performs (in C notation)
-\begin{lyxcode}
+\begin{verbatim}
 for(k=0;~k<=~n;~k++)\{~
 
 ~~~~~v{[}k{]}~=~a{[}subsArray{[}k{]}{[}0{]}{]}{[}subsArray{[}k{]}{[}1{]}{]}{[}subsArray{[}k{]}{[}2{]}{]}...;~
 
 \}~
-\end{lyxcode}
+\end{verbatim}
 
 \section{Periodic Interfaces }
 
@@ -264,31 +266,31 @@ wrapped over in the second dimension, as shown in the following figure
 \includegraphics[scale=0.7]{periodic2}
 
 Therefore the patch {[}2:4, -1:3{]} is
-\begin{lyxcode}
+\begin{verbatim}
 17~22~2~7~12~
 
 18~23~3~8~13~
 
 19~24~4~9~14
-\end{lyxcode}
+\end{verbatim}
 Periodic operations extend the boudary of each dimension in two directions,
 toward the lower bound and toward the upper bound. For any dimension
 with lo(i) to hi(i), where 1 < i < ndim, it extends the range from 
-\begin{lyxcode}
+\begin{verbatim}
 {[}lo(i)~:~hi(i){]}~
-\end{lyxcode}
+\end{verbatim}
 to 
-\begin{lyxcode}
+\begin{verbatim}
 {[}(lo(i)-1-(hi(i)-lo(i)+1))~:~(lo(i)-1){]},~{[}lo(i)~:~hi(i){]},~
-\end{lyxcode}
+\end{verbatim}
 and 
-\begin{lyxcode}
+\begin{verbatim}
 {[}(hi(i)+1)~:~(hi(i)+1+(hi(i)-lo(i)+1)){]},~
-\end{lyxcode}
+\end{verbatim}
 or 
-\begin{lyxcode}
+\begin{verbatim}
 {[}(lo(i)-1-(hi(i)-lo(i)+1))~:~(hi(i)+1+(hi(i)-lo(i)+1)){]}.
-\end{lyxcode}
+\end{verbatim}
 Even though the patch spans in a much large range, the length must
 always be less, or equal to (hi(i)-lo(i)+1)).
 
@@ -307,7 +309,7 @@ Current version of GA supports three periodic operations. They are
 \emph{Periodic Get }copies data from a global array section to a local
 array, which is almost the same as regular get, except the indices
 of the patch can be outside the boundaries of each dimension.
-\begin{lyxcode}
+\begin{verbatim}
 \textcolor{blue}{Fortran}~subroutine~\href{http://www.emsl.pnl.gov/docs/global/ga_ops.html\#ga_periodic_get}{nga\_{}periodic\_{}get}(g\_a,~lo,~hi,~buf,~ld)~
 
 \textcolor{blue}{C}~~~~~~~void~\href{http://www.emsl.pnl.gov/docs/global/c_nga_ops.html\#ga_periodic_get}{NGA\_{}Periodic\_{}get}(int~g\_a,~int~lo{[}{]},~int~hi{[}{]},~
@@ -317,27 +319,27 @@ of the patch can be outside the boundaries of each dimension.
 \textcolor{blue}{C++}~~~~~void~GA::GlobalArray::periodicGet(int~lo{[}{]},~
 
 ~~~~~~~~~~~~~int~hi{[}{]},~void~{*}buf,~int~ld{[}{]})
-\end{lyxcode}
-Similar to regular \emph{get}, \texttt{\noun{lo}} and \texttt{\noun{hi}}
-specify where the data should come from in the global array, and \texttt{\noun{ld}}
-specifies the stride information of the local array \texttt{\noun{buf}}.
+\end{verbatim}
+Similar to regular \emph{get}, \texttt{\emph{lo}} and \texttt{\emph{hi}}
+specify where the data should come from in the global array, and \texttt{\emph{ld}}
+specifies the stride information of the local array \texttt{\emph{buf}}.
 
 \emph{Example}: Let us look at the first example in this section.
 It is 5 x 5 two dimensional global array. Assume that the local buffer
 is an 4x3 array. 
 
 Also assume that
-\begin{lyxcode}
+\begin{verbatim}
 1o{[}0{]}~=~-1,~hi{[}0{]}~=~2,~
 
 lo{[}1{]}~=~4,~hi{[}1{]}~=~6,~and~
 
 ld{[}0{]}~=~4.
-\end{lyxcode}
+\end{verbatim}
 \includegraphics[width=7cm]{periodic1}
 
-The local buffer \texttt{\noun{buf}} is
-\begin{lyxcode}
+The local buffer \texttt{\emph{buf}} is
+\begin{verbatim}
 19~~~~24~~~~4~
 
 20~~~~25~~~~5~~
@@ -345,10 +347,10 @@ The local buffer \texttt{\noun{buf}} is
 16~~~~21~~~~1~
 
 17~~~~22~~~~2~
-\end{lyxcode}
+\end{verbatim}
 Periodic Put is the reverse operations of Periodic Get. It copies
 data from the local array to the global array section, which is
-\begin{lyxcode}
+\begin{verbatim}
 \textcolor{blue}{Fortran}~subroutine~\href{http://www.emsl.pnl.gov/docs/global/ga_ops.html\#ga_periodic_put}{nga\_{}periodic\_{}put}(g\_a,~lo,~hi,~buf,~ld)~
 
 \textcolor{blue}{C}~~~~~~~void~\href{http://www.emsl.pnl.gov/docs/global/c_nga_ops.html\#ga_periodic_put}{NGA\_{}Periodic\_{}put}(int~g\_a,~int~lo{[}{]},~int~hi{[}{]},~
@@ -358,10 +360,10 @@ data from the local array to the global array section, which is
 \textcolor{blue}{C++}~~~~~void~GA::GlobalArray::periodicPut(int~lo{[}{]},~
 
 ~~~~~~~~~~~~~int~hi{[}{]},~void~{*}buf,~int~ld{[}{]})
-\end{lyxcode}
-Similar to regular\emph{ put}, \texttt{\noun{lo}} and \texttt{\noun{hi}}
-specify where the data should go in the global array; \texttt{\noun{ld}}
-specifies the stride information of the local array \texttt{\noun{buf}}.
+\end{verbatim}
+Similar to regular\emph{ put}, \texttt{\emph{lo}} and \texttt{\emph{hi}}
+specify where the data should go in the global array; \texttt{\emph{ld}}
+specifies the stride information of the local array \texttt{\emph{buf}}.
 
 \emph{Periodic Put/Get} (also include the \emph{Accumulate}, which
 will be discussed later in this section) divide the patch into several
@@ -372,20 +374,20 @@ each patch, to complete the operations.
 
 \emph{Example}: Look at the example for periodic get. Because it is
 a 5 x 5 global array, the valid indices for each dimension are
-\begin{lyxcode}
+\begin{verbatim}
 dimension~0:~{[}1~:~5{]}~
 
 dimension~1:~{[}1~:~5{]}
-\end{lyxcode}
+\end{verbatim}
 The specified lo and hi are apparently out of the range of each dimension:
-\begin{lyxcode}
+\begin{verbatim}
 dimemsion~0:~{[}-1~:~2{]}~-{}->~{[}-1~:~0{]}~-{}-~wrap~back~-{}->~{[}4~:~5{]}~{[}~1~:~2{]}~ok
 
 dimension~1:~{[}~4~:~6{]}~-{}->~{[}~4~:~5{]}~ok~{[}~6~:~6{]}~-{}-~wrap~back~-{}->~{[}1~:~1{]}
-\end{lyxcode}
+\end{verbatim}
 Hence, there will be four smaller patches after the adjustment. They
 are
-\begin{lyxcode}
+\begin{verbatim}
 patch~0:~{[}4~:~5,~4~:~5{]}~
 
 patch~1:~{[}4~:~5,~1~:~1{]}~
@@ -393,7 +395,7 @@ patch~1:~{[}4~:~5,~1~:~1{]}~
 patch~2:~{[}1~:~2,~4~:~5{]}~
 
 patch~3:~{[}1~:~2,~1~:~1{]}
-\end{lyxcode}
+\end{verbatim}
 as shown in the following figure
 
 \includegraphics[width=0.7\paperwidth]{periodic4}
@@ -404,7 +406,7 @@ buffer also need to be calculated.
 Similar to regular \emph{Accumulate, Periodic Accumulate} combines
 the data from the local array with data in the global array section,
 which is
-\begin{lyxcode}
+\begin{verbatim}
 \textcolor{blue}{Fortran}~subroutine~\href{http://www.emsl.pnl.gov/docs/global/ga_ops.html\#ga_periodic_acc}{nga\_{}periodic\_{}acc}(g\_a,~lo,~hi,~buf,~ld,~alpha)~
 
 \textcolor{blue}{C}~~~~~~~void~\href{http://www.emsl.pnl.gov/docs/global/c_nga_ops.html\#ga_periodic_acc}{NGA\_{}Periodic\_{}acc}(int~g\_a,~int~lo{[}{]},~int~hi{[}{]},~
@@ -414,10 +416,10 @@ which is
 \textcolor{blue}{C++~}~~~~void~GA::GlobalArray::periodicAcc(int~lo{[}{]},~int~hi{[}{]},~
 
 ~~~~~~~~~~~~~~~~~~~void~{*}buf,~int~ld{[}{]},~void~{*}alpha)
-\end{lyxcode}
+\end{verbatim}
 The local array is assumed to have the same number of dimensions as
 the global array. Users don't need to worry about where the region
-defined by \texttt{\noun{lo}} and \texttt{\noun{hi}} is physically
+defined by \texttt{\emph{lo}} and \texttt{\emph{hi}} is physically
 located. The function performs
 
 \emph{global array section (lo{[}{]}, hi{[}{]}) += alpha {*} buf}
@@ -427,17 +429,17 @@ a 5 x 5 two dimensional global array. Assume that the local buffer
 is an 4x3 array. 
 
 Also assume that
-\begin{lyxcode}
+\begin{verbatim}
 1o{[}0{]}~=~-1,~hi{[}0{]}~=~2,~
 
 lo{[}1{]}~=~4,~hi{[}1{]}~=~6,~and~
 
 ld{[}0{]}~=~4.
-\end{lyxcode}
+\end{verbatim}
 \includegraphics[width=7cm]{periodic1}
 
 The local buffer buf is
-\begin{lyxcode}
+\begin{verbatim}
 1~~5~~9~
 
 4~~6~~5~
@@ -445,8 +447,8 @@ The local buffer buf is
 3~~2~~1~
 
 7~~8~~2
-\end{lyxcode}
-and the \texttt{\noun{alpha = 2}}.
+\end{verbatim}
+and the \texttt{\emph{alpha = 2}}.
 
 After the Periodic Accumulate operation, the global array will be
 
@@ -485,7 +487,7 @@ stores temperature. If there are two computation phases (first phase
 computes pressure and second phase computes temperature), then we
 can overlap communication with computation, thus hiding latency.\tabularnewline
 \hline 
-\begin{lyxcode}
+\begin{verbatim}
 .~.~.~.~.~.~.~.~.~
 
 nga\_get~(get\_pressure\_array)
@@ -503,7 +505,7 @@ nga\_nbwait(temperature\_array~-~completes~data~transfer)
 compute\_temperature()~
 
 .~.~.~.~.~.~.~.
-\end{lyxcode}
+\end{verbatim}
 \tabularnewline
 \hline
 \end{tabular}
@@ -511,7 +513,7 @@ compute\_temperature()~
 The non-blocking APIs are derived from the blocking interface by adding
 a handle argument that identifies an instance of the non-blocking
 request.
-\begin{lyxcode}
+\begin{verbatim}
 \textcolor{green}{n-D}~\textcolor{blue}{Fortran}~subroutine~\href{http://www.emsl.pnl.gov/docs/global/ga_ops.html\#nga_nbput}{nga\_{}nbput}(g\_a,~lo,~hi,~buf,~ld,~nbhandle)~
 
 \textcolor{green}{n-D}~Fortran~subroutine~\href{http://www.emsl.pnl.gov/docs/global/ga_ops.html\#nga_nbget}{nga\_{}nbget}(g\_a,~lo,~hi,~buf,~ld,~nbhandle)~
@@ -571,5 +573,5 @@ request.
 ~~~~~~~~~~~~~int~ld{[}{]},~void~{*}alpha,~ga\_nbhdl\_t{*}~nbhandle)~
 
 \textcolor{blue}{C++}~~~~~~~~~int~GA::GlobalArray::NbWait(ga\_nbhdl\_t{*}~nbhandle)
-\end{lyxcode}
+\end{verbatim}
 
