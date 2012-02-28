@@ -1,0 +1,128 @@
+\chapter{Writing GP Programs}
+
+The GP library is automatically built when GA is built. To build GP, refer to
+the GA documentation for the build process. Similarly, all the GP routines are
+automatically included in the GA library, so linking to GA will allow users to
+call GP as well. Note that at present, only the C interface is supported, so
+only C and C++ programs can call the GP library.
+
+\section{Writing GP Programs}
+
+The GP library is built on top of the same ARMCI runtime as GA and uses much of
+the GA functionality in its implementation. It is therefore necessary to
+initialize GA before initializing GP. C and C++ programs that use Global Pointers should
+include files `gp.h'. If the programs also call any GA routines then they
+should inlude `ga.h' and `macdecls.h' as well. Users should refer
+to the GA documentation on initializing programs with GA.
+
+After initializing GA, the user should include initialize the GP library by
+calling
+
+\begin{verbatim}
+      GP_Initialize();
+\end{verbatim}
+
+\noindent
+This will start up the GP library and initialize all internal data structures.
+Similarly, at the end of the program the user should call
+
+\begin{verbatim}
+      GP_Terminate();
+\end{verbatim}
+
+\noindent
+before terminating the GA library and whatever runtime (MPI or TCGMSG) that is
+being used with it. The call to GP\_Terminate will clean up the internal GP data
+structures and free up resources that have been allocated by the library. All
+other calls to the GP library should be bracketed between these two calls.
+
+\section{Creating GP Arrays}
+
+Creating a GP array is straightforward and follows the model for creating GAs
+using the new, more flexible interface. The first step in creating a GP array is
+to create a handle for it.
+
+\begin{verbatim}
+      int GP_Create_handle();
+\end{verbatim}
+
+\noindent
+This is a global operation and returns the handle as a simple integer. In object
+oriented terms, creating a GP handle is similar to creating an instance of a GP
+array, all other operations on this array will refer to this handle. The
+dimensions of the GP array can be set by calling the function
+ 
+\begin{verbatim}
+      void GP_Set_dimensions(int g_p, int ndim, int *dims);
+\end{verbatim}
+
+\noindent
+Again, this is a global operation that determines the dimension of the GP array
+as well as setting the extents of the array axes. The extents are passed in
+through the integer array dims which has ndim entries. The variable g\_p is the
+GP array handle. Note that unlike the corresponding call in GA (GA\_Set\_data),
+there is no argument that controls data type. In the context of a GP array,
+specifying the type of an element is meaningless.
+
+Finally, to finish creating the GP array and allocating internal resources for
+the array, it is necessary to call
+ 
+\begin{verbatim}
+      int GP_Allocate(int g_p);
+\end{verbatim}
+
+\noindent
+This function returns true if the allocation is successful and false if the
+allocation fails for some reason. These three functions represent the minimal
+list of functions required to create a GP array. Other functions can be inserted
+between creating the GP handle and allocating the GP array that can be used to
+control how the GP distributes data among different processors. These are
+described below.
+ 
+The GP library uses a cartesian decomposition to divide arrays up among
+different processors. This means that each array axis is divide up into some
+number of blocks such that the product of the number of blocks along each
+dimension is equal to the total number of processors.
+If no information about how the user wants to distribute array is provided, the
+GP library will allocate data to different processors using an internal
+algorithm that tries to guarantee that the blocks on each processor  contain
+roughly the same number of array elements. This distribution can be controlled
+to a certain extent using one or the other of the following two directives.
+The firsts sets a chunk array which can be used to control the maximum number of
+blocks a particular axis can be divided up into.
+
+\begin{verbatim}
+      void GP_Set_chunk(int g_p, int *chunk);
+\end{verbatim}
+
+\noindent
+The number of entries in the chunk array is equal to the number of array
+dimensions. For each axis, the corresponding entry in the chunk array
+represents the \emph{minimum} size that the block dimensions on that axis can be
+set to. If the entry in the chunk array is set to 0 or less, then the internal
+algorithm will be used to figure out the array decomposition along that axis.
+The chunk array is often used to prevent the library from decomposing an array
+along a particular axis so that all data along that axis is forced to reside on the
+same processor. This can be done by setting the corresponding value in the chunk
+array to equal the array dimension.
+
+A second way to control the distribution of data is to allow the user to
+completely specify how data is decomposed among processors using the set
+irregular distribution method.
+ 
+\begin{verbatim}
+      void GP_Set_irreg_distr(int g_p, int *mapc, *nblocks);
+\end{verbatim}
+
+\noindent
+The two arrays in this method are used to specify how data is decomposed along
+each axis. The nblocks array contains ndim entries. Each entry must be greater
+than zero and the product of all ndim entries must be equal to the total number
+of processors. Each entry specifies how many intervals the corresponding axis is
+divided into. The mapc array is used to specify exactly how each axis is
+partitioned. The number of entries in this array is equal to the sum of the
+entries in the nblocks array. The first nblocks[0] entries in mapc correspond to
+the \emph{starting} index for the partitions along the first axis, the next
+nblocks[1] entries correspond to the starting indices for the partitions along
+the second axis (if there is one) and so on. The indices along each axis must be
+monotonically increasing.

@@ -1,0 +1,17 @@
+MANUAL_DEPS =
+MANUAL_DEPS += GP1-Introduction.tex
+MANUAL_DEPS += GP2-WritingGPProg.tex
+
+# these flags produce a single, large page
+LATEX2HTML_FLAGS = -split 0 -no_navigation
+
+#all: GA-UserManual-Main.pdf GA-UserManual-Main/index.html
+
+# run pdflatex twice in case references need to be updated
+GP-UserManual-Main.pdf: $(MANUAL_DEPS)
+	pdflatex GP-UserManual-Main.tex
+	pdflatex GP-UserManual-Main.tex
+
+clean:
+	rm -f GA-UserManual-Main.pdf
+	rm -f *.aux *.log *.out *.toc

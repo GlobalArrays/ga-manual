@@ -1,0 +1,83 @@
+\chapter{Introduction}
+
+\section{Overview}
+
+The Global Pointer Arrays (GP) toolkit is an extension of the Global Arrays
+(GA) toolkit that is designed to support much more general distributed data
+structures than GA. Instead of creating distributed arrays of elements, where
+each element represents the same type of data object, GP arrays support
+distributed arrays of ``pointers'', where each element can be an object of
+arbitrary size. Once created, however, elements can be accessed from any
+processor using the same kind of \emph{put} and \emph{get} symmantics that are familiar from
+the GA toolkit.
+
+Like GA, the GP toolkit uses a onesided communication model to move data from
+the distributed GP array to local buffers. These operations consist of basic
+\emph{get}, \emph{put}, \emph{gather} and \emph{scatter} operations that can be used to
+move blocks of data from remote processors to and from local buffers.
+
+The basic functionality of the GP toolkit is similar to that of GA. The user
+creates a distributed GP array by specifying the dimensions of the GP array. It
+is also possible to specify how the data is distributed by setting variables
+such as the chunk size or using the irregular distribution functionality. Unlike
+conventional GAs, the user cannot specify data type since this concept is
+meaningless for a GP array.
+
+Once created, the GP array needs to be attached to data. This can be done by
+having each process identify the set of pointers in the GP array that are local
+to the process, allocating a local memory segment that contains the data that
+will go in the GP at that location, and assigning the GP pointer to the
+allocated memory segment. Once all array elements have been assigned, it is then
+possible for any process to access or modify the contents of any array element
+using \emph{get} and \emph{put} operations to copy data between the GP array and a local
+buffer.
+
+Because the size of individual array elements is arbitrary, more information
+about the size of each array element needs to be communicated to the application
+than for ordinary GAs. Because of this the interfaces for onesided GP operations
+are more complicated than the corresponding operations in the GA toolkit.
+Another consequence of having arbitrary array elements is that operations like
+addition and multiplication are not defined, so many operations that are
+available in the GA toolkit, such as accumulate, add, scale, etc. have no
+counterpart in the GP toolkit.
+
+As with GA, GP divides logically shared data structures into ``local'' and ``remote''
+portions. It recognizes variable data transfer costs required to access the
+data depending on the proximity attributes. A local portion of the shared
+memory is assumed to be faster to access and the remainder (remote portion) is
+considered slower to access. These differences do not hinder the ease-of-use
+since the library provides uniform access mechanisms for all the shared data
+regardless where the referenced data is located. In addition, any processes can
+access a local portion of the shared data directly/in-place like any other data
+in process local memory. Access to other portions of the shared data must be
+done through the GP library calls. 
+
+The GP toolkit is currently implemented as a library with C bindings.
+
+\section{Basic Functionality}
+
+The basic shared memory operations supported in the GP toolkit include \emph{get},
+\emph{put}, \emph{scatter} and \emph{gather}. Unlike GA, there are no accumulate
+or atomic read-and-increment operations, since operations for generalized array
+elements are not defined. These operations can only be used to access data in global
+pointer arrays rather than arbitrary memory locations. At least one global
+pointer array has to
+be created before data transfer operations can be used. These GP operations are
+one-sided/unilateral and will complete regardless of actions taken by the
+remote process(es) that own(s) the referenced data. In particular, like GA, GP does not
+offer or rely on a polling operation or require inserting any other GP library
+calls to assure communication progress on the remote side. 
+
+The GP data transfer operations use an array index-based interface rather than
+addresses of the shared data.  The
+higher level array oriented API (application programming interface) makes GP
+easier to use, without compromising data locality control. The
+library internally performs global array index-to-address translation and then
+transfers data between appropriate processes.
+The supported array dimensions range from one to seven. This limit follows the
+Fortran convention. Because the amount of data represented by a request is
+usually unknown, \emph{a priori}, GP provides functionality for determining how
+large a data request is likely to be before the user actually acquires the data.
+This allows the program to allocate buffers that are large enough to accomodate
+the request without statically providing oversized buffers that may waste
+memory.
