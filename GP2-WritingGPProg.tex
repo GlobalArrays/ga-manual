@@ -6,7 +6,7 @@ automatically included in the GA library, so linking to GA will allow users to
 call GP as well. Note that at present, only the C interface is supported, so
 only C and C++ programs can call the GP library.
 
-\section{Writing GP Programs}
+\section{Initializing the GP Library}
 
 The GP library is built on top of the same ARMCI runtime as GA and uses much of
 the GA functionality in its implementation. It is therefore necessary to
@@ -126,3 +126,100 @@ the \emph{starting} index for the partitions along the first axis, the next
 nblocks[1] entries correspond to the starting indices for the partitions along
 the second axis (if there is one) and so on. The indices along each axis must be
 monotonically increasing.
+
+\section{Assigning Data to Global Pointers}
+
+After a GP array is allocated, data needs to be associated with the pointers
+before it can be used. To do this, memory for each array element needs to be
+allocated on the processor that contains the element and then that memory needs
+to be associated with the array element. The first step is to determine which
+set of array elements are owned by a process. This can be determined using the
+function
+ 
+\begin{verbatim}
+      void GP_Distribution(int g_p, int iproc, int *lo, int *hi);
+\end{verbatim}
+
+\noindent
+This function returns the low and high indices of the array block that is owned
+by processor iproc. To determine which set of indices are locally owned, the
+process ID should be used for iproc (this is the value returned by the
+GA\_Nodeid() function).
+
+Once the block of locally held elements is known, individual elements can be
+associated with data. The first step is to allocate memory for a local element
+using a specialized version of malloc
+
+\begin{verbatim}
+      void* GP_Malloc(size_t size);
+\end{verbatim}
+
+\noindent
+and free
+
+\begin{verbatim}
+      void GP_Free(void *ptr);
+\end{verbatim}
+
+\noindent
+Because this memory will be used in communication, it is necessary for the GP
+library to have access to its network address. This is only determined if
+GP\_Malloc is called, ordinary malloc will not work in this context. Similarly,
+to make sure that the memory is properly cleaned up, it is necessary to call
+GP\_Free and not the ordinary free. This only applies to data that will be
+associated with a GP array element, other buffers can be created and destroyed
+using conventional C calls.
+
+After the memory segment has been created, it needs to be associated with an
+array element. This can be done using the call
+
+\begin{verbatim}
+      void GP_Assign_local_element(int g_p, int *subscript,
+                                   void *ptr, int size);
+\end{verbatim}
+
+\noindent
+This function associates the array element at the location indicated by the
+array subscript with the memory located at ptr. The size of the memory segment
+(in bytes) is also stored in the GP array. The values of subscript must lie
+within the ranges found using the GP\_Distribution function and ptr must be
+allocated using a GP\_Malloc call. The size of the memory location in the
+GP\_Assign\_local\_element call must match the value used in the corresponding
+GP\_Malloc call. Once a memory segment has been associated with an element in
+the GP array, it is no longer necessary to keep a local pointer to it. A pointer
+to the memory can be recovered directly from the GP array.
+
+In addition to associating memory locations with a GP array, it is also possible
+to dissociate memory locations with a GP array. This can be done using the
+function
+
+\begin{verbatim}
+      void* GP_Free_local_element(int g_p, int *subscript);
+\end{verbatim}
+
+\noindent
+This function deletes the information about the memory location from the GP
+array but does \emph{not} delete the memory location itself. The memory location
+is returned as a void pointer that can be used in a call to GP\_Free.
+
+Finally, GP arrays can be removed by calling
+
+\begin{verbatim}
+     int GP_Destroy(int g_p);
+\end{verbatim}
+
+\noindent
+This function returns a logical value that is true if the GP is successfully
+removed with no problems and false otherwise. Note that calling GP\_Destroy
+\emph{only} removes the GP itself, it does not remove the memory segments
+associated with each array element. These must be removed first by using calls to
+GP\_Free\_local\_element and GP\_Free. A code fragment that completely cleans up
+a sample one dimensional GP array would look like this
+
+\begin{verbatim}
+      GP_Distribution(g_p, me, lo, hi)
+      for (i=lo; i<=hi; i++) {
+        GP_Free(GP_Free_local_element(g_p, &i));
+      }
+      GP_Destroy(g_p)
+\end{verbatim}
