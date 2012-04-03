@@ -56,16 +56,15 @@ The GP toolkit is currently implemented as a library with C bindings.
 
 \section{Basic Functionality}
 
-The basic shared memory operations supported in the GP toolkit include \emph{get},
+The basic shared memory functions supported in the GP toolkit include \emph{get},
 \emph{put}, \emph{scatter} and \emph{gather}. Unlike GA, there are no accumulate
-or atomic read-and-increment operations, since operations for generalized array
-elements are not defined. These operations can only be used to access data in global
+or atomic read-and-increment functions, since algebraic operations for generalized array
+elements are not defined. These functions can only be used to access data in global
 pointer arrays rather than arbitrary memory locations. At least one global
-pointer array has to
-be created before data transfer operations can be used. These GP operations are
-one-sided/unilateral and will complete regardless of actions taken by the
-remote process(es) that own(s) the referenced data. In particular, like GA, GP does not
-offer or rely on a polling operation or require inserting any other GP library
+pointer array has to be created before data transfer operations can be used.
+These GP functions are one-sided/unilateral and will complete regardless of actions
+taken by the remote process(es) that own(s) the referenced data. In particular, like GA,
+GP does not offer or rely on a polling operation or require inserting any other GP library
 calls to assure communication progress on the remote side. 
 
 The GP data transfer operations use an array index-based interface rather than
