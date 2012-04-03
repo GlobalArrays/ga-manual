@@ -1,0 +1,250 @@
+\chapter{Onesided Communication with GP Arrays}
+
+The GP library relies on the same one-sided communication model used in Global
+Arrays. However, because the data elements in a GP array can each have an
+arbitrary size, the communication functions themselve are more complicated. For
+a GA, the size of the local buffer needed to hold a request can be readily
+calculated from the bounds of the requested array section and the size of the
+array elements. If each element can have its own size, this calculation is no
+longer possible. Because of this, the GP toolkit provides functions that allow
+users to determine the size of a request before actually trying to access the
+data. Once the size of the request is known, the user can allocate an
+appropriate sized buffer for use in actually requesting the data. For GP
+\emph{get} or \emph{gather} operations, the user should first determine the size
+of the request, then allocate buffers that are large enough to receive the data,
+and then make the actual call to \emph{get} or \emph{gather} to get the data
+from the GP and store it locally.
+
+For \emph{put} and \emph{scatter}, it is not necessary to determine the total
+size of the request since presumably the data already exists locally and there
+is no need to allocate additional buffers to receive it. Some buffers may need to
+be created to hold pointers to local data, but since pointers are of uniform size,
+this is easily done based on the number of elements in the request.
+
+Because communication is one-sided, only the processor requesting the data
+transfer needs to participate. Remote processors that may all or part of the
+data transfered are not required to participate in any way.
+
+\section{Accessing Remote Data Using Put and Get}
+Remote data can be accessed in the GP toolkit using either \emph{get} or
+\emph{gather} to transfer data from a GP array into a local buffer. In the case
+of GP\_Get, the first step is to determine how large the requested data is using
+the function
+
+\begin{verbatim}
+      void GP_Get_size(int g_p, int *lo, int *hi, int *size);
+\end{verbatim}
+
+\noindent
+The arrays lo[] and hi[] are the bounding indices of the request and size is the
+returned value representing the total amount of data, in bytes, of the requested
+block of elements.
+
+Using the information obtained from the function GP\_Get\_size, the user can
+allocated a local buffer of size `size'. This buffer can then be used to store
+the data. The full \emph{get} operation has the form
+
+\begin{verbatim}
+      void GP_Get(int g_p, int *lo, int *hi,
+                  void *buf, void **buf_ptr, int *ld,
+                  void *buf_size, int *ld_sz, int *size);
+\end{verbatim}
+
+\noindent
+This is quite complicated and has several parts. The arrays lo[] and hi[]
+contain the bounding indices of the block of elements that are being requested.
+The buffer represented by buf is a pointer to the memory segment that was
+allocated to receive all the data using the GP\_Get\_size call. After the call
+to GP\_Get is complete, all the data from requested elements will be in this
+buffer. However, it will still be difficult to locate the data for each
+individual element within buf. Pointers to individual array elements within buf
+are contained in the array of pointers, buf\_ptr. The stride array ld[] is input
+that describes how buf\_ptr is laid out locally in memory. There are ndim-1
+entries in ld[] and they run from the slowest stride to the fastest.  Similarly,
+the array buf\_size
+contains integers that describe the size of each array element in buf\_ptr. The
+array buf\_size is a void pointer instead of an int, because depending on
+whether the underlying GA and GP libraries are built with 4 or 8 byte integers,
+the size of the integers buf\_size will change. Users should cast to the correct
+size pointer before accessing the contents. The stride array ld\_sz[] is input
+that describes how buf\_size is laid out in memory.  This operation also returns
+the total size of the data request, which may be redundant if a call to
+GP\_Get\_size has already been made.
+
+A call is also available that allows users to put data back into the GP array.
+This call has the form
+
+\begin{verbatim}
+      void GP_Put(int g_p, int *lo, int *hi, void **buf_ptr,
+                  int *ld, void *buf_size, int *ld_sz,
+                  int *size, int checksize);
+\end{verbatim}
+
+\noindent
+Note that the signature for this call differs from that of the GP\_Get call,
+unlike the corresponding calls in GA, which are completely symmetrical. The
+arrays lo[] and hi[] again refer to the bounding indices of the block of array
+elements that are to be over written, buf\_ptr is an array of pointers
+containing pointers to the local memory segments containing the data to be
+written to the GP array, ld[] is an integer array of strides for buf\_ptr. The
+array buf\_size contains integers representing the size of the of the array
+elements. The type of integer should match the size of integers specified when
+building GA and GP (4 or 8 bytes). ld\_sz is the corresponding stride array for
+buf\_size and size is a return value representing the total size of the data
+sent. Because the data already resides on the local process, which presumably
+knows how big each data element is, there is no need to use the size information
+stored in the GP array to arrange the data transfer. However,
+for debugging purposes it may be useful to compare it with size information in
+the GP. The logical variable checksize allows users to do this. If it is set to
+true, then the GP\_Put call will do a comparison between the data in the
+buf\_size array and the data stored in the GP array, otherwise it will skip this
+check. Note that the comparison requires extra data transfers and memory
+allocations, so for working code this should be turned off.
+
+\section{Scatter and Gather}
+
+The \emph{gather} and \emph{scatter} functionality in GP are similar to
+\emph{get} and \emph{put} except that instead of moving blocks of GP data array,
+these calls move lists of random GP elements back and forth between local
+buffers and the GP array. Otherwise, the use and structure of these calls is
+very similar to \emph{get} and \emph{put}. If gathering a random collection of
+array elements into a local buffer, it is convenient to first find out how large
+the request is by making a call to the function
+
+\begin{verbatim}
+      void GP_Gather_size(int g_p, int nv, int *subscript,
+                          int *size);
+\end{verbatim}
+
+\noindent
+The number of elements that are requested is nv and the subscripts of each
+element are stored in the array subscript. The dimension of subscript must be at
+least ndim*nv. The subscripts are stored in the order
+
+\begin{verbatim}
+0,...,ndim-1,ndim,...,2*ndim-1,.......,(nv-1)*ndim,...,nv*ndim-1
+\end{verbatim}
+
+\noindent
+Upon return, the variable size contains the size in bytes of the data request.
+Once the size of the request is known, a local void* buffer can be allocated and
+the actual data can be copied to it using the function
+
+\begin{verbatim}
+      void GP_Gather(int g_p, int nv, int *subscript, void *buf,
+                     void **buf_ptr, int *buf_size, int *size);
+\end{verbatim}
+
+\noindent
+The variable buf is a pointer to the contiguous memory segment that will hold
+the entire request, buf\_ptr is an array of pointers to individual array
+elements, buf\_size is an array of integers that gives the size of each array
+element and size returns the size of the request.
+
+Data can be written to random locations in a GP array with the call
+
+\begin{verbatim}
+      void GP_Scatter(int g_p, int nv, int *subscript,
+                      void **buf_ptr, int *buf_size, int *size,
+                      int checksize)
+\end{verbatim}
+
+\noindent
+The arguments are the same as for the GP\_Scatter call. The void* buf argument
+is dropped and the checksize option has been added. As in the case of GP\_Put,
+this argument can be used to verify that the sizes in buf\_size match the
+information in the GP array.
+
+\section{Data Consistency}
+
+Because the one-sided communication model used in both the GA and GP libraries
+allows processes to arbitrarily read and write to memory locations on other
+processors without any active participation by the remote processor, data
+consistency must be managed explicitly by the user. Unlike message-passing,
+where both the sending and recieving processors must reach well-defined points
+in the code before the data transfer can take place, there is no \emph{a priori}
+guarantee of ordering of messages in one-sided communication that allows users
+to know when a data transfer has completed. This can cause data race conditions
+if a program is trying to read and write to remote locations while other
+processors are simultaneously trying to modify data. To prevent this from
+happening, several strategies can be employed when writing code using one-sided
+communication.
+
+\begin{itemize}
+
+\item The primary mechanism for guaranteeing data consistency is to call a GA or
+GP synchronization function. This forces all processes to reach the same point
+in the algorithm before proceeding further and also guarantees that all
+outstanding communication has been flushed from the system.
+
+\item Divide calculations into phases, where each phase represents a different
+communication pattern. For example, during one phase a program may read from a
+GP array and modify the data in local buffers. Because nobody is modifying the
+GP array, all users are guaranteed that the GP array is in a known, consistent
+state. Data consistency between phases can be guaranteed using synchronization.
+
+\item Do not simultaneously read and write to the same GP array without an
+intervening synchronization call unless each process is simultaneously reading
+and writing to the \emph{same} set of elements and each set of elements is being
+read and overwritten by at most \emph{one} process. If it is necessary to do a
+read/modify/write then separate GP arrays should be used for the data source and
+destinations.
+
+\item Design algorithms to write to GP arrays in non-overlapping patches so that
+no two processors are simultaneously trying to write to the same array location
+during the same communication phase.
+
+\end{itemize}
+
+The synchronization call in the GP toolkit is the same function as in the GA
+toolkit and they can be used interchangeably. The function has the form
+
+\begin{verbatim}
+      void GP_Sync();
+\end{verbatim}
+
+\noindent
+There are no arguments to this function. It must be called by all processors,
+otherwise the program will hang.
+
+\section{Direct Data Access}
+
+Direct data access does not represent communication as such, but it does fall
+under the general category of accessing an modifying data so it is included
+here. The data stored in GP arrays can be accessed directly without
+communication if it is local to the process that wants to modify it. One way to
+do this is to store the pointer to the data that is returned from the original
+GP\_Malloc call, but this may be inconvenient if the data is modified in a
+different subroutine or library than the one that created it. A better way to
+access the data is to retrieve a pointer to it directly from the GP array. A
+pointer to any local data element can be recovered using the function
+
+\begin{verbatim}
+      void GP_Access_element(int g_p, int *subscript, void *ptr,
+                             int *size);
+\end{verbatim}
+
+\noindent
+This function returns a pointer to the element corresponding to the data element
+at the location in the array specified in the array subscript. It also returns
+the size of the data element in the variable size. The values in subscript must
+lie within the array bounds specified by a call to the GP\_Distribution
+function. The contents of ptr can then be read or modified by the user. If the
+contents are only be read, then access to the element can be released by calling
+the function
+
+\begin{verbatim}
+      void GP_Release_element(int g_p, int *subscript);
+\end{verbatim}
+
+\noindent
+If the data is modified, then access to the element can be released by calling
+the function
+
+\begin{verbatim}
+      void GP_Release_update_element(int g_p, int *subscript);
+\end{verbatim}
+
+\noindent
+Note that the \emph{access} and \emph{release} functions are purely local and
+have no effect on data residing on other processors.

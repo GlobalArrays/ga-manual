@@ -1,4 +1,4 @@
-\chapter{Writing GP Programs}
+\chapter{Writing GP Programs and Creating GP Arrays}
 
 The GP library is automatically built when GA is built. To build GP, refer to
 the GA documentation for the build process. Similarly, all the GP routines are
@@ -214,7 +214,7 @@ removed with no problems and false otherwise. Note that calling GP\_Destroy
 \emph{only} removes the GP itself, it does not remove the memory segments
 associated with each array element. These must be removed first by using calls to
 GP\_Free\_local\_element and GP\_Free. A code fragment that completely cleans up
-a sample one dimensional GP array would look like this
+a hypothetical one-dimensional GP array would look like this
 
 \begin{verbatim}
       GP_Distribution(g_p, me, lo, hi)
@@ -223,3 +223,27 @@ a sample one dimensional GP array would look like this
       }
       GP_Destroy(g_p)
 \end{verbatim}
+
+\noindent
+It is not required to destroy a GP array after using GP\_Free\_local\_element and
+GP\_Free. For example, users might want to free up some elements and reassign
+them to other memory segments. This can be done without calling GP\_Destroy. It
+is also not necessary to have data assigned to all array elements. These can be
+considered as null pointers and can be identified by the fact that the size of
+the corresponding data element is zero.
+
+Because GP arrays are filled with arbitrary elements, conventional algebraic
+operations are meaningless and it is not possible to define as many global
+operations as in the case of the GA toolkit. Although the concept of setting a
+GP element equal to zero has no meaning, it is possible to think of setting all
+the bytes in a GP element to zero. The GP toolkit provides a function
+
+\begin{verbatim}
+      void GP_Memzero(int g_p)
+\end{verbatim}
+
+\noindent
+that allows to users to simultaneously set every byte pointed to by the GP array
+to zero. This can be done to reinitialize GP arrays. Note that this
+function does not delete the memory. That can be done using the
+GP\_Free\_local\_element and GP\_Free routines, as described above.
