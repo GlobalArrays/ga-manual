@@ -1,4 +1,4 @@
-\chapter{Onesided Communication with GP Arrays}
+\chapter{One-sided Communication with GP Arrays}
 
 The GP library relies on the same one-sided communication model used in Global
 Arrays. However, because the data elements in a GP array can each have an
@@ -47,16 +47,20 @@ the data. The full \emph{get} operation has the form
 \begin{verbatim}
       void GP_Get(int g_p, int *lo, int *hi,
                   void *buf, void **buf_ptr, int *ld,
-                  void *buf_size, int *ld_sz, int *size);
+                  void *buf_size, int *ld_sz, int *size,
+                  int setbuf);
 \end{verbatim}
 
 \noindent
-This is quite complicated and has several parts. The arrays lo[] and hi[]
+This function is quite complicated and has several parts. The arrays lo[] and hi[]
 contain the bounding indices of the block of elements that are being requested.
-The buffer represented by buf is a pointer to the memory segment that was
-allocated to receive all the data using the GP\_Get\_size call. After the call
-to GP\_Get is complete, all the data from requested elements will be in this
-buffer. However, it will still be difficult to locate the data for each
+The buffers in this call can be used in two ways, depending on the value of the
+setbuf parameter. If setbuf is 0, then the buffer represented by buf is assumed
+to be a valid pointer to a memory segment that was allocated to receive all
+incoming data. The size required for this buffer can be determined using the
+GP\_Get\_size call. After the call
+to GP\_Get is complete, all the data from requested elements will be in buf.
+However, it will still be difficult to locate the data for each
 individual element within buf. Pointers to individual array elements within buf
 are contained in the array of pointers, buf\_ptr. The stride array ld[] is input
 that describes how buf\_ptr is laid out locally in memory. There are ndim-1
@@ -70,6 +74,14 @@ size pointer before accessing the contents. The stride array ld\_sz[] is input
 that describes how buf\_size is laid out in memory.  This operation also returns
 the total size of the data request, which may be redundant if a call to
 GP\_Get\_size has already been made.
+
+If setbuf is not 0, then this call assumes that buf\_ptr buf\_size contain valid
+pointers and sizes that can be used to hold incoming data. The buf pointer is
+ignored for this case. Assuming the buf\_ptr and buf\_size already point to
+valid memory locations and contain the correct sizes can lead to performance
+gains. This situation can occur if multiple GP\_Get calls are being made to a GP
+array or if part of one GP array is being copied into a part of another GP
+array.
 
 A call is also available that allows users to put data back into the GP array.
 This call has the form
@@ -132,7 +144,8 @@ the actual data can be copied to it using the function
 
 \begin{verbatim}
       void GP_Gather(int g_p, int nv, int *subscript, void *buf,
-                     void **buf_ptr, int *buf_size, int *size);
+                     void **buf_ptr, int *buf_size, int *size,
+                     int setbuf);
 \end{verbatim}
 
 \noindent
@@ -140,6 +153,13 @@ The variable buf is a pointer to the contiguous memory segment that will hold
 the entire request, buf\_ptr is an array of pointers to individual array
 elements, buf\_size is an array of integers that gives the size of each array
 element and size returns the size of the request.
+
+The parameter setbuf works in a similar way to the GP\_Get call. If setbuf is 0,
+then buf is assumed to be a valid pointer and no useful information is in
+buf\_ptr and buf\_size. These buffers are returned with valid pointers and sizes
+when the call completes. If setbuf is not 0, then buf\_ptr and buf\_size are
+assumed to already contain valid pointers and the correct sizes and buf is
+ignored.
 
 Data can be written to random locations in a GP array with the call
 
