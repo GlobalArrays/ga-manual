@@ -38,44 +38,44 @@ one needs to do:
 5.~~Destroy~mutexes
 \end{verbatim}
 The function
-\begin{verbatim}
-\textcolor{blue}{Fortran}~logical~function~\href{http://www.emsl.pnl.gov/docs/global/ga_ops.html\#ga_create_mutex}{ga\_{}create\_{}mutexes}(number)~
+% \begin{verbatim}
+\textcolor{blue}{Fortran}~logical~function~\href{https://hpc.pnl.gov/globalarrays/api/f_op_api.html#CREATE_MUTEXES}{ga\_{}create\_{}mutexes}(number)~
 
-\textcolor{blue}{C}~~~~~~~int~\href{http://www.emsl.pnl.gov/docs/global/c_nga_ops.html\#ga_create_mutexes}{GA\_{}Create\_{}mutexes}(int~number)~
+\textcolor{blue}{C}~~~~~~~int~\href{https://hpc.pnl.gov/globalarrays/api/c_op_api.html#CREATE_MUTEXES}{GA\_{}Create\_{}mutexes}(int~number)~
 
 \textcolor{blue}{C++~}~~~~int~GA::GAServices::createMutexes(int~number)
-\end{verbatim}
+% \end{verbatim}
 creates a set containing the number of mutexes. Only one set of mutexes
 can exist at a time. Mutexes can be created and destroyed as many
 times as needed. Mutexes are numbered: 0, ..., number-1.
 
 The function
-\begin{verbatim}
-\textcolor{blue}{Fortran}~logical~function~\href{http://www.emsl.pnl.gov/docs/global/ga_ops.html\#ga_destroy_mutex}{ga\_{}destroy\_{}mutexes}()~
+% \begin{verbatim}
+\textcolor{blue}{Fortran}~logical~function~\href{https://hpc.pnl.gov/globalarrays/api/f_op_api.html#DESTROY_MUTEXES}{ga\_{}destroy\_{}mutexes}()~
 
-\textcolor{blue}{C}~~~~~~~int~\href{http://www.emsl.pnl.gov/docs/global/c_nga_ops.html\#ga_destroy_mutexes}{GA\_{}Destroy\_{}mutexes}()
+\textcolor{blue}{C}~~~~~~~int~\href{https://hpc.pnl.gov/globalarrays/api/c_op_api.html#DESTROY_MUTEXES}{GA\_{}Destroy\_{}mutexes}()
 
 \textcolor{blue}{C++}~~~~~int~GA::GAServices::destroyMutexes()
-\end{verbatim}
+% \end{verbatim}
 destroys the set of mutexes created with ga\_create\_mutexes.
 
 Both \texttt{\emph{ga\_create\_mutexes}} and \texttt{\emph{ga\_destroy\_mutexes}}
 are collective operations.
 
 The functions
-\begin{verbatim}
-\textcolor{blue}{Fortran}~subroutine~\href{http://www.emsl.pnl.gov/docs/global/ga_ops.html\#ga_lock}{ga\_{}lock}(int~mutex)~
+% \begin{verbatim}
+\textcolor{blue}{Fortran}~subroutine~\href{https://hpc.pnl.gov/globalarrays/api/f_op_api.html\#LOCK}{ga\_{}lock}(int~mutex)~
 
-~~~~~~~~subroutine~\href{http://www.emsl.pnl.gov/docs/global/ga_ops.html\#ga_unlock}{ga\_{}unlock}(int~mutex)~
+~~~~~~~~subroutine~\href{https://hpc.pnl.gov/globalarrays/api/f_op_api.html#UNLOCK}{ga\_{}unlock}(int~mutex)~
 
-\textcolor{blue}{C}~~~~~~~void~\href{http://www.emsl.pnl.gov/docs/global/c_nga_ops.html\#ga_lock}{GA\_{}lock}(int~mutex)~
+\textcolor{blue}{C}~~~~~~~void~\href{https://hpc.pnl.gov/globalarrays/api/c_op_api.html#LOCK}{GA\_{}lock}(int~mutex)~
 
-~~~~~~~~void~\href{http://www.emsl.pnl.gov/docs/global/c_nga_ops.html\#ga_unlock}{GA\_{}unlock}(int~mutex)~
+~~~~~~~~void~\href{https://hpc.pnl.gov/globalarrays/api/c_op_api.html#UNLOCK}{GA\_{}unlock}(int~mutex)~
 
 \textcolor{blue}{C++}~~~~~void~GA::GAServices::lock(int~mutex)~
 
 ~~~~~~~~void~GA::GAServices::unlock(int~mutex)
-\end{verbatim}
+% \end{verbatim}
 lock and unlock a mutex object identified by the mutex number, respectively.
 It is a fatal error for a process to attempt to lock a mutex which
 has already been locked by this process, or unlock a mutex which has
@@ -192,12 +192,12 @@ all the processes and ensures that all the Global Array operations
 are complete at the call.
 
 The function is
-\begin{verbatim}
+% \begin{verbatim}
 \textcolor{blue}{Fortran}~subroutine~\href{http://www.emsl.pnl.gov/docs/global/ga_ops.html\#ga_sync}{ga\_{}sync}()~
 
 \textcolor{blue}{C}~~~~~~~void~\href{http://www.emsl.pnl.gov/docs/global/c_nga_ops.html\#ga_sync}{GA\_{}Sync}()~
 
 \textcolor{blue}{C++}~~~~~void~GA::GAServices::sync()
-\end{verbatim}
+% \end{verbatim}
 Sync should be inserted as necessary. With many sync calls, the application
 performance would suffer. 

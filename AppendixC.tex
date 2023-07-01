@@ -241,7 +241,7 @@ C programs that use Global Arrays should include files \emph{`global.h',
 The GA program should look like:
 \begin{itemize}
 \item When GA runs with MPI\end{itemize}
-\begin{verbatim}
+% \begin{verbatim}
 \textcolor{blue}{Fortran~}~~~~~~~~~~~~~~\textcolor{green}{C}
 
 \textcolor{blue}{call~mpi\_init(..)~}~~~\textcolor{green}{MPI\_Init(..)~}~~~!~start~MPI~
@@ -256,10 +256,11 @@ The GA program should look like:
 
 \textcolor{blue}{mpi\_finalize()}~~~~~~~\textcolor{green}{MPI\_Finalize()}~~!~tidy~up~MPI~~
 
-\textcolor{blue}{stop}~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~!~exit~program\end{verbatim}
+\textcolor{blue}{stop}~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~!~exit~program
+% \end{verbatim}
 \begin{itemize}
 \item When GA runs with TCGMSG or TCGMSG-MPI\end{itemize}
-\begin{verbatim}
+% \begin{verbatim}
 \textcolor{blue}{Fortran~C}
 
 \textcolor{blue}{call~pbeginf()~}~~~~~~~~\textcolor{green}{PBEGIN\_(..)~}~~~~!~start~TCGMSG~
@@ -275,7 +276,7 @@ The GA program should look like:
 \textcolor{blue}{call~pend()}~~~~~~~~~~~~\textcolor{green}{PEND\_()}~~~~~~~~~!~tidy~up~tcgmsg~
 
 \textcolor{blue}{stop~}~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~!~exit~program~
-\end{verbatim}
+% \end{verbatim}
 The \emph{ma\_init }call looks like :
 \begin{verbatim}
 status~=~ma\_init(type,~stack\_size,~heap\_size)

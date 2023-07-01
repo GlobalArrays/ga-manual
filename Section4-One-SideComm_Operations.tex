@@ -38,19 +38,19 @@ in shared memory.
 
 Put copies data from the local array to the global array section,
 which is
-\begin{verbatim}
-\textcolor{green}{n-D}~\textcolor{blue}{Fortran}~subroutine~\href{http://www.emsl.pnl.gov/docs/global/ga_ops.html\#ga_put}{nga\_{}put}(g\_a,~lo,~hi,~buf,~ld)~
+% \begin{verbatim}
+\textcolor{green}{n-D}~\textcolor{blue}{Fortran}~subroutine~\href{https://hpc.pnl.gov/globalarrays/api/f_op_api.html\#PUT}{nga\_{}put}(g\_a,~lo,~hi,~buf,~ld)~
 
-\textcolor{green}{2-D}~\textcolor{blue}{Fortran}~subroutine~\href{http://www.emsl.pnl.gov/docs/global/ga_ops.html\#ga_put}{ga\_{}put}(g\_a,~ilo,~ihi,~jlo,~jhi,~buf,~ld)~
+\textcolor{green}{2-D}~\textcolor{blue}{Fortran}~subroutine~\href{https://hpc.pnl.gov/globalarrays/api/f_op_api.html\#PUT}{ga\_{}put}(g\_a,~ilo,~ihi,~jlo,~jhi,~buf,~ld)~
 
-\textcolor{blue}{C}~~~~~~~~~~~void~\href{http://www.emsl.pnl.gov/docs/global/c_nga_ops.html\#ga_put}{NGA\_{}Put}(int~g\_a,~int~lo{[}{]},~int~hi{[}{]},~void~{*}buf,~
+\textcolor{blue}{C}~~~~~~~~~~~void~\href{https://hpc.pnl.gov/globalarrays/api/c_op_api.html\#PUT}{NGA\_{}Put}(int~g\_a,~int~lo{[}{]},~int~hi{[}{]},~void~{*}buf,~
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~int~ld{[}{]})~
 
 \textcolor{blue}{C++}~~~~~~~~~void~GA::GlobalArray::put(int~lo{[}{]},~int~hi{[}{]},~
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~void~{*}buf,~int~ld{[}{]})
-\end{verbatim}
+% \end{verbatim}
 All the arguments are provided in one call: \texttt{lo} and \texttt{\emph{hi}}
 specify where the data should go in the global array; \texttt{\emph{ld}}
 specifies the stride information of the local array \texttt{\emph{buf}}.
@@ -67,7 +67,7 @@ a local process).
 
 \emph{Get} is the reverse operation of \emph{put}. It copies data
 from a global array section to the local array. It is
-\begin{verbatim}
+% \begin{verbatim}
 \textcolor{green}{n-D}~\textcolor{blue}{Fortran}~subroutine~\href{http://www.emsl.pnl.gov/docs/global/ga_ops.html\#ga_get}{nga\_{}get}(g\_a,~lo,~hi,~buf,~ld)~
 
 \textcolor{green}{2-D}~\textcolor{blue}{Fortran}~subroutine~\href{http://www.emsl.pnl.gov/docs/global/ga_ops.html\#ga_get}{ga\_{}get}(g\_a,~ilo,~ihi,~jlo,~jhi,~buf,~ld)~
@@ -79,7 +79,7 @@ from a global array section to the local array. It is
 \textcolor{blue}{C++}~~~~~~~~~void~GA::GlobalArray::get(int~lo{[}{]},~int~hi{[}{]},~
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~void~{*}buf,~int~ld{[}{]})
-\end{verbatim}
+% \end{verbatim}
 Similar to \emph{put}, \texttt{\emph{lo}} and \texttt{\emph{hi}} specify
 where the data should come from in the global array, and \texttt{\emph{ld}}
 specifies the stride information of the local array \texttt{\emph{buf}}.
@@ -118,7 +118,7 @@ of the updates.
 
 \emph{Accumulate} combines the data from the local array with data
 in the global array section, which is
-\begin{verbatim}
+% \begin{verbatim}
 \textcolor{green}{n-D}~\textcolor{blue}{Fortran}~subroutine~\href{http://www.emsl.pnl.gov/docs/global/ga_ops.html\#ga_acc}{nga\_{}acc}(g\_a,~lo,~hi,~buf,~ld,~alpha)~
 
 \textcolor{green}{2-D}~\textcolor{blue}{Fortran}~subroutine~\href{http://www.emsl.pnl.gov/docs/global/ga_ops.html\#ga_acc}{ga\_{}acc}(g\_a,~ilo,~ihi,~jlo,~jhi,~buf,~
@@ -134,7 +134,7 @@ in the global array section, which is
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~void~{*}buf,~int~ld{[}{]},~v
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~oid~{*}alpha)
-\end{verbatim}
+% \end{verbatim}
 The local array is assumed to have the same number of dimensions as
 the global array. Users don't need to worry about where the region
 defined by lo and hi is physically located. The function performs
@@ -144,7 +144,7 @@ buf}
 
 Read\_inc remotely updates a particular element in the global array,
 which is
-\begin{verbatim}
+% \begin{verbatim}
 \textcolor{green}{n-D}~\textcolor{blue}{Fortran}~subroutine~\href{http://www.emsl.pnl.gov/docs/global/ga_ops.html\#ga_read_inc}{nga\_{}read\_{}inc}(g\_a,~subscript,~inc)~
 
 \textcolor{green}{2-D}~\textcolor{blue}{Fortran}~subroutine~\href{http://www.emsl.pnl.gov/docs/global/ga_ops.html\#ga_read_inc}{ga\_{}read\_{}inc}(g\_a,~i,~j,~inc)~
@@ -152,7 +152,7 @@ which is
 \textcolor{blue}{C}~~~~~~~~~~~long~\href{http://www.emsl.pnl.gov/docs/global/c_nga_ops.html\#ga_read_inc}{NGA\_{}Read\_{}inc}(int~g\_a,~int~subscript{[}{]},~long~inc)~
 
 \textcolor{blue}{C++}~~~~~~~~~long~GA::GlobalArray::readInc(int~subscript{[}{]},~long~inc)
-\end{verbatim}
+% \end{verbatim}
 This function applies to integer arrays only. It atomically reads
 and increments an element in an integer array. It performs
 
@@ -169,51 +169,41 @@ need the cooperation of the process(es) who own the referenced elements
 in the global array.
 
 Scatter puts array elements into a global array, which is
-\begin{verbatim}
+% \begin{verbatim}
 \textcolor{green}{n-D}~\textcolor{blue}{Fortran}~subroutine~\href{http://www.emsl.pnl.gov/docs/global/ga_ops.html\#ga_scatter}{nga\_{}scatter}(g\_a,~v,~subsarray,~n)~
 
 \textcolor{green}{2-D}~\textcolor{blue}{Fortran}~subroutine~\href{http://www.emsl.pnl.gov/docs/global/ga_ops.html\#ga_scatter}{ga\_{}scatter}(g\_a,~v,~i,~j,~n)~
 
-\textcolor{blue}{C}~~~~~~~~~~~void~\href{http://www.emsl.pnl.gov/docs/global/c_nga_ops.html\#ga_scatter}{NGA\_{}Scatter}(int~g\_a,~void~{*}v,~int~
+\textcolor{blue}{C}~~~~~~~~~~~void~\href{http://www.emsl.pnl.gov/docs/global/c_nga_ops.html\#ga_scatter}{NGA\_{}Scatter}(int~g\_a,~void~{*}v,~int~{*}subsarray{[}{]},~int~n)~
 
-~~~~~~~~~~~~~~~~~~~~~~~{*}subsarray{[}{]},~int~n)~
-
-\textcolor{blue}{C++~}~~~~~~~~void~GA::GlobalArray::scatter(void~{*}v,~
-
-~~~~~~~~~~~~~~~~~~~~~~~int~{*}subsarray{[}{]},~int~n)
-\end{verbatim}
+\textcolor{blue}{C++~}~~~~~~~~void~GA::GlobalArray::scatter(void~{*}v,~int~{*}subsarray{[}{]},~int~n)
+% \end{verbatim}
 It performs (in C notation)
-\begin{verbatim}
+
+\begin{lstlisting}
+
 for(k=0;~k<=~n;~k++)~\{
 
 a{[}subsArray{[}k{]}{[}0{]}{]}{[}subsArray{[}k{]}{[}1{]}{]}{[}subsArray{[}k{]}{[}2{]}{]}...~=~v{[}k{]};~
 
 \}
-\end{verbatim}
+\end{lstlisting}
+
 \emph{Example}:
 
 Scatter the 5 elements into a 10x10 global array
 \begin{verbatim}
-Element~1~v{[}0{]}~=~5~subsArray{[}0{]}{[}0{]}~=~2~
+Element~1~v{[}0{]}~=~5~subsArray{[}0{]}{[}0{]}~=~2~subsArray{[}0{]}{[}1{]}~=~3~
 
-~~~~~~~~~~~~~~~~~~~subsArray{[}0{]}{[}1{]}~=~3~
+Element~2~v{[}1{]}~=~3~subsArray{[}1{]}{[}0{]}~=~3~subsArray{[}1{]}{[}1{]}~=~4~
 
-Element~2~v{[}1{]}~=~3~subsArray{[}1{]}{[}0{]}~=~3~
+Element~3~v{[}2{]}~=~8~subsArray{[}2{]}{[}0{]}~=~8~subsArray{[}2{]}{[}1{]}~=~5~
 
-~~~~~~~~~~~~~~~~~~~subsArray{[}1{]}{[}1{]}~=~4~
+Element~4~v{[}3{]}~=~7~subsArray{[}3{]}{[}0{]}~=~3~subsArray{[}3{]}{[}1{]}~=~7~
 
-Element~3~v{[}2{]}~=~8~subsArray{[}2{]}{[}0{]}~=~8~
+Element~5~v{[}4{]}~=~2~subsArray{[}4{]}{[}0{]}~=~6~subsArray{[}4{]}{[}1{]}~=~3
+% \end{verbatim}
 
-~~~~~~~~~~~~~~~~~~~subsArray{[}2{]}{[}1{]}~=~5~
-
-Element~4~v{[}3{]}~=~7~subsArray{[}3{]}{[}0{]}~=~3~
-
-~~~~~~~~~~~~~~~~~~~subsArray{[}3{]}{[}1{]}~=~7~
-
-Element~5~v{[}4{]}~=~2~subsArray{[}4{]}{[}0{]}~=~6~
-
-~~~~~~~~~~~~~~~~~~~subsArray{[}4{]}{[}1{]}~=~3
-\end{verbatim}
 After the scatter operation, the five elements would be scattered
 into the global array as shown in the following figure. 
 
@@ -221,19 +211,16 @@ into the global array as shown in the following figure.
 
 \emph{Gather} is the reverse operation of scatter. It gets the array
 elements from a global array into a local array.
-\begin{verbatim}
+% \begin{verbatim}
 \textcolor{green}{n-D}~\textcolor{blue}{Fortran}~subroutine~\href{http://www.emsl.pnl.gov/docs/global/ga_ops.html\#ga_gather}{nga\_{}gather}(g\_a,~v,~subsarray,~n)~
 
 \textcolor{green}{2-D}~\textcolor{blue}{Fortran}~subroutine~\href{http://www.emsl.pnl.gov/docs/global/ga_ops.html\#ga_gather}{ga\_{}gather}ga\_gather(g\_a,~v,~i,~j,~n)~
 
-\textcolor{blue}{C}~~~~~~~~~~~void~\href{http://www.emsl.pnl.gov/docs/global/c_nga_ops.html\#ga_gather}{NGA\_{}Gather}(int~g\_a,~void~{*}v,~
+\textcolor{blue}{C}~~~~~~~~~~~void~\href{http://www.emsl.pnl.gov/docs/global/c_nga_ops.html\#ga_gather}{NGA\_{}Gather}(int~g\_a,~void~{*}v,~int~{*}subsarray{[}{]},~int~n)~
 
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~int~{*}subsarray{[}{]},~int~n)~
+\textcolor{blue}{C++}~~~~~~~~~void~GA::GlobalArray::gather(void~{*}v,~int~{*}subsarray{[}{]},~int~n)
+% \end{verbatim}
 
-\textcolor{blue}{C++}~~~~~~~~~void~GA::GlobalArray::gather(void~{*}v,~int~
-
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~{*}subsarray{[}{]},~int~n)
-\end{verbatim}
 It performs (in C notation)
 \begin{verbatim}
 for(k=0;~k<=~n;~k++)\{~
@@ -312,14 +299,11 @@ of the patch can be outside the boundaries of each dimension.
 \begin{verbatim}
 \textcolor{blue}{Fortran}~subroutine~\href{http://www.emsl.pnl.gov/docs/global/ga_ops.html\#ga_periodic_get}{nga\_{}periodic\_{}get}(g\_a,~lo,~hi,~buf,~ld)~
 
-\textcolor{blue}{C}~~~~~~~void~\href{http://www.emsl.pnl.gov/docs/global/c_nga_ops.html\#ga_periodic_get}{NGA\_{}Periodic\_{}get}(int~g\_a,~int~lo{[}{]},~int~hi{[}{]},~
+\textcolor{blue}{C}~~~~~~~void~\href{http://www.emsl.pnl.gov/docs/global/c_nga_ops.html\#ga_periodic_get}{NGA\_{}Periodic\_{}get}(int~g\_a,~int~lo{[}{]},~int~hi{[}{]},~void~{*}buf,~int~ld{[}{]})~
 
-~~~~~~~~~~~~~void~{*}buf,~int~ld{[}{]})~
-
-\textcolor{blue}{C++}~~~~~void~GA::GlobalArray::periodicGet(int~lo{[}{]},~
-
-~~~~~~~~~~~~~int~hi{[}{]},~void~{*}buf,~int~ld{[}{]})
+\textcolor{blue}{C++}~~~~~void~GA::GlobalArray::periodicGet(int~lo{[}{]},~int~hi{[}{]},~void~{*}buf,~int~ld{[}{]})
 \end{verbatim}
+
 Similar to regular \emph{get}, \texttt{\emph{lo}} and \texttt{\emph{hi}}
 specify where the data should come from in the global array, and \texttt{\emph{ld}}
 specifies the stride information of the local array \texttt{\emph{buf}}.
@@ -350,17 +334,14 @@ The local buffer \texttt{\emph{buf}} is
 \end{verbatim}
 Periodic Put is the reverse operations of Periodic Get. It copies
 data from the local array to the global array section, which is
-\begin{verbatim}
+% \begin{verbatim}
 \textcolor{blue}{Fortran}~subroutine~\href{http://www.emsl.pnl.gov/docs/global/ga_ops.html\#ga_periodic_put}{nga\_{}periodic\_{}put}(g\_a,~lo,~hi,~buf,~ld)~
 
-\textcolor{blue}{C}~~~~~~~void~\href{http://www.emsl.pnl.gov/docs/global/c_nga_ops.html\#ga_periodic_put}{NGA\_{}Periodic\_{}put}(int~g\_a,~int~lo{[}{]},~int~hi{[}{]},~
+\textcolor{blue}{C}~~~~~~~void~\href{http://www.emsl.pnl.gov/docs/global/c_nga_ops.html\#ga_periodic_put}{NGA\_{}Periodic\_{}put}(int~g\_a,~int~lo{[}{]},~int~hi{[}{]},~void~{*}buf,~int~ld{[}{]})~
 
-~~~~~~~~~~~~~void~{*}buf,~int~ld{[}{]})~
+\textcolor{blue}{C++}~~~~~void~GA::GlobalArray::periodicPut(int~lo{[}{]},~int~hi{[}{]},~void~{*}buf,~int~ld{[}{]})
+% \end{verbatim}
 
-\textcolor{blue}{C++}~~~~~void~GA::GlobalArray::periodicPut(int~lo{[}{]},~
-
-~~~~~~~~~~~~~int~hi{[}{]},~void~{*}buf,~int~ld{[}{]})
-\end{verbatim}
 Similar to regular\emph{ put}, \texttt{\emph{lo}} and \texttt{\emph{hi}}
 specify where the data should go in the global array; \texttt{\emph{ld}}
 specifies the stride information of the local array \texttt{\emph{buf}}.
@@ -406,17 +387,16 @@ buffer also need to be calculated.
 Similar to regular \emph{Accumulate, Periodic Accumulate} combines
 the data from the local array with data in the global array section,
 which is
-\begin{verbatim}
+% \begin{verbatim}
 \textcolor{blue}{Fortran}~subroutine~\href{http://www.emsl.pnl.gov/docs/global/ga_ops.html\#ga_periodic_acc}{nga\_{}periodic\_{}acc}(g\_a,~lo,~hi,~buf,~ld,~alpha)~
 
-\textcolor{blue}{C}~~~~~~~void~\href{http://www.emsl.pnl.gov/docs/global/c_nga_ops.html\#ga_periodic_acc}{NGA\_{}Periodic\_{}acc}(int~g\_a,~int~lo{[}{]},~int~hi{[}{]},~
-
-~~~~~~~~~~~~~~~~~~~void~{*}buf,~int~ld{[}{]},~void~{*}alpha)~
+\textcolor{blue}{C}~~~~~~~void~\href{http://www.emsl.pnl.gov/docs/global/c_nga_ops.html\#ga_periodic_acc}{NGA\_{}Periodic\_{}acc}(int~g\_a,~int~lo{[}{]},~int~hi{[}{]},~void~{*}buf,~int~ld{[}{]},~void~{*}alpha)~
 
 \textcolor{blue}{C++~}~~~~void~GA::GlobalArray::periodicAcc(int~lo{[}{]},~int~hi{[}{]},~
 
 ~~~~~~~~~~~~~~~~~~~void~{*}buf,~int~ld{[}{]},~void~{*}alpha)
-\end{verbatim}
+% \end{verbatim}
+
 The local array is assumed to have the same number of dimensions as
 the global array. Users don't need to worry about where the region
 defined by \texttt{\emph{lo}} and \texttt{\emph{hi}} is physically
@@ -513,7 +493,7 @@ compute\_temperature()~
 The non-blocking APIs are derived from the blocking interface by adding
 a handle argument that identifies an instance of the non-blocking
 request.
-\begin{verbatim}
+% \begin{verbatim}
 \textcolor{green}{n-D}~\textcolor{blue}{Fortran}~subroutine~\href{http://www.emsl.pnl.gov/docs/global/ga_ops.html\#nga_nbput}{nga\_{}nbput}(g\_a,~lo,~hi,~buf,~ld,~nbhandle)~
 
 \textcolor{green}{n-D}~Fortran~subroutine~\href{http://www.emsl.pnl.gov/docs/global/ga_ops.html\#nga_nbget}{nga\_{}nbget}(g\_a,~lo,~hi,~buf,~ld,~nbhandle)~
@@ -573,5 +553,5 @@ request.
 ~~~~~~~~~~~~~int~ld{[}{]},~void~{*}alpha,~ga\_nbhdl\_t{*}~nbhandle)~
 
 \textcolor{blue}{C++}~~~~~~~~~int~GA::GlobalArray::NbWait(ga\_nbhdl\_t{*}~nbhandle)
-\end{verbatim}
+% \end{verbatim}
 
