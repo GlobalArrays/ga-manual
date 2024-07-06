@@ -77,6 +77,7 @@ Creating New Groups
 - Fortran integer function: `ga_pgroup_create <https://hpc.pnl.gov/globalarrays/api/f_op_api.html#GA_PGROUP_CREATE>`__\ (list, size)
 
 - C:       int `GA_Pgroup_create <https://hpc.pnl.gov/globalarrays/api/c_op_api.html#GA_PGROUP_CREATE>`__\ (int \*list, int size)
+  
 This call can be used to create a processor group of size ``size``
 containing the processors in the array ``list``. This call must be
 executed on all processors in the group. It returns an integer handle

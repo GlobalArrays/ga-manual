@@ -5,7 +5,8 @@ GlobalArrays Manual
    :maxdepth: 3
    :caption: Contents:
 
-   Section1-Introduction
+   Section0-Introduction
+   Section1-BuildInstructions
    Section2-Initialization-Termination
    Section3-One-SideComm_Operations
    Section4-InterprocessSync
