@@ -1,0 +1,98 @@
+\documentclass[oneside,english]{book}
+\usepackage[T1]{fontenc}
+\usepackage[latin9]{inputenc}
+\setcounter{secnumdepth}{3}
+\setcounter{tocdepth}{3}
+\usepackage{fancyvrb}
+\usepackage{color}
+\usepackage{babel}
+\usepackage{array}
+\usepackage{longtable}
+\usepackage{url}
+\usepackage{graphicx}
+\usepackage[unicode=true, pdfusetitle,
+ bookmarks=true,bookmarksnumbered=false,bookmarksopen=false,
+ breaklinks=false,pdfborder={0 0 1},backref=false,colorlinks=false]
+ {hyperref}
+
+% we don't require that pygments and the minted package be installed so we
+% created a minted stylesheet externally rather than \usepackage{minted}.
+\input{mintedstyle}
+
+\begin{document}
+
+\title{The Global Pointer Arrays User Manual}
+
+\author{Bruce Palmer, Manojkumar Krishnan, Sriram Krishnamoorthy}
+
+\maketitle
+\begin{center}
+This document is intended to be used with version XXX of Global Pointer Arrays
+\par\end{center}
+
+\begin{center}
+(Pacific Northwest National Laboratory Technical Report Number PNNL-XXXXX)
+\par\end{center}
+
+\paragraph{DISCLAIMER}
+
+This material was prepared as an account of work sponsored by an agency of the
+United States Government. Neither the United States Government nor the United
+States Department of Energy, nor Battelle, nor any of their employees, MAKES
+ANY WARRANTY, EXPRESS OR IMPLIED, OR ASSUMES ANY LEGAL LIABILITY OR
+RESPONSIBILITY FOR THE ACCURACY, COMPLETENESS, OR USEFULNESS OF ANY
+INFORMATION, APPARATUS, PRODUCT, SOFTWARE, OR PROCESS DISCLOSED, OR REPRESENTS
+THAT ITS USE WOULD NOT INFRINGE PRIVATELY OWNED RIGHTS. 
+
+\paragraph{ACKNOWLEDGMENT}
+
+This software and its documentation were produced with United States Government
+support under Contract Number DE-AC05-76RLO-1830 awarded by the United States
+Department of Energy. The United States Government retains a paid-up
+non-exclusive, irrevocable worldwide license to reproduce, prepare derivative
+works, perform publicly and display publicly by or for the US Government,
+including the right to distribute to other US Government contractors. 
+
+\date{February, 2012}
+
+\tableofcontents{}
+
+\include{GP1-Introduction}
+
+\include{GP2-WritingGPProg}
+
+\include{GP3-CommOperations}
+
+%\include{Section4-One-SideComm_Operations}
+
+%\include{Section5-InterprocessSync}
+
+%\include{Section6-CollectiveArrayOperations}
+
+%\include{Section7-UtilityOperations}
+
+%\include{Section8-GA-CplusBindingsforGA}
+
+%\include{Section9-MirroredArrays}
+
+%\include{Section10-ProcessorGroups}
+
+%\include{Section11-SparseDataOperations}
+
+%\include{Section12-Restricted-Arrays}
+
+%\appendix
+
+%\chapter{List of C Functions}
+
+%TODO
+%\href{https://hpc.pnl.gov/globalarrays/api/capi.shtml}{Online listing of C functions. }
+
+%\chapter{List of Fortran Functions}
+
+%TODO
+%\href{https://hpc.pnl.gov/globalarrays/api/fapi.shtml}{Online listing of Fortran functions. }
+
+%\include{AppendixC}
+
+\end{document}

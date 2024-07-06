@@ -1,0 +1,181 @@
+\chapter{Interprocess Synchronization}
+
+Global Arrays provide three types of synchronization calls to support
+different synchronization styles. 
+
+\begin{tabular}{|>{\centering}p{3cm}|>{\raggedright}p{6cm}|}
+\hline 
+\emph{Lock with mutex}  & is useful for a shared memory model. One can lock a mutex, to exclusively
+access a critical section. \tabularnewline
+\hline 
+\emph{Fence}  & guarantees that the Global Array operations issued from the calling
+process are complete. The fence operation is local. \tabularnewline
+\hline 
+\emph{Sync}  & is a barrier. It synchronizes processes and ensures that all Global
+Array operations are completed. Sync operation is collective. \tabularnewline
+\hline
+\end{tabular}
+
+
+\section{Lock and Mutex }
+
+Lock works together with mutex. It is a simple synchronization mechanism
+used to protect a critical section. To enter a critical section, typically,
+one needs to do:
+\begin{verbatim}
+1. Create mutexes
+2. Lock on a mutex
+3. ...
+    Do the exclusive operation in the critical section
+   ...
+4. Unlock the mutex
+5. Destroy mutexes
+\end{verbatim}
+The function
+
+\textcolor{blue}{Fortran}~logical~function~\href{https://hpc.pnl.gov/globalarrays/api/f_op_api.html#CREATE_MUTEXES}{ga\_{}create\_{}mutexes}(number)~
+
+\textcolor{blue}{C}~~~~~~~int~\href{https://hpc.pnl.gov/globalarrays/api/c_op_api.html#CREATE_MUTEXES}{GA\_{}Create\_{}mutexes}(int~number)~
+
+\textcolor{blue}{C++~}~~~~int~GA::GAServices::createMutexes(int~number)
+
+creates a set containing the number of mutexes. Only one set of mutexes
+can exist at a time. Mutexes can be created and destroyed as many
+times as needed. Mutexes are numbered: 0, ..., number-1.
+
+The function
+
+\textcolor{blue}{Fortran}~logical~function~\href{https://hpc.pnl.gov/globalarrays/api/f_op_api.html#DESTROY_MUTEXES}{ga\_{}destroy\_{}mutexes}()~
+
+\textcolor{blue}{C}~~~~~~~int~\href{https://hpc.pnl.gov/globalarrays/api/c_op_api.html#DESTROY_MUTEXES}{GA\_{}Destroy\_{}mutexes}()
+
+\textcolor{blue}{C++}~~~~~int~GA::GAServices::destroyMutexes()
+
+destroys the set of mutexes created with ga\_create\_mutexes.
+
+Both \texttt{\emph{ga\_create\_mutexes}} and \texttt{\emph{ga\_destroy\_mutexes}}
+are collective operations.
+
+The functions
+
+\textcolor{blue}{Fortran}~subroutine~\href{https://hpc.pnl.gov/globalarrays/api/f_op_api.html\#LOCK}{ga\_{}lock}(int~mutex)~
+
+~~~~~~~~subroutine~\href{https://hpc.pnl.gov/globalarrays/api/f_op_api.html#UNLOCK}{ga\_{}unlock}(int~mutex)~
+
+\textcolor{blue}{C}~~~~~~~void~\href{https://hpc.pnl.gov/globalarrays/api/c_op_api.html#LOCK}{GA\_{}lock}(int~mutex)~
+
+~~~~~~~~void~\href{https://hpc.pnl.gov/globalarrays/api/c_op_api.html#UNLOCK}{GA\_{}unlock}(int~mutex)~
+
+\textcolor{blue}{C++}~~~~~void~GA::GAServices::lock(int~mutex)~
+
+~~~~~~~~void~GA::GAServices::unlock(int~mutex)
+
+lock and unlock a mutex object identified by the mutex number, respectively.
+It is a fatal error for a process to attempt to lock a mutex which
+has already been locked by this process, or unlock a mutex which has
+not been locked by this process.
+
+\emph{\underbar{Example}}\underbar{ }\emph{\underbar{1}}\underbar{:}
+
+Use one mutex and the lock mechanism to enter the critical section.
+\begin{verbatim}
+    status = ga_create_mutexes(1)
+    if(.not.status) then
+        call ga_error('ga_create_mutexes failed ',0)
+    endif
+    call ga_lock(0)
+    ... do something in the critical section
+    call ga_put(g_a, ...)
+    ...
+    call ga_unlock(0)
+    if(.not.ga_destroy_mutexes()) then
+        call ga_error('mutex not destroyed',0)
+\end{verbatim}
+
+\section{Fence }
+
+Fence blocks the calling process until all the data transfers corresponding
+to the Global Array operations initiated by this process complete.
+The typical scenario that it is being used is
+\begin{verbatim}
+1. Initialize the fence
+
+2. ...
+
+    Global array operations
+
+    ...
+
+3. Fence
+\end{verbatim}
+This would guarantee the operations between step 1 and 3 are complete.
+
+The function
+
+\textcolor{blue}{Fortran}~subroutine~\href{https://hpc.pnl.gov/globalarrays/api/f_op_api.html\#ga_init_fence}{ga\_{}init\_{}fence}()~
+
+\textcolor{blue}{C}~~~~~~~void~\href{https://hpc.pnl.gov/globalarrays/api/c_op_api.html\#ga_init_fence}{GA\_{}Init\_{}fence}()~
+
+\textcolor{blue}{C++}~~~~~void~GA::GAServices::initFence()
+
+Initializes tracing of completion status of data movement operations.
+
+The function
+
+\textcolor{blue}{Fortran}~subroutine~\href{https://hpc.pnl.gov/globalarrays/api/f_op_api.html\#ga_fence}{ga\_{}fence}()~
+
+\textcolor{blue}{C}\textcolor{blue}{\underbar{~}}~~~~~~void~\href{https://hpc.pnl.gov/globalarrays/api/c_op_api.html\#ga_fence}{GA\_{}Fence}()~
+
+\textcolor{blue}{C++}~~~~~void~GA::GAServices::fence()
+
+blocks the calling process until all the data transfers corresponding
+to GA operations called after \texttt{\emph{ga\_init\_fence}} complete.
+
+\texttt{\emph{ga\_fence}} must be called after \texttt{\emph{ga\_init\_fence}}.
+A barrier, \texttt{\emph{ga\_sync}}, assures completion of all data
+transfers and implicitly cancels outstanding ga\_init\_fence. \texttt{\emph{ga\_init\_fence}}
+and \texttt{\emph{ga\_fence}} must be used in pairs, multiple calls
+to \texttt{\emph{ga\_fence}} require the same number of corresponding
+\texttt{\emph{ga\_init\_fence}} calls. \texttt{\emph{ga\_init\_fence/ga\_fence}}
+pairs can be nested.
+
+\textit{\underbar{Example 1:}}
+
+Since \texttt{\emph{ga\_put}} might return before the data reaches
+the final destination \texttt{\emph{ga\_init\_fence}} and \texttt{\emph{ga\_fence}}
+allow the process to wait until the data is actually moved:
+\begin{verbatim}
+    call ga_init_fence()
+    call ga_put(g_a,...)
+    call ga_fence()
+\end{verbatim}
+\textit{\underbar{Example 2:}}
+
+\texttt{\emph{ga\_fence}} works for multiple GA operations.
+\begin{verbatim}
+    call ga_init_fence()
+    call ga_put(g_a,...)
+    call ga_scatter(g_a,...)
+    call ga_put(g_b,...)
+    call ga_fence()
+\end{verbatim}
+The calling process will be blocked until data movements initiated
+by two calls to \texttt{ga\_put} and one \texttt{ga\_scatter} complete. 
+
+
+\section{Sync }
+
+Sync is a collective operation. It acts as a barrier, which synchronizes
+all the processes and ensures that all the Global Array operations
+are complete at the call.
+
+The function is
+
+\textcolor{blue}{Fortran}~subroutine~\href{https://hpc.pnl.gov/globalarrays/api/f_op_api.html\#ga_sync}{ga\_{}sync}()~
+
+\textcolor{blue}{C}~~~~~~~void~\href{https://hpc.pnl.gov/globalarrays/api/c_op_api.html\#ga_sync}{GA\_{}Sync}()~
+
+\textcolor{blue}{C++}~~~~~void~GA::GAServices::sync()
+
+Sync should be inserted as necessary. With many sync calls, the application
+performance would suffer. 
