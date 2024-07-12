@@ -32,6 +32,7 @@ MANUAL_DEPS += scatter-GA.png
 MANUAL_DEPS += Section9-ProcessorGroups.tex
 MANUAL_DEPS += Section10-SparseDataOperations.tex
 MANUAL_DEPS += Section11-Restricted-Arrays.tex
+MANUAL_DEPS += Section12-Sparse-Arrays.tex
 MANUAL_DEPS += Section1-Introduction.tex
 # MANUAL_DEPS += Section2-WritingBuildRunGAProg.tex
 MANUAL_DEPS += Section2-Initialization-Termination.tex

@@ -17,6 +17,7 @@ GlobalArrays Manual
    Section9-ProcessorGroups
    Section10-SparseDataOperations
    Section11-Restricted-Arrays
+   Section12-Sparse-Arrays
 
 .. Indices and tables
 .. ==================

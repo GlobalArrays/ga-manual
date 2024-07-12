@@ -74,7 +74,7 @@ into sparse blocks. Final data structure is a sparse array of sparse blocks.}
 \end{figure}
 
 Alternatively, it is possible to create a new sparse array from an existing
-sparse array using the function \textt{NGA\_Sprs\_array\_duplicate(int s\_a)}
+sparse array using the function \texttt{NGA\_Sprs\_array\_duplicate(int s\_a)}
 which returns a handle to a new sparse array that is a duplicate of the original
 array \texttt{s\_a}. The new array can then be modified using some of the
 functions described in the next section.
@@ -126,12 +126,18 @@ representing the product.
 GA provides basic functionality on sparse matrices that can be used to construct
 more complex algorithms. In addition, an array of tools provides direct access
 to the data stored in the sparse array enabling users to both access and modify
-the sparse array in more complicated ways.
-
+the sparse array in more complicated ways.\newline
 The most basic operations for understanding data layout are the
+
 \texttt{NGA\_Sprs\_array\_row\_distribution(int s\_a, int iproc, int *rlo, int
-*rhi)} and {NGA\_Sprs\_array\_column\_distribution(int s\_a, int iproc, int *clo, int
-*chi)} functions. For the given processor \texttt{iproc} these function return
+*rhi)}
+
+and 
+
+\texttt{NGA\_Sprs\_array\_column\_distribution(int s\_a, int iproc, int *clo, int
+*chi)} 
+\newline
+functions. For the given processor \texttt{iproc} these function return
 the bounding indices of the corresponding row or column partition. Data for all
 rows between \texttt{rlo} and \texttt{rhi} are located on processor
 \texttt{iproc}. On each processor, this data is further organized into CSR
@@ -146,10 +152,12 @@ process. In C, the pointer \texttt{*idx} is allocated by this function and must
 be freed by the calling program. In Fortran, the array \texttt{idx} is assumed
 to have already been allocated and the variable \texttt{n} on input is the
 length of \texttt{idx}. On output, \texttt{n} is the number of non-zero blocks.
+\newline
+The data inside the column blocks can be accessed directly using 
 
-The data inside the column blocks can be accessed directly using the
 \texttt{NGA\_Sprs\_arrayt\_access\_col\_block(int s\_a, int icol, int **idx, int
-**jdx, void **val)}. This function returns pointers to the column block data in
+**jdx, void **val)}. \newline
+This function returns pointers to the column block data in
 CSR format. The bounding indices for this data can be obtained using the
 distribution functions. This function is also available in a 64 bit version. If
 the column block corresponding to \texttt{iproc} is empty, the pointers returned
@@ -158,14 +166,14 @@ row indices \texttt{idx} array contains the starting location of the column
 indices and values for all non-zero values in the row. The number of entries in
 \texttt{idx} is \texttt{rhi-rlo+2}. The extra entry is included so that
 the number of non-zero entries in any row can be calculated using
-\texttt{idx[i+1]-idx[i], even for the last row in the block. The absolute row
+\texttt{idx[i+1]-idx[i]}, even for the last row in the block. The absolute row
 index of the row indexed by \texttt{i} in \texttt{idx} can be calculated using
 \texttt{i+rlo}. The array \texttt{jdx} contains the absolute column indices for
 the entry. The relative column index in the block can be recovered using
 \texttt{j=jdx[k]-clo}.
 
-Any column block in the sparse array can be recovered using the
-\texttt{NGA\_Sprs\_array\_get\_block(int s\_a, \int irow, int icol, int **idx,
+Any column block in the sparse array can be recovered using the \newline
+\texttt{NGA\_Sprs\_array\_get\_block(int s\_a, int irow, int icol, int **idx,
 int **idx, void *val, int *rlo, int *rhi, int *clo, int *chi)} function. This
 function is also available in a 64 bit version. The indices \texttt{irow} and
 \texttt{icol} are the row and column indices of the desired block. The values of
