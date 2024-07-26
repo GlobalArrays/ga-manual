@@ -24,8 +24,8 @@ is initially created using a call to
 ``NGA_Sprs_array_create(int idim, int jdim, int type)``, where ``idim``
 is the row dimension of the sparse array, ``jdim`` is the column
 dimension of the sparse array and ``type`` is the GA datatype of the
-array. This function is also available in a version that supports 64 bit
-indexing
+array. This function is also available in the C API in a version that
+supports 64 bit indexing
 ``NGA_Sprs_array_create64(int64_t idim, int64_t jdim, int64_t type)`` [1]_. 
 
 The function returns an integer handle that can be used to
@@ -134,7 +134,13 @@ The sparse matrix library also supports sparse matrix-sparse matrix
 multiplication through the function
 ``NGA_Sprs_array_matmatm_multiply(int s_a, int s_b)``. This operation
 multiplies the sparse matrices ``s_a`` and ``s_b`` together and returns
-a handle to a new sparse matrix representing the product.
+a handle to a new sparse matrix representing the product. Functions that
+multiplication of a sparse matrix and a dense matrix have also been
+included in the suite of sparse matrix operations. These are
+``NGA_Sprs_array_sprsdns_multiply(int s_a, int g_b)`` and
+``NGA_Sprs_array_dnssprs_multiply(int g_a, int s_b)``, which implement
+multiplication of a sparse matrix times a dense matrix and a dense matrix
+times a sparse matrix, respectively.
 
 Direct Access to Sparse Matrix Data
 -----------------------------------
