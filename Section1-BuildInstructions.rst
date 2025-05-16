@@ -218,8 +218,7 @@ compiles fast, it is still bundled with the GA package.
    --with-tcgmsg           Select TCGMSG as the messaging library; if
                            --with-mpi is also specified then TCGMSG over MPI is
                            used.
-   --with-blas=ARG         Use external BLAS library; attempt to detect
-                           sizeof(INTEGER) used to compile BLAS; if not found, an
+   --with-blas=ARG         Use external BLAS library; if not found, an
                            internal BLAS is built
    --with-blas4=ARG        Use external BLAS library compiled with
                            sizeof(INTEGER)==4
@@ -265,9 +264,8 @@ GA must know the size of INTEGER used by the BLAS library.
 configure has the following BLAS-related options: ``--with-blas``,
 ``--with-blas4``, and ``--with-blas8``. The latter two will force the
 INTEGER size to 4- or 8-bytes, respectively. The first option,
-``--with-blas``, defaults to 4-byte INTEGERS *however* in the two
-special cases of using ACML or MKL, it is possible to detect 8-byte
-INTEGERs automatically. As documented in the ACML manual, if the path to
+``--with-blas``, defaults to 4-byte INTEGERS. 
+As documented in the ACML manual, if the path to
 the library has ``_int64`` then 8-byte INTEGERs are used. As documented
 in the MKL manual, if the library is ``ilp64``, then 8-byte INTEGERs are
 used.
