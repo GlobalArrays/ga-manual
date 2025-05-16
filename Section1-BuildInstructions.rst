@@ -228,7 +228,7 @@ compiles fast, it is still bundled with the GA package.
                            one is built.
    --with-scalapack=ARG    Use external ScaLAPACK library compiled with
                            sizeof(INTEGER)==4
-   --with-scalapack8=ARG    Use external ScaLAPACK library compiled with
+   --with-scalapack8=ARG   Use external ScaLAPACK library compiled with
                            sizeof(INTEGER)==8
 
 There are some influential environment variables as documented in
