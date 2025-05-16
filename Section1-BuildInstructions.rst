@@ -226,7 +226,10 @@ compiles fast, it is still bundled with the GA package.
                            sizeof(INTEGER)==8
    --with-lapack=ARG       Use external LAPACK library. If not found, an internal
                            one is built.
-   --with-scalapack=ARG    Use external ScaLAPACK library.
+   --with-scalapack=ARG    Use external ScaLAPACK library compiled with
+                           sizeof(INTEGER)==4
+   --with-scalapack8=ARG   Use external ScaLAPACK library compiled with
+                           sizeof(INTEGER)==8
 
 There are some influential environment variables as documented in
 ``configure --help``, however there are a few that are special to GA.
