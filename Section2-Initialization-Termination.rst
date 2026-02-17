@@ -174,19 +174,19 @@ GA must first be initialized to determine if it needs shared or MA
 memory for storing distributed array data. There are two alternative
 functions to initialize GA:
 
-``
-Fortran subroutine ga_initialize()
-C       void GA_Initialize()
-C++     void GA::Initialize(int argc, char \*\*argv)
-``
+::
+
+  Fortran subroutine ga_initialize()
+  C       void GA_Initialize()
+  C++     void GA::Initialize(int argc, char **argv)
 
 and
 
-``
-Fortran subroutine ga_initialize_ltd(limit)
-C       void GA_Initialize_ltd(size_t limit)
-C++     void GA::Initialize(int argc, char \*\*argv, size_t limit)
-``
+::
+
+  Fortran subroutine ga_initialize_ltd(limit)
+  C       void GA_Initialize_ltd(size_t limit)
+  C++     void GA::Initialize(int argc, char **argv, size_t limit)
 
 The first interface allows GA to consume as much memory as the
 application needs to allocate new arrays. The latter call allows the
@@ -197,32 +197,32 @@ Starting with the GA 5.9 release, there is an additional option that allows
 users to initialize GA on an existing MPI communicator. This can be done by
 calling the function
 
-``
-Fortran logical function ga_initialize_comm(comm)
-C       int GA_Initialize_comm(MPI_Comm comm)
-``
+::
+
+  Fortran logical function ga_initialize_comm(comm)
+  C       int GA_Initialize_comm(MPI_Comm comm)
 
 This function assumes that MPI has already been initialized and a
 subcommunicator has been created. The return value in this case does not
 indicate success but is used help the code exit cleanly for some runtimes such
 as the progress ranks runtime. This functionality should be used as follows:
 
-``
+::
+
       void my_ga_app(....., MPI_Comm comm)
         if (GA_Initialize_comm(comm)) {
-          /\* Main body of code here \*/
+          /* Main body of code here */
           GA_Terminate()
         }
       }
-``
 
 *Note*: In GA++, there is an additional functionality as follows:
 
-``
-      void GA::Initialize(int argc, char \*argv[], sizet_t,
+::
+
+      void GA::Initialize(int argc, char *argv[], sizet_t,
                           unsigned long heapSize, unsigned long stacksize,
                           int type, size_t limit=0);
-``
 
 Limiting Memory Usage by Global Arrays
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -273,21 +273,21 @@ Termination
 
 The normal way to terminate a GA program is to call the function
 
-``
-Fortran subroutine ga_terminate()
-C       void GA_Terminate()
-C++     void GA::Terminate()
-``
+::
+
+  Fortran subroutine ga_terminate()
+  C       void GA_Terminate()
+  C++     void GA::Terminate()
 
 The programmer can also abort a running program for example as part of
 handling a programmatically detected error condition by calling the
 function
 
-``
-Fortran subroutine ga_error(message, code)
-C       void GA_Error(char \*message, int code);
-C++     void GA::GAServices::error(char \*message, int code)
-``
+::
+
+  Fortran subroutine ga_error(message, code)
+  C       void GA_Error(char *message, int code);
+  C++     void GA::GAServices::error(char *message, int code)
 
 Creating Arrays - I
 -------------------
@@ -296,47 +296,46 @@ There are three ways to create new arrays:
 
 #. From scratch, for a regular distribution, using
 
-``
-n-d Fortran  logical function nga_create(type, ndim, 
-                        dims, array_name, chunk, g_a) 
-2-d Fortran  logical function ga_create(type, dim1, 
-                        dim2, array_name, chunk1, chunk2, g_a) 
-C            int NGA_Create(int type, int ndim, int dims[], 
-                        char \*array_name, int chunk[]) 
-C++          GA::GlobalArray\* GA::GAServices::createGA(int type, 
-                        int ndim, int dims[], char \*array_name, 
-                        int chunk[])
-``
+::
 
-   or for an irregular distribution, using
+  n-d Fortran  logical function nga_create(type, ndim, 
+                          dims, array_name, chunk, g_a) 
+  2-d Fortran  logical function ga_create(type, dim1, 
+                          dim2, array_name, chunk1, chunk2, g_a) 
+  C            int NGA_Create(int type, int ndim, int dims[], 
+                          char *array_name, int chunk[]) 
+  C++          GA::GlobalArray* GA::GAServices::createGA(int type, 
+                          int ndim, int dims[], char *array_name, 
+                          int chunk[])
 
-``
-n-d Fortran logical function nga_create_irreg(type, ndim, dims,
-                       array_name, block, map, g_a) 
-2-d Fortran logical function ga_create_irreg(type, dim1, dim2,
-                       array_name, map1, nblock1, map2, nblock2, g_a) 
-C           int NGA_Create_irreg(int type, int ndim, int dims[], 
-                       char \*array_name, int block[], map[])
-C++         GA::GlobalArray\* GA::GAServices::createGA(int type, 
-                       int ndim, int dims[], char \*array_name, 
-                       int block[], map[])
-``
+or for an irregular distribution, using
 
+::
+
+  n-d Fortran logical function nga_create_irreg(type, ndim, dims,
+                         array_name, block, map, g_a) 
+  2-d Fortran logical function ga_create_irreg(type, dim1, dim2,
+                         array_name, map1, nblock1, map2, nblock2, g_a) 
+  C           int NGA_Create_irreg(int type, int ndim, int dims[], 
+                         char *array_name, int block[], map[])
+  C++         GA::GlobalArray\* GA::GAServices::createGA(int type, 
+                         int ndim, int dims[], char *array_name, 
+                         int block[], map[])
 
 #. Based on a template (an existing array) with the function
 
-``
-Fortran logical function ga_duplicate(g_a, g_b, array_name) 
-C       int GA_Duplicate(int g_a, char \*array_name) 
-C++     int GA::GAServices::duplicate(int g_a, char \*array_name) 
-``
+::
+
+  Fortran logical function ga_duplicate(g_a, g_b, array_name) 
+  C       int GA_Duplicate(int g_a, char *array_name) 
+  C++     int GA::GAServices::duplicate(int g_a, char *array_name) 
 
 - or - 
 
-``
-C++     GA::GlobalArray\* GA::GAServices::createGA(int g_a,
-                         char \*array_name)
-``
+::
+
+  C++     GA::GlobalArray* GA::GAServices::createGA(int g_a,
+                           char *array_name)
 
 In this case, the new array inherits all the properties such as
 distribution, datatype and dimensions from the existing array.
@@ -405,23 +404,23 @@ single GA function. To create global arrays with these extra data
 elements, referred to in the following as ghost cells, the user needs to
 call either the functions:
 
-``
-n-d Fortran logical function nga_create_ghosts(type, dims, width,
-                            array_name, chunk, g_a)
-C           int int NGA_Create_ghosts}(int type, int ndim, int dims[],
-                            int width[], char \*array_name, int chunk[])
-C++         int GA::GAServices::createGA_GhostsGA_Ghosts(int type, int
-                            ndim, int dims[], int width[], 
-                            char  \*array_name, int chunk[])
-n-d Fortran logical function nga_create_ghosts_irreg(type, dims, width,
-                            array_name, map, block, g_a) 
-C           int int NGA_Create_ghosts_irreg(int type, int ndim, 
-                            int dims[], int width[], char \*array_name,
-                            int map[], int block[]) 
-C++         int GA::GAServices::createGA_Ghosts(int type, int ndim, 
-                            int dims[], int width[], char \*array_name,
-                            int map[], int block[]) 
-``
+::
+
+  n-d Fortran logical function nga_create_ghosts(type, dims, width,
+                              array_name, chunk, g_a)
+  C           int int NGA_Create_ghosts}(int type, int ndim, int dims[],
+                              int width[], char *array_name, int chunk[])
+  C++         int GA::GAServices::createGA_GhostsGA_Ghosts(int type, int
+                              ndim, int dims[], int width[], 
+                              char  *array_name, int chunk[])
+  n-d Fortran logical function nga_create_ghosts_irreg(type, dims, width,
+                              array_name, map, block, g_a) 
+  C           int int NGA_Create_ghosts_irreg(int type, int ndim, 
+                              int dims[], int width[], char *array_name,
+                              int map[], int block[]) 
+  C++         int GA::GAServices::createGA_Ghosts(int type, int ndim, 
+                              int dims[], int width[], char *array_name,
+                              int map[], int block[]) 
 
 These two functions are almost identical to the ``nga_create`` and
 ``nga_create_irreg`` functions described above. The only difference is
@@ -492,19 +491,19 @@ the array. The array can now be used in exactly the same way as arrays
 created using the traditional ga_create_XXX calls. The calls for
 obtaining a new global array handle are
 
-``
-n-d Fortran integer function ga_create_handle() 
-C           int GA_Create_handle()
-``
+::
+
+  n-d Fortran integer function ga_create_handle() 
+  C           int GA_Create_handle()
 
 Properties of the global arrays can be set using the ga_set_XXX calls.
 Note that the only required call is to ga_set_data. The others are all
 optional.
 
-``
-n-d Fortran subroutine ga_set_data(g_a, ndim, dims, type) 
-C           void GA_Set_data(int g_a, int ndim, int \*dims, int type)
-``
+::
+
+  n-d Fortran subroutine ga_set_data(g_a, ndim, dims, type) 
+  C           void GA_Set_data(int g_a, int ndim, int *dims, int type)
 
 The argument *g_a* is the global array handle, *ndim* is the dimension
 of the array, *dims* is an array of *ndim* numbers containing the
@@ -512,18 +511,18 @@ dimensions of the array, and *type* is the data type as defined in
 either the macdecls.h or mafdecls.h files. Other options that can be set
 using these subroutines are:
 
-``
-n-d Fortran subroutine ga_set_array_name(g_a, array_name) 
-C           void GA_Set_array_name(int g_a, char \*array_name)
-``
+::
+
+  n-d Fortran subroutine ga_set_array_name(g_a, array_name) 
+  C           void GA_Set_array_name(int g_a, char *array_name)
 
 This subroutine assigns a character string as an array name to the
 global array.
 
-``
-n-d Fortran subroutine ga_set_chunk(g_a, chunk) 
-C           void GA_Set_chunk(int g_a, int \*chunk)
-``
+::
+
+  n-d Fortran subroutine ga_set_chunk(g_a, chunk) 
+  C           void GA_Set_chunk(int g_a, int *chunk)
 
 The chunk array contains the minimum size dimensions that should be
 allocated to a single processor. If the minimum size is set to -1 for
@@ -531,11 +530,10 @@ some of the dimensions, then the minimum size allocation is left to the
 GA toolkit. The default setting of the chunk array is -1 along all
 dimensions.
 
-``
-n-d Fortran subroutine ga_set_irreg_distr(g_a, map, block) 
-C           void GA_Set_irreg_distr(int g_a, int \*map, int \*block)
-``
+::
 
+  n-d Fortran subroutine ga_set_irreg_distr(g_a, map, block) 
+  C           void GA_Set_irreg_distr(int g_a, int *map, int *block)
 
 The ga_set_irreg_distr subroutine can be used to specify the
 distribution of data among processors. The block array contains the
@@ -548,18 +546,18 @@ the block array is N, then the values in the map array from M+1 to M+N
 are the first indices of the each data block along the second axis and
 so on through the D dimensions of the global array.
 
-``
-n-d Fortran subroutine ga_set_ghosts(g_a, width) 
-C           void GA_Set_ghosts(int g_a, int \*width)
-``
+::
+
+  n-d Fortran subroutine ga_set_ghosts(g_a, width) 
+  C           void GA_Set_ghosts(int g_a, int *width)
 
 This call can be used to set the ghost cell width along each of the
 array dimensions.
 
-``
-n-d Fortran subroutine ga_set_pgroup(g_a, p_group) 
-C           void ga_set_pgroup(int g_a, int p_group)
-``
+::
+
+  n-d Fortran subroutine ga_set_pgroup(g_a, p_group) 
+  C           void ga_set_pgroup(int g_a, int p_group)
 
 This call assigns a processor group to the global array. If no processor
 group is assigned to the global array, it is assumed that the global
@@ -569,10 +567,10 @@ After all the array properties have been set, memory for the global
 array is allocated by a call to ga_allocate. After this call, the global
 array is ready for use inside the parallel application.
 
-``
-n-d Fortran logical function ga_allocate(g_a) 
-C           int GA_Allocate(int g_a)
-``
+::
+
+  n-d Fortran logical function ga_allocate(g_a) 
+  C           int GA_Allocate(int g_a)
 
 This function returns a logical variable that is true if the global
 array was successfully allocated and false otherwise.
@@ -582,11 +580,11 @@ Destroying Arrays
 
 Global arrays can be destroyed by calling the function
 
-``
-Fortran logical ga_destroy}(g_a) 
-C       void GA_Destroy(int g_a) 
-C++     void GA::GlobalArray::destroy()
-``
+::
+
+  Fortran logical ga_destroy}(g_a) 
+  C       void GA_Destroy(int g_a) 
+  C++     void GA::GlobalArray::destroy()
 
 that takes as its argument a handle representing a valid global array.
 It is a fatal error to call ga_destroy with a handle pointing to an
